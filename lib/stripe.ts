@@ -16,7 +16,7 @@ if (!stripeSecretKey.startsWith('sk_')) {
 // Intentionally no console logging of key metadata to keep logs clean
 
 export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-05-28.basil' as const,
+  apiVersion: '2025-08-27.basil' as const,
   typescript: true,
 });
 
