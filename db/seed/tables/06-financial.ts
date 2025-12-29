@@ -151,8 +151,7 @@ export async function seedFinancialData(database = db, options?: any) {
 
   if (bankAccounts.length > 0) {
     await database.insert(schema.vendorBankAccounts)
-      .values(bankAccounts)
-      .onConflictDoNothing({ target: schema.vendorBankAccounts.vendorId });
+      .values(bankAccounts);
   }
 
   // 4. Create payouts for vendors with sufficient balance

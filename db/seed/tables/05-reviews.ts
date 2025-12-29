@@ -171,7 +171,7 @@ export async function seedReviewsAndRatings(database = db, options?: any) {
           title: faker.helpers.arrayElement(titles),
           comment: faker.helpers.arrayElement(comments),
           isVerifiedPurchase: false,
-          helpfulCount: generateHelpfulCount(rating) / 2, // Less helpful if not verified
+          helpfulCount: Math.floor(generateHelpfulCount(rating) / 2), // Less helpful if not verified
           images: null,
           createdAt: faker.date.recent({ days: 90 })
         });

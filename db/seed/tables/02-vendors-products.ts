@@ -197,7 +197,7 @@ export async function seedVendorsAndProducts(database = db, options?: any) {
         categoryId: category.id,
         vendorId: vendor.id,
         price: String(price),
-        images: [], // Will be filled by image generation later
+        images: [`/uploads/seed/${category.slug}.png`],
         tags: generateProductTags(category.slug, vendorType),
         stock: generateStock(vendorType, vendorIndex),
         isActive: faker.datatype.boolean({ probability: 0.95 }),

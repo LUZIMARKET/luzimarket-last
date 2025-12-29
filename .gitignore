@@ -54,6 +54,7 @@ next-env.d.ts
 
 # uploads
 /public/uploads/
+!/public/uploads/seed/
 
 # neon local data
 .neon_local/
