@@ -1,16 +1,15 @@
 import Stripe from 'stripe';
 
 // Sanitize the API key to remove any whitespace or newline characters
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim() || '';
 
-if (!stripeSecretKey) {
-  throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
+if (!stripeSecretKey && process.env.NODE_ENV !== 'production') {
+  console.warn('STRIPE_SECRET_KEY is not defined in environment variables');
 }
 
 // Validate the API key format (should start with sk_)
-if (!stripeSecretKey.startsWith('sk_')) {
+if (stripeSecretKey && !stripeSecretKey.startsWith('sk_')) {
   console.error('Invalid STRIPE_SECRET_KEY format - should start with sk_');
-  throw new Error('Invalid STRIPE_SECRET_KEY format');
 }
 
 // Intentionally no console logging of key metadata to keep logs clean
