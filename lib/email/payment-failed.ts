@@ -4,7 +4,18 @@ import { db } from '@/db';
 import { orders, orderItems, products } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend lazily to avoid build errors
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    // Return a dummy object for build time or handle error gracefully
+    if (process.env.NODE_ENV === 'production' && !process.env.CI) {
+      console.warn('RESEND_API_KEY is missing');
+    }
+    return new Resend('re_123456789'); // Dummy key to prevent crash if not called
+  }
+  return new Resend(apiKey);
+}
 
 interface SendPaymentFailedEmailParams {
   orderId: string;
@@ -57,7 +68,7 @@ export async function sendPaymentFailedEmail({ orderId, retryUrl }: SendPaymentF
     const finalRetryUrl = retryUrl || `${baseUrl}/checkout/retry?order=${order.orderNumber}`;
 
     // Send email
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResendClient().emails.send({
       from: process.env.EMAIL_FROM || 'Luzimarket <noreply@luzimarket.com>',
       to: customerEmail,
       subject: `Payment Failed - Order ${order.orderNumber}`,
