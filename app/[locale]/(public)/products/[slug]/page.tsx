@@ -144,8 +144,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     .from(reviews)
     .where(eq(reviews.productId, product.id));
 
-  const avgRating = reviewStats[0]?.avgRating || 0;
-  const reviewCount = reviewStats[0]?.reviewCount || 0;
+  const avgRating = Number(reviewStats[0]?.avgRating) || 0;
+  const reviewCount = Number(reviewStats[0]?.reviewCount) || 0;
 
   // JSON-LD structured data for Google
   const structuredData = {

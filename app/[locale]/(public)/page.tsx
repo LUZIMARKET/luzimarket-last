@@ -10,25 +10,25 @@ interface HomePageProps {
 const categories = [
   {
     title: "Flowershop",
-    image: "/images/links/pia-riverola.webp",
+    image: "https://images.unsplash.com/photo-1572454591674-2739f30d8c40?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Zmxvd2VyJTIwYm91cXVldHxlbnwwfHx8fDE3NjcwMjI1NTZ8MA&ixlib=rb-4.1.0&q=85",
     slug: "flores-arreglos",
     bgColor: "bg-white"
   },
   {
     title: "Sweet",
-    image: "/images/links/game-wwe-19-1507733870-150-911.jpg",
+    image: "https://images.unsplash.com/photo-1610450949065-1f2841536c88?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Y2hvY29sYXRlfGVufDB8fHx8MTc2NzAwOTkyMHww&ixlib=rb-4.1.0&q=85",
     slug: "chocolates-dulces",
     bgColor: "bg-luzi-pink-light"
   },
   {
     title: "Events + Dinners",
-    image: "/images/links/game-wwe-19-1507733870-150-911.jpg",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8ZmFuY3klMjBkaW5uZXJ8ZW58MHx8fHwxNzY3MDUzODgxfDA&ixlib=rb-4.1.0&q=85",
     slug: "eventos-cenas",
     bgColor: "bg-white"
   },
   {
     title: "Giftshop",
-    image: "/images/links/pia-riverola.webp",
+    image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Z2lmdCUyMGJveHxlbnwwfHx8fDE3NjcwNTM2ODV8MA&ixlib=rb-4.1.0&q=85",
     slug: "regalos-personalizados",
     bgColor: "bg-luzi-yellow-light"
   }

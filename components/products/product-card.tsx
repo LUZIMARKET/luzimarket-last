@@ -59,7 +59,7 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
         id: product.id,
         name: product.name,
         price: parseFloat(product.price),
-        image: product.images[0] || "/images/links/pia-riverola.webp",
+        image: product.images[0] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Z2lmdCUyMGJveHxlbnwwfHx8fDE3NjcwNTM2ODV8MA&ixlib=rb-4.1.0&q=85",
         vendorId: product.vendor?.id || "",
         vendorName: product.vendor?.businessName || t('vendor'),
       });
@@ -77,7 +77,7 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
     >
       <div className="relative aspect-square mb-4 overflow-hidden bg-gray-100 rounded-lg">
         <Image
-          src={product.images[0] || "/images/links/pia-riverola.webp"}
+          src={product.images[0] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Z2lmdCUyMGJveHxlbnwwfHx8fDE3NjcwNTM2ODV8MA&ixlib=rb-4.1.0&q=85"}
           alt={product.name}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -136,7 +136,7 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
                 id: product.id,
                 name: product.name,
                 price: parseFloat(product.price),
-                image: product.images[0] || "/images/links/pia-riverola.webp",
+                image: product.images[0] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Z2lmdCUyMGJveHxlbnwwfHx8fDE3NjcwNTM2ODV8MA&ixlib=rb-4.1.0&q=85",
                 vendorId: product.vendor?.id || "",
                 vendorName: product.vendor?.businessName || t('vendor'),
                 vendorState: product.vendor?.state,

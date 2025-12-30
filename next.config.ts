@@ -20,23 +20,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        pathname: '/**',
-      },
-      {
         protocol: 'https',
-        hostname: 'luzimarket.shop',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.public.blob.vercel-storage.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: '**',
       },
     ],
   },

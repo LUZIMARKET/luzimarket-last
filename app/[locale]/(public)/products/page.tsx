@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { setRequestLocale } from 'next-intl/server';
+import Image from "next/image";
 import { ProductsGrid } from "@/components/products/products-grid";
 import { InfiniteProductsGrid } from "@/components/products/infinite-products-grid";
 import { FilterSidebar } from "@/components/products/filter-sidebar";
@@ -74,10 +75,15 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
           </div>
 
           {/* Right side - dark background with pattern */}
-          <div className="relative bg-black">
-            <div className="absolute inset-0 opacity-20">
-              {/* Add a pattern or image here */}
-            </div>
+          <div className="relative h-full">
+            <Image
+              src="/images/banners/products-banner.png"
+              alt="Products Banner"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/20" />
           </div>
         </div>
       </section>

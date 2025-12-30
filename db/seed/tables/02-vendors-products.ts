@@ -197,7 +197,7 @@ export async function seedVendorsAndProducts(database = db, options?: any) {
         categoryId: category.id,
         vendorId: vendor.id,
         price: String(price),
-        images: [`/uploads/seed/${category.slug}.png`],
+        images: [getCategoryImage(category.slug)],
         tags: generateProductTags(category.slug, vendorType),
         stock: generateStock(vendorType, vendorIndex),
         isActive: faker.datatype.boolean({ probability: 0.95 }),
@@ -384,4 +384,20 @@ function getVariantConfig(categorySlug: string) {
   };
 
   return configs[categorySlug] || null;
+}
+
+function getCategoryImage(categorySlug: string): string {
+  const images: Record<string, string> = {
+    "flores-arreglos": "https://images.unsplash.com/photo-1572454591674-2739f30d8c40?auto=format&fit=crop&w=800&q=80",
+    "chocolates-dulces": "https://images.unsplash.com/photo-1610450949065-1f2841536c88?auto=format&fit=crop&w=800&q=80",
+    "velas-aromas": "https://images.unsplash.com/photo-1766555766657-ea8f81a67934?auto=format&fit=crop&w=800&q=80", // spa/candle
+    "regalos-personalizados": "https://images.unsplash.com/photo-1766682117531-17a55cde82c3?auto=format&fit=crop&w=800&q=80", // luxury gift
+    "cajas-regalo": "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80",
+    "decoracion-hogar": "https://images.unsplash.com/photo-1766555766657-ea8f81a67934?auto=format&fit=crop&w=800&q=80", // home decor vase
+    "joyeria-accesorios": "https://images.unsplash.com/photo-1766898211761-989d13ad3c3d?auto=format&fit=crop&w=800&q=80", // jewelry
+    "gourmet-delicatessen": "https://images.unsplash.com/photo-1766543497004-2fd76e88f605?auto=format&fit=crop&w=800&q=80", // cheese platter
+  };
+
+  // Use specific verified IDs where possible
+  return images[categorySlug] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80";
 }
