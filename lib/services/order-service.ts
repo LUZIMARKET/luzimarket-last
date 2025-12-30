@@ -44,8 +44,6 @@ export {
     getRelatedOrders,
     getOrderStatistics,
     getCurrentVendorOrders,
-    type OrderWithDetails,
-    type OrderStatus,
 };
 
 // ============================================================================
@@ -91,13 +89,13 @@ export async function updateOrderStatusWithNotifications(
  * Send notifications based on order status
  */
 async function sendOrderNotifications(
-  order: any, // Using any since we need guestEmail/guestName which aren't in OrderWithDetails
-  newStatus: OrderStatus,
-  trackingNumber?: string
+    order: any, // Using any since we need guestEmail/guestName which aren't in OrderWithDetails
+    newStatus: OrderStatus,
+    trackingNumber?: string
 ): Promise<void> {
-  try {
-    const customerEmail = order.user?.email || order.guestEmail || '';
-    const customerName = order.user?.name || order.guestName || 'Cliente';
+    try {
+        const customerEmail = order.user?.email || order.guestEmail || '';
+        const customerName = order.user?.name || order.guestName || 'Cliente';
 
         const orderData = {
             orderNumber: order.orderNumber,
@@ -167,47 +165,52 @@ async function sendOrderNotifications(
  * Get order by order number
  */
 export async function getOrderByNumber(
-  orderNumber: string,
-  userId?: string
+    orderNumber: string,
+    userId?: string
 ): Promise<{ success: boolean; order?: any; relatedOrders?: any[]; error?: string }> {
-  try {
-    // Use getOrderById from actions for consistency
-    // First find the order
-    const orderLookup = await db
-      .select({ id: orders.id })
-      .from(orders)
-      .where(
-        userId 
-          ? and(eq(orders.orderNumber, orderNumber), eq(orders.userId, userId))
-          : eq(orders.orderNumber, orderNumber)
-      )
-      .limit(1);
+    try {
+        // Use getOrderById from actions for consistency
+        // First find the order
+        // Debug: Check if order exists at all first
+        const orderExists = await db
+            .select({ id: orders.id, userId: orders.userId })
+            .from(orders)
+            .where(eq(orders.orderNumber, orderNumber))
+            .limit(1);
 
-    if (!orderLookup || orderLookup.length === 0) {
-      return { success: false, error: "Orden no encontrada" };
+        if (orderExists.length === 0) {
+            return { success: false, error: "Orden no encontrada (No existe)" };
+        }
+
+        if (userId && orderExists[0].userId !== userId) {
+            console.log(`[Service] Access Denied. Order User: ${orderExists[0].userId}, Request User: ${userId}`);
+            return { success: false, error: "No tienes permiso para ver esta orden" };
+        }
+
+        // Proceed with regular lookup (redundant check but safe)
+        const orderLookup = orderExists; // reusing the result
+
+        const order = await getOrderById(orderLookup[0].id);
+
+        if (!order) {
+            return { success: false, error: "Orden no encontrada" };
+        }
+
+        // Get related orders if part of multi-vendor
+        let relatedOrders: any[] = [];
+        if ((order as any).orderGroupId) {
+            relatedOrders = await getRelatedOrders((order as any).orderGroupId);
+        }
+
+        return {
+            success: true,
+            order,
+            relatedOrders: relatedOrders.length > 1 ? relatedOrders : [],
+        };
+    } catch (error) {
+        console.error("Error getting order by number:", error);
+        return { success: false, error: "Error al obtener la orden" };
     }
-
-    const order = await getOrderById(orderLookup[0].id);
-    
-    if (!order) {
-      return { success: false, error: "Orden no encontrada" };
-    }
-
-    // Get related orders if part of multi-vendor
-    let relatedOrders: any[] = [];
-    if ((order as any).orderGroupId) {
-      relatedOrders = await getRelatedOrders((order as any).orderGroupId);
-    }
-
-    return {
-      success: true,
-      order,
-      relatedOrders: relatedOrders.length > 1 ? relatedOrders : [],
-    };
-  } catch (error) {
-    console.error("Error getting order by number:", error);
-    return { success: false, error: "Error al obtener la orden" };
-  }
 }
 
 /**
@@ -359,93 +362,93 @@ export async function listOrders(filters: {
  * Cancel an order
  */
 export async function cancelOrder(
-  orderId: string,
-  reason: string,
-  cancelledBy?: string
+    orderId: string,
+    reason: string,
+    cancelledBy?: string
 ): Promise<{ success: boolean; error?: string }> {
-  try {
-    const order = await getOrderById(orderId);
-    
-    if (!order) {
-      return { success: false, error: "Orden no encontrada" };
+    try {
+        const order = await getOrderById(orderId);
+
+        if (!order) {
+            return { success: false, error: "Orden no encontrada" };
+        }
+
+        // Check if order can be cancelled
+        if (['shipped', 'delivered', 'cancelled', 'refunded'].includes(order.status)) {
+            return {
+                success: false,
+                error: `No se puede cancelar una orden con estado: ${order.status}`,
+            };
+        }
+
+        // Update order status
+        await db
+            .update(orders)
+            .set({
+                status: 'cancelled',
+                cancellationStatus: 'approved',
+                cancellationReason: reason,
+                cancelledBy,
+                cancelledAt: new Date(),
+                updatedAt: new Date(),
+            })
+            .where(eq(orders.id, orderId));
+
+        // Log cancellation
+        await logOrderEvent({
+            action: 'cancelled',
+            orderId: order.id,
+            orderNumber: order.orderNumber,
+            userId: order.user?.id || null,
+            userEmail: order.user?.email,
+            vendorId: order.vendor.id,
+            details: {
+                reason,
+                cancelledBy,
+            },
+        });
+
+        // Get full order data with guest fields
+        const fullOrder: any = await db.query.orders.findFirst({
+            where: eq(orders.id, orderId),
+            with: {
+                vendor: true,
+                user: true,
+                items: {
+                    with: {
+                        product: true,
+                    },
+                },
+            },
+        });
+
+        // Send notification
+        const customerEmail = fullOrder.user?.email || fullOrder.guestEmail || '';
+        if (customerEmail) {
+            await sendOrderCancelledNotificationEmail({
+                orderNumber: fullOrder.orderNumber,
+                customerName: fullOrder.user?.name || fullOrder.guestName || 'Cliente',
+                customerEmail,
+                vendorName: fullOrder.vendor.businessName,
+                items: fullOrder.items.map((item: any) => ({
+                    name: item.product?.name || 'Producto',
+                    quantity: item.quantity,
+                    price: parseFloat(item.price),
+                })),
+                subtotal: parseFloat(fullOrder.subtotal),
+                tax: parseFloat(fullOrder.tax),
+                shipping: parseFloat(fullOrder.shipping),
+                total: parseFloat(fullOrder.total),
+                currency: fullOrder.currency,
+                shippingAddress: fullOrder.shippingAddress,
+            }, reason);
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error("Error cancelling order:", error);
+        return { success: false, error: "Error al cancelar la orden" };
     }
-
-    // Check if order can be cancelled
-    if (['shipped', 'delivered', 'cancelled', 'refunded'].includes(order.status)) {
-      return {
-        success: false,
-        error: `No se puede cancelar una orden con estado: ${order.status}`,
-      };
-    }
-
-    // Update order status
-    await db
-      .update(orders)
-      .set({
-        status: 'cancelled',
-        cancellationStatus: 'approved',
-        cancellationReason: reason,
-        cancelledBy,
-        cancelledAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .where(eq(orders.id, orderId));
-
-    // Log cancellation
-    await logOrderEvent({
-      action: 'cancelled',
-      orderId: order.id,
-      orderNumber: order.orderNumber,
-      userId: order.user?.id || null,
-      userEmail: order.user?.email,
-      vendorId: order.vendor.id,
-      details: {
-        reason,
-        cancelledBy,
-      },
-    });
-
-    // Get full order data with guest fields
-    const fullOrder: any = await db.query.orders.findFirst({
-      where: eq(orders.id, orderId),
-      with: {
-        vendor: true,
-        user: true,
-        items: {
-          with: {
-            product: true,
-          },
-        },
-      },
-    });
-
-    // Send notification
-    const customerEmail = fullOrder.user?.email || fullOrder.guestEmail || '';
-    if (customerEmail) {
-      await sendOrderCancelledNotificationEmail({
-        orderNumber: fullOrder.orderNumber,
-        customerName: fullOrder.user?.name || fullOrder.guestName || 'Cliente',
-        customerEmail,
-        vendorName: fullOrder.vendor.businessName,
-        items: fullOrder.items.map((item: any) => ({
-          name: item.product?.name || 'Producto',
-          quantity: item.quantity,
-          price: parseFloat(item.price),
-        })),
-        subtotal: parseFloat(fullOrder.subtotal),
-        tax: parseFloat(fullOrder.tax),
-        shipping: parseFloat(fullOrder.shipping),
-        total: parseFloat(fullOrder.total),
-        currency: fullOrder.currency,
-        shippingAddress: fullOrder.shippingAddress,
-      }, reason);
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error("Error cancelling order:", error);
-    return { success: false, error: "Error al cancelar la orden" };
-  }
 }
 
 /**

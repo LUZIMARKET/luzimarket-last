@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateOrderStatusWithNotifications, getOrderById, type OrderStatus } from "@/lib/services/order-service";
+import { updateOrderStatusWithNotifications, getOrderById } from "@/lib/services/order-service";
+import { type OrderStatus } from "@/lib/actions/orders";
 import { auth } from "@/lib/auth";
 import { z } from "zod";
 

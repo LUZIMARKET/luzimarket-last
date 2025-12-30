@@ -23,9 +23,14 @@ export async function GET(
     const { orderNumber } = await params;
 
     // Get order using OrderService
-    const result = await getOrderByNumber(orderNumber, session.user.id);
+    // If admin, pass undefined for userId to bypass ownership check
+    const userIdToCheck = session.user.role === 'admin' ? undefined : session.user.id;
+
+    console.log(`[API] Fetching order ${orderNumber}. User role: ${session.user.role}`);
+    const result = await getOrderByNumber(orderNumber, userIdToCheck);
 
     if (!result.success) {
+      console.log(`[API] Order not found or access denied`);
       return NextResponse.json(
         { error: result.error || "Orden no encontrada" },
         { status: 404 }
@@ -37,10 +42,14 @@ export async function GET(
       relatedOrders: result.relatedOrders || []
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching order details:", error);
     return NextResponse.json(
-      { error: "Error al obtener los detalles de la orden" },
+      {
+        error: "Error interno del servidor",
+        details: error.message,
+        stack: error.stack
+      },
       { status: 500 }
     );
   }
