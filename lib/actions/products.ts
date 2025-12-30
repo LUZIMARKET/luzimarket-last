@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 
 import { db } from "@/db";
 import { products, categories, vendors, reviews, orderItems } from "@/db/schema";
@@ -368,6 +370,8 @@ export async function getVendorProductById(productId: string) {
     throw new Error("Product not found");
   }
 
+  console.log(`[getVendorProductById] Fetched product ${productId} - Category: ${product.categoryId} (${product.category?.name})`);
+
   return product;
 }
 
@@ -432,6 +436,10 @@ export async function updateVendorProduct(
     if (imagesChanged && data.images.length > 0) {
       await createImageModerationRecords(productId, session.user.vendor.id, data.images);
     }
+
+    // Force revalidation of the product page and list
+    revalidatePath(`/vendor/products/${productId}/edit`);
+    revalidatePath(`/vendor/products`);
 
     return { success: true, product: updatedProduct };
   } catch (error) {
