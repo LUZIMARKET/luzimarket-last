@@ -4,9 +4,15 @@ import { routing } from '@/i18n/routing';
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
+import { Viewport } from "next";
 
-export default async function LocaleLayout({
-  children,
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+children,
   params
 }: {
   children: React.ReactNode;

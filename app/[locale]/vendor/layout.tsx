@@ -34,7 +34,7 @@ export default async function VendorLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full">
+      <div className="flex h-dvh w-full overflow-hidden">
         <VendorSidebar
           userEmail={session!.user!.email!}
           vendorName={vendorName}
