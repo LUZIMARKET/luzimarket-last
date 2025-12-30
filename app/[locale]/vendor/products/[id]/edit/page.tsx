@@ -57,6 +57,24 @@ export default function EditProductPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { getAllCategories } = await import("@/lib/actions/categories");
+        const data = await getAllCategories();
+        setCategories(data);
+      } catch (e) {
+        toast.error("No se pudieron cargar las categorías");
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const productSchema = createProductSchema(t);
 
@@ -297,14 +315,15 @@ export default function EditProductPage() {
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder={t("selectCategoryPlaceholder")} />
+                            <SelectValue placeholder={categoriesLoading ? "Cargando..." : t("selectCategoryPlaceholder")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="1">{t("categories.1")}</SelectItem>
-                          <SelectItem value="2">{t("categories.2")}</SelectItem>
-                          <SelectItem value="3">{t("categories.3")}</SelectItem>
-                          <SelectItem value="4">{t("categories.4")}</SelectItem>
+                          {categories.map((c) => (
+                            <SelectItem key={c.id} value={String(c.id)}>
+                              {c.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />

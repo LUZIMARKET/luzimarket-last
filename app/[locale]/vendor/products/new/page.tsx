@@ -41,18 +41,20 @@ export default function NewProductPage() {
 
   useEffect(() => {
     let isMounted = true;
-    (async () => {
+    const fetchCategories = async () => {
       try {
-        const res = await fetch("/api/categories", { cache: "no-store" });
-        if (!res.ok) throw new Error("failed");
-        const data: { id: number; name: string }[] = await res.json();
+        const { getAllCategories } = await import("@/lib/actions/categories");
+        const data = await getAllCategories();
         if (isMounted) setCategories(data);
       } catch (e) {
         toast.error("No se pudieron cargar las categorías");
       } finally {
         if (isMounted) setCategoriesLoading(false);
       }
-    })();
+    };
+
+    fetchCategories();
+
     return () => {
       isMounted = false;
     };
