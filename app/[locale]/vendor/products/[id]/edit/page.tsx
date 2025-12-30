@@ -126,19 +126,26 @@ export default function EditProductPage() {
   const onSubmit = async (data: ProductForm) => {
     setIsLoading(true);
     try {
-      await updateVendorProduct(productId, {
+      const result = await updateVendorProduct(productId, {
         ...data,
         price: parseFloat(data.price),
         stock: parseInt(data.stock),
         categoryId: parseInt(data.categoryId),
         tags: data.tags ? data.tags.split(",").map(tag => tag.trim()) : [],
       });
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
       await queryClient.invalidateQueries({ queryKey: ["vendor", "product", productId] });
       await queryClient.invalidateQueries({ queryKey: ["vendor", "products"] });
       toast.success(t("toast.updateSuccess"));
       router.push("/vendor/products");
     } catch (error) {
-      toast.error(t("toast.updateError"));
+      console.error("Update failed:", error);
+      const errorMessage = error instanceof Error ? error.message : t("toast.updateError");
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

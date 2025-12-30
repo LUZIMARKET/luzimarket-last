@@ -384,11 +384,65 @@ export async function updateVendorProduct(
     isActive: boolean;
   }
 ) {
+  try {
+    const { auth } = await import("@/lib/auth");
+    const { createImageModerationRecords } = await import("@/lib/actions/image-moderation");
+    const session = await auth();
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      throw new Error("Unauthorized");
+    }
+
+    const existing = await db.query.products.findFirst({
+      where: and(
+        eq(products.id, productId),
+        eq(products.vendorId, session.user.vendor.id)
+      ),
+    });
+    if (!existing) {
+      throw new Error("Product not found");
+    }
+
+    const imagesChanged = JSON.stringify(existing.images) !== JSON.stringify(data.images);
+
+    const [updatedProduct] = await db
+      .update(products)
+      .set({
+        name: data.name,
+        description: data.description,
+        price: data.price.toString(),
+        stock: data.stock,
+        categoryId: data.categoryId,
+        images: data.images,
+        tags: data.tags || [],
+        isActive: data.isActive,
+        updatedAt: new Date(),
+        ...(imagesChanged && {
+          imagesPendingModeration: data.images.length > 0,
+          imagesApproved: false,
+        }),
+      })
+      .where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)))
+      .returning();
+
+    if (imagesChanged && data.images.length > 0) {
+      await createImageModerationRecords(productId, session.user.vendor.id, data.images);
+    }
+
+    return { success: true, product: updatedProduct };
+  } catch (error) {
+    console.error("Error updating vendor product:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to update product"
+    };
+  }
+}
+
+export async function deleteVendorProduct(productId: string) {
   const { auth } = await import("@/lib/auth");
-  const { createImageModerationRecords } = await import("@/lib/actions/image-moderation");
   const session = await auth();
   if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
-    throw new Error("Unauthorized");
+    return { success: false, error: "Unauthorized" };
   }
 
   const existing = await db.query.products.findFirst({
@@ -398,50 +452,7 @@ export async function updateVendorProduct(
     ),
   });
   if (!existing) {
-    throw new Error("Product not found");
-  }
-
-  const imagesChanged = JSON.stringify(existing.images) !== JSON.stringify(data.images);
-
-  const [updatedProduct] = await db
-    .update(products)
-    .set({
-      name: data.name,
-      description: data.description,
-      price: data.price.toString(),
-      stock: data.stock,
-      categoryId: data.categoryId,
-      images: data.images,
-      tags: data.tags || [],
-      isActive: data.isActive,
-      updatedAt: new Date(),
-      ...(imagesChanged && {
-        imagesPendingModeration: data.images.length > 0,
-        imagesApproved: false,
-      }),
-    })
-    .where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)))
-    .returning();
-
-  if (imagesChanged && data.images.length > 0) {
-    await createImageModerationRecords(productId, session.user.vendor.id, data.images);
-  }
-
-  return updatedProduct;
-}
-
-export async function deleteVendorProduct(productId: string) {
-  const { auth } = await import("@/lib/auth");
-  const session = await auth();
-  if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
-    throw new Error("Unauthorized");
-  }
-
-  const existing = await db.query.products.findFirst({
-    where: and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)),
-  });
-  if (!existing) {
-    throw new Error("Product not found");
+    return { success: false, error: "Product not found" };
   }
 
   await db.delete(products).where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)));
