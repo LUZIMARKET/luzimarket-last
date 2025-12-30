@@ -531,6 +531,20 @@ export default function EditProductPage() {
           </div>
         </form>
       </Form>
+
+      {/* Temporary Debug Info */}
+      <div className="mt-8 p-4 bg-gray-100 rounded text-xs font-mono">
+        <p>Debug Info:</p>
+        <pre>
+          {JSON.stringify({
+            productCategoryId: product?.categoryId,
+            productCategoryIdType: typeof product?.categoryId,
+            formCategoryId: form.getValues("categoryId"),
+            categoriesLoaded: categories.length,
+            firstCategory: categories[0]
+          }, null, 2)}
+        </pre>
+      </div>
     </div>
   );
 }
