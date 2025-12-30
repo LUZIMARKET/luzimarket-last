@@ -2,7 +2,7 @@
 
 
 import { db } from "@/db";
-import { products, categories, vendors, reviews } from "@/db/schema";
+import { products, categories, vendors, reviews, orderItems } from "@/db/schema";
 import { eq, and, gte, lte, inArray, sql, desc, asc, or, avg } from "drizzle-orm";
 
 export interface ProductFilters {
@@ -402,6 +402,9 @@ export async function updateVendorProduct(
       throw new Error("Product not found");
     }
 
+    console.log("Updating product:", productId);
+    console.log("Data received:", JSON.stringify(data, null, 2));
+
     const imagesChanged = JSON.stringify(existing.images) !== JSON.stringify(data.images);
 
     const [updatedProduct] = await db
@@ -423,6 +426,8 @@ export async function updateVendorProduct(
       })
       .where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)))
       .returning();
+
+    console.log("Updated product result categoryId:", updatedProduct.categoryId);
 
     if (imagesChanged && data.images.length > 0) {
       await createImageModerationRecords(productId, session.user.vendor.id, data.images);
@@ -459,11 +464,30 @@ export async function deleteVendorProduct(productId: string) {
       return { success: false, error: "Product not found" };
     }
 
+    // Check if product has been ordered
+    const orderItem = await db.query.orderItems.findFirst({
+      where: eq(orderItems.productId, productId),
+    });
+
+    if (orderItem) {
+      return {
+        success: false,
+        error: "No se puede eliminar un producto que ha sido vendido. Por favor, desactívelo en su lugar para mantener el historial de ventas."
+      };
+    }
+
     await db.delete(products).where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)));
 
     return { success: true };
   } catch (error) {
     console.error("Error deleting vendor product:", error);
+    // Handle foreign key violation explicitly if missed by order check
+    if (error instanceof Error && error.message.includes("violates foreign key constraint")) {
+      return {
+        success: false,
+        error: "El producto tiene dependencias (ventas, reseñas, etc.) y no puede ser eliminado. Desactívelo en su lugar."
+      };
+    }
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to delete product"
