@@ -154,12 +154,17 @@ export default function EditProductPage() {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteVendorProduct(productId);
+      const result = await deleteVendorProduct(productId);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
       await queryClient.invalidateQueries({ queryKey: ["vendor", "products"] });
       toast.success(t("toast.deleteSuccess"));
       router.push("/vendor/products");
     } catch (error) {
-      toast.error(t("toast.deleteError"));
+      console.error("Delete failed:", error);
+      const errorMessage = error instanceof Error ? error.message : t("toast.deleteError");
+      toast.error(errorMessage);
     } finally {
       setIsDeleting(false);
     }

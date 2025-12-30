@@ -439,24 +439,33 @@ export async function updateVendorProduct(
 }
 
 export async function deleteVendorProduct(productId: string) {
-  const { auth } = await import("@/lib/auth");
-  const session = await auth();
-  if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
-    return { success: false, error: "Unauthorized" };
-  }
+  try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
 
-  const existing = await db.query.products.findFirst({
-    where: and(
-      eq(products.id, productId),
-      eq(products.vendorId, session.user.vendor.id)
-    ),
-  });
-  if (!existing) {
-    return { success: false, error: "Product not found" };
-  }
+    const existing = await db.query.products.findFirst({
+      where: and(
+        eq(products.id, productId),
+        eq(products.vendorId, session.user.vendor.id)
+      ),
+    });
+    if (!existing) {
+      return { success: false, error: "Product not found" };
+    }
 
-  await db.delete(products).where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)));
-  return { success: true };
+    await db.delete(products).where(and(eq(products.id, productId), eq(products.vendorId, session.user.vendor.id)));
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting vendor product:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to delete product"
+    };
+  }
 }
 
 export async function createVendorProduct(data: {
