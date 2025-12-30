@@ -120,45 +120,37 @@ export function ProductCSVImport({ vendorId }: ProductCSVImportProps) {
 
     return (
         <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Import Card */}
-                <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setShowDialog(true)}>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Upload className="h-5 w-5" />
-                            Importar CSV
-                        </CardTitle>
-                        <CardDescription>
-                            Importa múltiples productos desde un archivo CSV
-                        </CardDescription>
-                    </CardHeader>
-                </Card>
+            <div className="flex flex-wrap gap-2">
+                {/* Import Button */}
+                <Button
+                    variant="outline"
+                    onClick={() => setShowDialog(true)}
+                    className="flex items-center gap-2"
+                >
+                    <Upload className="h-4 w-4" />
+                    <span className="hidden sm:inline">Importar CSV</span>
+                </Button>
 
-                {/* Export Card */}
-                <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleExport}>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Download className="h-5 w-5" />
-                            Exportar CSV
-                        </CardTitle>
-                        <CardDescription>
-                            Descarga todos tus productos como CSV
-                        </CardDescription>
-                    </CardHeader>
-                </Card>
+                {/* Export Button */}
+                <Button
+                    variant="outline"
+                    onClick={handleExport}
+                    className="flex items-center gap-2"
+                >
+                    <Download className="h-4 w-4" />
+                    <span className="hidden sm:inline">Exportar CSV</span>
+                </Button>
 
-                {/* Template Card */}
-                <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={downloadTemplate}>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <FileText className="h-5 w-5" />
-                            Plantilla CSV
-                        </CardTitle>
-                        <CardDescription>
-                            Descarga una plantilla de ejemplo
-                        </CardDescription>
-                    </CardHeader>
-                </Card>
+                {/* Template Button */}
+                <Button
+                    variant="ghost"
+                    onClick={downloadTemplate}
+                    className="flex items-center gap-2"
+                    title="Descargar plantilla"
+                >
+                    <FileText className="h-4 w-4" />
+                    <span className="hidden sm:inline">Plantilla</span>
+                </Button>
             </div>
 
             {/* Import Dialog */}
@@ -206,8 +198,8 @@ export function ProductCSVImport({ vendorId }: ProductCSVImportProps) {
                         {importResults && (
                             <div className="space-y-3">
                                 <div className={`p-4 rounded-lg border ${importResults.errors.length === 0
-                                        ? "bg-green-50 border-green-200"
-                                        : "bg-yellow-50 border-yellow-200"
+                                    ? "bg-green-50 border-green-200"
+                                    : "bg-yellow-50 border-yellow-200"
                                     }`}>
                                     <div className="flex items-center gap-2 mb-2">
                                         {importResults.errors.length === 0 ? (
