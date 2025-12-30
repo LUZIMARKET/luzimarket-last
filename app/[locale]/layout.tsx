@@ -12,7 +12,9 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
 };
-children,
+
+export default async function LocaleLayout({
+  children,
   params
 }: {
   children: React.ReactNode;
