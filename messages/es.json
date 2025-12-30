@@ -1223,6 +1223,7 @@
     "noAccount": "¿No tienes cuenta? Regístrate",
     "resendVerificationLink": "¿No recibiste el correo? Reenviar enlace de verificación",
     "subtitle": "Inicia sesión en tu cuenta",
+    "registerCustomer": "Registrar nueva cuenta",
     "tabs": {
       "admin": "Admin",
       "customer": "Cliente",

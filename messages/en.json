@@ -1223,6 +1223,7 @@
     "noAccount": "Don't have an account? Sign up",
     "resendVerificationLink": "Didn't receive the email? Resend verification link",
     "subtitle": "Sign in to your account",
+    "registerCustomer": "Register new account",
     "tabs": {
       "admin": "Admin",
       "customer": "Customer",

@@ -30,7 +30,7 @@ export async function getUserSessions() {
     const sessionsWithDetails = sessions.map(s => {
       const parser = new UAParser(s.userAgent || '');
       const result = parser.getResult();
-      
+
       return {
         ...s,
         device: s.device || `${result.device.vendor || ''} ${result.device.model || ''}`.trim() || result.os.name || 'Unknown Device',
@@ -149,7 +149,7 @@ export async function updateSessionActivity(sessionToken: string) {
       .update(userSessions)
       .set({ lastActive: new Date() })
       .where(eq(userSessions.sessionToken, sessionToken));
-    
+
     return { success: true };
   } catch (error) {
     console.error("Error updating session activity:", error);
@@ -162,7 +162,7 @@ export async function cleanExpiredSessions() {
     await db
       .delete(userSessions)
       .where(lt(userSessions.expiresAt, new Date()));
-    
+
     return { success: true };
   } catch (error) {
     console.error("Error cleaning expired sessions:", error);

@@ -71,6 +71,7 @@ export const authOptions = {
           return result.user || null;
         } catch (error) {
           console.error("Auth error:", error);
+
           if (error instanceof InvalidLoginError) {
             throw error;
           }
