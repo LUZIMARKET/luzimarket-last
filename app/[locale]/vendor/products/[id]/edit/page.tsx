@@ -103,11 +103,7 @@ export default function EditProductPage() {
   useEffect(() => {
     if (!product) return;
 
-    console.log("Resetting form with product data:", {
-      id: product.id,
-      categoryId: product.categoryId,
-      stringCategoryId: product.categoryId?.toString()
-    });
+
 
     form.reset({
       name: product.name,
@@ -539,21 +535,7 @@ export default function EditProductPage() {
         </form>
       </Form>
 
-      {/* Temporary Debug Info */}
-      <div className="mt-8 p-4 bg-gray-100 rounded text-xs font-mono">
-        <p>Debug Info:</p>
-        <pre>
-          {JSON.stringify({
-            productCategoryId: product?.categoryId,
-            productCategoryIdType: typeof product?.categoryId,
-            formCategoryId: form.getValues("categoryId"),
-            formErrors: form.formState.errors,
-            isDirty: form.formState.isDirty,
-            categoriesLoaded: categories.length,
-            firstCategory: categories[0]
-          }, null, 2)}
-        </pre>
-      </div>
+
     </div>
   );
 }
