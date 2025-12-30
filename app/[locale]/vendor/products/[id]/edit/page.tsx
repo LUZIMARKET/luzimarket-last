@@ -102,6 +102,13 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (!product) return;
+
+    console.log("Resetting form with product data:", {
+      id: product.id,
+      categoryId: product.categoryId,
+      stringCategoryId: product.categoryId?.toString()
+    });
+
     form.reset({
       name: product.name,
       description: product.description || "",
@@ -540,6 +547,8 @@ export default function EditProductPage() {
             productCategoryId: product?.categoryId,
             productCategoryIdType: typeof product?.categoryId,
             formCategoryId: form.getValues("categoryId"),
+            formErrors: form.formState.errors,
+            isDirty: form.formState.isDirty,
             categoriesLoaded: categories.length,
             firstCategory: categories[0]
           }, null, 2)}
