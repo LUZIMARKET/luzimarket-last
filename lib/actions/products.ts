@@ -431,9 +431,12 @@ export async function updateVendorProduct(
     return { success: true, product: updatedProduct };
   } catch (error) {
     console.error("Error updating vendor product:", error);
+    // Return detailed error for debugging
+    const errorMessage = error instanceof Error ? error.message : "Failed to update product";
+    const detailedError = JSON.stringify(error, Object.getOwnPropertyNames(error));
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to update product"
+      error: `${errorMessage} | Details: ${detailedError}`
     };
   }
 }
