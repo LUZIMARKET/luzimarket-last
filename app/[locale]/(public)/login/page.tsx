@@ -11,7 +11,6 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, CheckCircle } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -36,7 +35,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  
+
   const loginSchema = createLoginSchema(t);
 
   useEffect(() => {
@@ -56,26 +55,18 @@ export default function LoginPage() {
     }
   }, [searchParams, t]);
 
-  const customerForm = useForm<LoginForm>({
+  const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
 
-  const vendorForm = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const adminForm = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const handleLogin = async (data: LoginForm, userType: "customer" | "vendor" | "admin") => {
+  const handleLogin = async (data: LoginForm) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // First, try to authenticate to get detailed error info
+      // First, try to authenticate to get detailed error info and detect role
       const { authenticateUser } = await import("@/lib/actions/auth");
-      const authResult = await authenticateUser(data.email, data.password, userType, locale);
+      const authResult = await authenticateUser(data.email, data.password, undefined, locale);
 
       if (!authResult.success) {
         if (authResult.isLocked) {
@@ -89,10 +80,13 @@ export default function LoginPage() {
       }
 
       // If authentication succeeded, proceed with NextAuth signIn
+      // We pass the detected userType if available, or undefined
+      const detectedRole = authResult.user?.role;
+
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        userType,
+        userType: detectedRole, // Pass the detected role so NextAuth can verify it
         redirect: false,
       });
 
@@ -100,7 +94,7 @@ export default function LoginPage() {
         setError(tAuth("loginError"));
       } else {
         // Redirect based on user type
-        switch (userType) {
+        switch (detectedRole) {
           case "admin":
             router.push("/admin"); // Admin dashboard
             break;
@@ -137,209 +131,87 @@ export default function LoginPage() {
           </div>
         )}
 
-        <Tabs defaultValue="customer" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="customer" className="font-univers text-sm">{t("tabs.customer")}</TabsTrigger>
-            <TabsTrigger value="vendor" className="font-univers text-sm">{t("tabs.vendor")}</TabsTrigger>
-            <TabsTrigger value="admin" className="font-univers text-sm">{t("tabs.admin")}</TabsTrigger>
-          </TabsList>
+        <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
+          <div>
+            <Label htmlFor="email">{t("fields.email")}</Label>
+            <Input
+              id="email"
+              type="email"
+              {...form.register("email")}
+              disabled={isLoading}
+              className="mt-1"
+            />
+            {form.formState.errors.email && (
+              <p className="text-sm text-red-500 mt-1" role="alert">{form.formState.errors.email.message}</p>
+            )}
+          </div>
 
-          {/* Customer Login */}
-          <TabsContent value="customer">
-            <form onSubmit={customerForm.handleSubmit((data) => handleLogin(data, "customer"))} className="space-y-4">
-              <div>
-                <Label htmlFor="customer-email">{t("fields.email")}</Label>
-                <Input
-                  id="customer-email"
-                  type="email"
-                  {...customerForm.register("email")}
-                  disabled={isLoading}
-                />
-                {customerForm.formState.errors.email && (
-                  <p className="text-sm text-red-500 mt-1" role="alert">{customerForm.formState.errors.email.message}</p>
-                )}
-              </div>
+          <div>
+            <Label htmlFor="password">{t("fields.password")}</Label>
+            <Input
+              id="password"
+              type="password"
+              {...form.register("password")}
+              disabled={isLoading}
+              className="mt-1"
+            />
+            {form.formState.errors.password && (
+              <p className="text-sm text-red-500 mt-1" role="alert">{form.formState.errors.password.message}</p>
+            )}
+          </div>
 
-              <div>
-                <Label htmlFor="customer-password">{t("fields.password")}</Label>
-                <Input
-                  id="customer-password"
-                  type="password"
-                  {...customerForm.register("password")}
-                  disabled={isLoading}
-                />
-                {customerForm.formState.errors.password && (
-                  <p className="text-sm text-red-500 mt-1" role="alert">{customerForm.formState.errors.password.message}</p>
-                )}
-              </div>
-
-              {error && (
-                <div className={`p-3 rounded-md text-sm ${error.includes("bloqueada") || error.includes("intentos restantes")
-                  ? "bg-red-50 border border-red-200 text-red-700"
-                  : "text-red-500"
-                  }`} role="alert">
-                  {error}
-                  {error.includes("verifica tu correo electrónico") && (
-                    <div className="mt-2">
-                      <Link href="/resend-verification" className="text-sm text-blue-600 hover:text-blue-800 underline">
-                        {t("resendVerificationLink")}
-                      </Link>
-                    </div>
-                  )}
+          {error && (
+            <div className={`p-3 rounded-md text-sm ${error.includes("bloqueada") || error.includes("intentos restantes")
+              ? "bg-red-50 border border-red-200 text-red-700"
+              : "text-red-500"
+              }`} role="alert">
+              {error}
+              {error.includes("verifica tu correo electrónico") && (
+                <div className="mt-2">
+                  <Link href="/resend-verification" className="text-sm text-blue-600 hover:text-blue-800 underline">
+                    {t("resendVerificationLink")}
+                  </Link>
                 </div>
               )}
+            </div>
+          )}
 
-              <Button
-                type="submit"
-                className="w-full bg-black text-white hover:bg-gray-800"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("loggingIn")}
-                  </>
-                ) : (
-                  t("loginButton")
-                )}
-              </Button>
+          <Button
+            type="submit"
+            className="w-full bg-black text-white hover:bg-gray-800"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t("loggingIn")}
+              </>
+            ) : (
+              t("loginButton")
+            )}
+          </Button>
 
-              <div className="text-center space-y-2">
-                <Link href="/register" className="text-sm text-gray-600 hover:text-black font-univers block">
-                  {t("noAccount")}
+          <div className="space-y-4 pt-4 border-t border-gray-100">
+            <div className="text-center">
+              <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-black font-univers">
+                {t("forgotPassword")}
+              </Link>
+            </div>
+
+            <div className="text-center space-y-2">
+              <p className="text-sm text-gray-500">{t("noAccount")}</p>
+              <div className="flex justify-center gap-4">
+                <Link href="/register" className="text-sm font-medium text-black hover:underline">
+                  {t("registerCustomer")}
                 </Link>
-                <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-black font-univers block">
-                  {t("forgotPassword")}
-                </Link>
-              </div>
-            </form>
-          </TabsContent>
-
-          {/* Vendor Login */}
-          <TabsContent value="vendor">
-            <form onSubmit={vendorForm.handleSubmit((data) => handleLogin(data, "vendor"))} className="space-y-4">
-              <div>
-                <Label htmlFor="vendor-email">{t("fields.email")}</Label>
-                <Input
-                  id="vendor-email"
-                  type="email"
-                  {...vendorForm.register("email")}
-                  disabled={isLoading}
-                />
-                {vendorForm.formState.errors.email && (
-                  <p className="text-sm text-red-500 mt-1" role="alert">{vendorForm.formState.errors.email.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="vendor-password">{t("fields.password")}</Label>
-                <Input
-                  id="vendor-password"
-                  type="password"
-                  {...vendorForm.register("password")}
-                  disabled={isLoading}
-                />
-                {vendorForm.formState.errors.password && (
-                  <p className="text-sm text-red-500 mt-1" role="alert">{vendorForm.formState.errors.password.message}</p>
-                )}
-              </div>
-
-              {error && (
-                <div className={`p-3 rounded-md text-sm ${error.includes("bloqueada") || error.includes("intentos restantes")
-                  ? "bg-red-50 border border-red-200 text-red-700"
-                  : "text-red-500"
-                  }`} role="alert">
-                  {error}
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full bg-black text-white hover:bg-gray-800"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("loggingIn")}
-                  </>
-                ) : (
-                  t("loginButton")
-                )}
-              </Button>
-
-              <div className="text-center space-y-2">
-                <Link href="/vendor-register" className="text-sm text-gray-600 hover:text-black font-univers block">
+                <span className="text-gray-300">|</span>
+                <Link href="/vendor-register" className="text-sm font-medium text-black hover:underline">
                   {t("wantToBeVendor")}
                 </Link>
-                <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-black font-univers block">
-                  {t("forgotPassword")}
-                </Link>
               </div>
-            </form>
-          </TabsContent>
-
-          {/* Admin Login */}
-          <TabsContent value="admin">
-            <form onSubmit={adminForm.handleSubmit((data) => handleLogin(data, "admin"))} className="space-y-4">
-              <div>
-                <Label htmlFor="admin-email">{t("fields.email")}</Label>
-                <Input
-                  id="admin-email"
-                  type="email"
-                  {...adminForm.register("email")}
-                  disabled={isLoading}
-                />
-                {adminForm.formState.errors.email && (
-                  <p className="text-sm text-red-500 mt-1" role="alert">{adminForm.formState.errors.email.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="admin-password">{t("fields.password")}</Label>
-                <Input
-                  id="admin-password"
-                  type="password"
-                  {...adminForm.register("password")}
-                  disabled={isLoading}
-                />
-                {adminForm.formState.errors.password && (
-                  <p className="text-sm text-red-500 mt-1" role="alert">{adminForm.formState.errors.password.message}</p>
-                )}
-              </div>
-
-              {error && (
-                <div className={`p-3 rounded-md text-sm ${error.includes("bloqueada") || error.includes("intentos restantes")
-                  ? "bg-red-50 border border-red-200 text-red-700"
-                  : "text-red-500"
-                  }`} role="alert">
-                  {error}
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full bg-black text-white hover:bg-gray-800"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("loggingIn")}
-                  </>
-                ) : (
-                  t("loginButton")
-                )}
-              </Button>
-
-              <div className="text-center">
-                <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-black font-univers">
-                  {t("forgotPassword")}
-                </Link>
-              </div>
-            </form>
-          </TabsContent>
-        </Tabs>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );

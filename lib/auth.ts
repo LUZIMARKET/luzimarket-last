@@ -17,7 +17,7 @@ class InvalidLoginError extends CredentialsSignin {
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-  userType: z.enum(["customer", "vendor", "admin"]),
+  userType: z.enum(["customer", "vendor", "admin"]).optional(),
 });
 
 export const authOptions = {
@@ -85,7 +85,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role as "customer" | "vendor" | "admin";
-        
+
         // Generate a unique session token for tracking only on sign in
         if (trigger === "signIn" || trigger === "signUp") {
           token.sessionToken = `${user.id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;

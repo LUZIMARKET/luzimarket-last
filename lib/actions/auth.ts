@@ -32,7 +32,7 @@ interface AuthResult {
 export async function authenticateUser(
   email: string,
   password: string,
-  userType: "customer" | "vendor" | "admin",
+  userType?: "customer" | "vendor" | "admin",
   locale: string = "es"
 ): Promise<AuthResult> {
   try {

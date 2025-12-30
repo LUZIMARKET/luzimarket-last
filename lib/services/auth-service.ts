@@ -618,31 +618,61 @@ export async function disable2FA(
 export async function authenticateUser(
     email: string,
     password: string,
-    userType: UserType,
+    userType?: UserType,
     ip?: string
 ): Promise<AuthResult> {
     try {
+        // If userType is not provided, we need to find the user in one of the tables
+        // Priority: Admin > Vendor > Customer
+        let detectedUserType = userType;
         let table;
-        switch (userType) {
-            case "customer":
-                table = users;
-                break;
-            case "vendor":
-                table = vendors;
-                break;
-            case "admin":
+        let user;
+
+        if (!detectedUserType) {
+            // Try Admin
+            const [admin] = await db.select().from(adminUsers).where(eq(adminUsers.email, email)).limit(1);
+            if (admin) {
+                detectedUserType = "admin";
+                user = admin;
                 table = adminUsers;
-                break;
+            } else {
+                // Try Vendor
+                const [vendor] = await db.select().from(vendors).where(eq(vendors.email, email)).limit(1);
+                if (vendor) {
+                    detectedUserType = "vendor";
+                    user = vendor;
+                    table = vendors;
+                } else {
+                    // Try Customer
+                    const [customer] = await db.select().from(users).where(eq(users.email, email)).limit(1);
+                    if (customer) {
+                        detectedUserType = "customer";
+                        user = customer;
+                        table = users;
+                    }
+                }
+            }
+        } else {
+            // Use provided userType
+            switch (detectedUserType) {
+                case "customer":
+                    table = users;
+                    break;
+                case "vendor":
+                    table = vendors;
+                    break;
+                case "admin":
+                    table = adminUsers;
+                    break;
+            }
+
+            if (table) {
+                const [foundUser] = await db.select().from(table).where(eq(table.email, email)).limit(1);
+                user = foundUser;
+            }
         }
 
-        // Get user with lockout info
-        const [user] = await db
-            .select()
-            .from(table)
-            .where(eq(table.email, email))
-            .limit(1);
-
-        if (!user) {
+        if (!user || !detectedUserType || !table) {
             return { success: false, error: "Credenciales inválidas" };
         }
 
@@ -659,12 +689,12 @@ export async function authenticateUser(
         }
 
         // Check if account is active
-        if (!user.isActive) {
+        if ('isActive' in user && !user.isActive) {
             return { success: false, error: "Cuenta inactiva" };
         }
 
         // Check if email is verified (only for customers)
-        if (userType === "customer" && 'emailVerified' in user && !user.emailVerified) {
+        if (detectedUserType === "customer" && 'emailVerified' in user && !user.emailVerified) {
             return { success: false, error: "Debes verificar tu correo electrónico" };
         }
 
@@ -672,7 +702,7 @@ export async function authenticateUser(
         const isValidPassword = user.passwordHash && await bcrypt.compare(password, user.passwordHash);
 
         if (!isValidPassword) {
-            await handleFailedLoginAttempt(user.id, email, userType, table);
+            await handleFailedLoginAttempt(user.id, email, detectedUserType, table);
 
             const remainingAttempts = Math.max(0, LOCKOUT_THRESHOLD - ((user.failedLoginAttempts || 0) + 1));
 
@@ -707,14 +737,14 @@ export async function authenticateUser(
             category: "auth",
             severity: "info",
             userId: user.id,
-            userType: userType,
+            userType: detectedUserType,
             userEmail: user.email,
             ip: ip || "unknown",
             resourceType: "user",
             resourceId: user.id,
             details: {
                 loginMethod: "password",
-                userType: userType,
+                userType: detectedUserType,
             },
         });
 
@@ -724,7 +754,7 @@ export async function authenticateUser(
                 id: user.id,
                 email: user.email,
                 name: (user as any).name || (user as any).contactName || user.email,
-                role: userType,
+                role: detectedUserType,
             },
         };
     } catch (error) {
