@@ -477,49 +477,57 @@ export async function createVendorProduct(data: {
   tags: string[];
   images: string[];
 }) {
-  const { auth } = await import("@/lib/auth");
-  const { createImageModerationRecords } = await import("@/lib/actions/image-moderation");
-  const session = await auth();
-  if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
-    throw new Error("Unauthorized");
+  try {
+    const { auth } = await import("@/lib/auth");
+    const { createImageModerationRecords } = await import("@/lib/actions/image-moderation");
+    const session = await auth();
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    // Ensure category exists to avoid FK violations and provide a clear error
+    const existingCategory = await db.query.categories.findFirst({
+      where: eq(categories.id, data.categoryId),
+    });
+    if (!existingCategory) {
+      return { success: false, error: "Category not found" };
+    }
+
+    // Basic slugging: name + random suffix
+    const { customAlphabet } = await import("nanoid");
+    const nanoid = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 6);
+    const slug = `${data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${nanoid()}`;
+
+    const [product] = await db
+      .insert(products)
+      .values({
+        vendorId: session.user.vendor.id,
+        name: data.name,
+        slug,
+        description: data.description,
+        price: data.price.toString(),
+        stock: data.stock,
+        categoryId: data.categoryId,
+        images: data.images,
+        tags: data.tags || [],
+        isActive: true,
+        imagesPendingModeration: data.images.length > 0,
+        imagesApproved: false,
+      })
+      .returning();
+
+    if (data.images.length > 0) {
+      await createImageModerationRecords(product.id, session.user.vendor.id, data.images);
+    }
+
+    return { success: true, product };
+  } catch (error) {
+    console.error("Error creating vendor product:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to create product"
+    };
   }
-
-  // Ensure category exists to avoid FK violations and provide a clear error
-  const existingCategory = await db.query.categories.findFirst({
-    where: eq(categories.id, data.categoryId),
-  });
-  if (!existingCategory) {
-    throw new Error("Category not found");
-  }
-
-  // Basic slugging: name + random suffix
-  const { customAlphabet } = await import("nanoid");
-  const nanoid = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 6);
-  const slug = `${data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${nanoid()}`;
-
-  const [product] = await db
-    .insert(products)
-    .values({
-      vendorId: session.user.vendor.id,
-      name: data.name,
-      slug,
-      description: data.description,
-      price: data.price.toString(),
-      stock: data.stock,
-      categoryId: data.categoryId,
-      images: data.images,
-      tags: data.tags || [],
-      isActive: true,
-      imagesPendingModeration: data.images.length > 0,
-      imagesApproved: false,
-    })
-    .returning();
-
-  if (data.images.length > 0) {
-    await createImageModerationRecords(product.id, session.user.vendor.id, data.images);
-  }
-
-  return product;
 }
 
 // Bulk operations for vendors

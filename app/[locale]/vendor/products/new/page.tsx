@@ -105,17 +105,24 @@ export default function NewProductPage() {
   const onSubmit = async (data: ProductForm) => {
     setIsLoading(true);
     try {
-      await createVendorProduct({
+      const result = await createVendorProduct({
         ...data,
         price: parseFloat(data.price),
         stock: parseInt(data.stock),
         categoryId: parseInt(data.categoryId),
         tags: data.tags ? data.tags.split(",").map(tag => tag.trim()) : [],
       });
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
       toast.success(t("toast.createSuccess"));
       router.push("/vendor/products");
     } catch (error) {
-      toast.error(t("toast.createError"));
+      console.error("Create failed:", error);
+      const errorMessage = error instanceof Error ? error.message : t("toast.createError");
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
