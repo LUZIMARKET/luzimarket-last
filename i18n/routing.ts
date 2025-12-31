@@ -179,6 +179,10 @@ export const routing = defineRouting({
       es: '/registrarse/confirmacion',
       en: '/register/success'
     },
+    '/register/customer': {
+      es: '/registrarse/cliente',
+      en: '/register/customer'
+    },
     '/forgot-password': {
       es: '/olvide-contrasena',
       en: '/forgot-password'
