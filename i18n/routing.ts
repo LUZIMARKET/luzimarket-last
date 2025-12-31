@@ -41,6 +41,10 @@ export const routing = defineRouting({
       es: '/vendedor/registro',
       en: '/vendor/register'
     },
+    '/vendor-register/success': {
+      es: '/vendedor/registro/exito',
+      en: '/vendor/register/success'
+    },
     '/vendor/dashboard': {
       es: '/vendedor/panel',
       en: '/vendor/dashboard'
@@ -170,6 +174,10 @@ export const routing = defineRouting({
     '/register': {
       es: '/registrarse',
       en: '/register'
+    },
+    '/register/success': {
+      es: '/registrarse/confirmacion',
+      en: '/register/success'
     },
     '/forgot-password': {
       es: '/olvide-contrasena',

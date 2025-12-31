@@ -1313,6 +1313,7 @@
     }
   },
   "Orders": {
+    "pageOf": "Página {current} de {total}",
     "actions": {
       "buyAgain": "Comprar de nuevo"
     },
@@ -1714,6 +1715,22 @@
     "vendor": "Vendedor",
     "viewDetails": "Ver detalles"
   },
+  "RegisterGateway": {
+    "title": "Únete a Luzimarket",
+    "subtitle": "Selecciona el tipo de cuenta que deseas crear para comenzar tu experiencia",
+    "customer": {
+      "title": "Cliente",
+      "description": "Descubre y compra regalos únicos hechos por artesanos mexicanos.",
+      "button": "Soy Cliente"
+    },
+    "vendor": {
+      "title": "Vendedor",
+      "description": "Vende tus productos y alcanza a más clientes en nuestra plataforma.",
+      "button": "Soy Vendedor"
+    },
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "login": "Inicia sesión"
+  },
   "RegisterPage": {
     "alreadyHaveAccount": "¿Ya tienes cuenta? Inicia sesión",
     "createAccount": "Crear cuenta",
@@ -1755,6 +1772,11 @@
       "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
       "passwordsDoNotMatch": "Las contraseñas no coinciden"
     }
+  },
+  "RegisterSuccess": {
+    "title": "¡Gracias!",
+    "message": "Te hemos enviado un correo de confirmación. Por favor revísalo para verificar tu cuenta e iniciar sesión correctamente.",
+    "backToHome": "Volver al inicio"
   },
   "Search": {
     "checkSpelling": "Verifica la ortografía",
@@ -2821,6 +2843,9 @@
     "emailLabel": "Correo electrónico",
     "error": "Error al registrar vendedor",
     "external": "Servicio Externo",
+    "exteriorNumberPlaceholder": "Número exterior",
+    "interiorNumberPlaceholder": "Número interior",
+    "neighborhoodLabel": "Colonia",
     "facebook": "Facebook",
     "hasDelivery": "¿Ofreces servicio de entrega?",
     "instagram": "Instagram",

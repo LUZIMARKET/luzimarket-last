@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ChevronDown, ChevronUp, Star } from "lucide-react";
+import { ArrowDown, Check, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 
 interface FilterOption {
   id: string;
@@ -48,214 +49,242 @@ export function FilterSidebar({
   const currentRating = searchParams.get("minRating") || "";
   const currentAvailability = searchParams.get("availability") || "";
 
-  // Local state for inputs
+  // Local state
   const [minPrice, setMinPrice] = useState(currentMinPrice);
   const [maxPrice, setMaxPrice] = useState(currentMaxPrice);
 
   // Collapsible states
   const [openSections, setOpenSections] = useState({
     categories: true,
-    vendors: true,
-    price: true,
-    rating: true,
-    availability: true,
+    vendors: false,
+    price: false,
+    rating: false,
+    availability: false,
   });
 
-  // Update URL with new filters
+  // Show More states
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [showAllVendors, setShowAllVendors] = useState(false);
+
+  // Constants
+  const INITIAL_ITEMS_TO_SHOW = 6;
+
+  // Update logic
   const updateFilters = (updates: Record<string, string | string[]>) => {
     const params = new URLSearchParams(searchParams);
-
     Object.entries(updates).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        if (value.length > 0) {
-          params.set(key, value.join(","));
-        } else {
-          params.delete(key);
-        }
+        value.length > 0 ? params.set(key, value.join(",")) : params.delete(key);
       } else if (value) {
         params.set(key, value);
       } else {
         params.delete(key);
       }
     });
-
-    // Reset to page 1 when filters change
     params.set("page", "1");
-
     router.push(`?${params.toString()}` as any);
   };
 
-  // Handle category toggle
   const toggleCategory = (categoryId: string) => {
     const newCategories = currentCategories.includes(categoryId)
       ? currentCategories.filter(id => id !== categoryId)
       : [...currentCategories, categoryId];
-
     updateFilters({ categories: newCategories });
   };
 
-  // Handle vendor toggle
   const toggleVendor = (vendorId: string) => {
     const newVendors = currentVendors.includes(vendorId)
       ? currentVendors.filter(id => id !== vendorId)
       : [...currentVendors, vendorId];
-
     updateFilters({ vendors: newVendors });
   };
 
-  // Handle price filter
   const applyPriceFilter = () => {
-    updateFilters({
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-    });
+    updateFilters({ minPrice: minPrice, maxPrice: maxPrice });
   };
 
-  // Clear all filters
   const clearAllFilters = () => {
+    setMinPrice("");
+    setMaxPrice("");
     router.push("/products");
   };
 
-  const hasActiveFilters =
-    currentCategories.length > 0 ||
-    currentVendors.length > 0 ||
-    currentMinPrice ||
-    currentMaxPrice ||
-    currentRating ||
-    currentAvailability;
+  // --- Render Helpers ---
 
-  return (
-    <div className="w-full">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2">
-        {hasActiveFilters && (
+  // 1. Categories List (Clean Text Style, no visible checkbox box used, just selective bolding/check)
+  // mimicking the "Classic, Modern" simple list from image
+  const renderCategoryList = () => {
+    const visibleItems = showAllCategories ? categories : categories.slice(0, INITIAL_ITEMS_TO_SHOW);
+    const hasHiddenItems = categories.length > INITIAL_ITEMS_TO_SHOW;
+
+    return (
+      <div className="space-y-2 pl-4">
+        {visibleItems.map((category) => {
+          const isSelected = currentCategories.includes(category.id);
+          return (
+            <div
+              key={category.id}
+              onClick={() => toggleCategory(category.id)}
+              className={cn(
+                "cursor-pointer text-base transition-colors hover:text-black flex items-center gap-2",
+                isSelected ? "font-medium text-black" : "text-gray-500 font-light"
+              )}
+            >
+              <span>{category.name}</span>
+              {/* Optional: subtle checkmark if selected, since we removed the box */}
+              {isSelected && <Check className="h-3 w-3" />}
+            </div>
+          );
+        })}
+        {hasHiddenItems && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={clearAllFilters}
-            className="text-xs font-univers"
+            onClick={() => setShowAllCategories(!showAllCategories)}
+            className="h-auto px-0 text-gray-400 hover:text-black text-sm font-light mt-2"
           >
-            {t("clearAll")}
+            {showAllCategories ? "Show less" : `Show ${categories.length - INITIAL_ITEMS_TO_SHOW} more`}
           </Button>
         )}
       </div>
+    );
+  };
 
-      {/* Categories */}
+  // 2. Vendors List (Minimalist Checkboxes)
+  const renderVendorList = () => {
+    const visibleItems = showAllVendors ? vendors : vendors.slice(0, INITIAL_ITEMS_TO_SHOW);
+    const hasHiddenItems = vendors.length > INITIAL_ITEMS_TO_SHOW;
+
+    return (
+      <div className="space-y-3 pt-2">
+        {visibleItems.map((vendor) => (
+          <div key={vendor.id} className="flex items-center space-x-3 group">
+            <Checkbox
+              id={`vendor-${vendor.id}`}
+              checked={currentVendors.includes(vendor.id)}
+              onCheckedChange={() => toggleVendor(vendor.id)}
+              className="border-gray-300 data-[state=checked]:bg-black data-[state=checked]:border-black"
+            />
+            <Label
+              htmlFor={`vendor-${vendor.id}`}
+              className="flex-1 text-sm text-gray-600 group-hover:text-black cursor-pointer flex items-center justify-between font-light"
+            >
+              <span>{vendor.name}</span>
+              <span className="text-xs text-gray-400">({vendor.count})</span>
+            </Label>
+          </div>
+        ))}
+        {hasHiddenItems && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowAllVendors(!showAllVendors)}
+            className="h-auto px-0 text-gray-400 hover:text-black text-sm font-light mt-2 flex items-center gap-1"
+          >
+            {showAllVendors ? (
+              <>
+                <Minus className="h-3 w-3" /> Show less
+              </>
+            ) : (
+              <>
+                <Plus className="h-3 w-3" /> Show {vendors.length - INITIAL_ITEMS_TO_SHOW} more
+              </>
+            )}
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  // 3. Shared Header for Non-Pill sections
+  const MinimalHeader = ({ title, isOpen }: { title: string; isOpen: boolean }) => (
+    <div className="flex items-center justify-between w-full py-4 border-b border-gray-100 group">
+      <span className="text-base text-gray-800 font-normal group-hover:text-black">{title}</span>
+      <ArrowDown
+        className={cn(
+          "h-4 w-4 text-gray-800 transition-transform duration-200",
+          isOpen ? "transform rotate-180" : ""
+        )}
+      />
+    </div>
+  );
+
+  return (
+    <div className="w-full pr-6">
+      {/* 1. Categories - PILL STYLE */}
       <Collapsible
         open={openSections.categories}
         onOpenChange={(open) => setOpenSections(prev => ({ ...prev, categories: open }))}
-        className="mb-6"
+        className="mb-8"
       >
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-univers hover:text-gray-700">
-          <span>{t("categories")}</span>
-          {openSections.categories ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
+        <CollapsibleTrigger className="w-full">
+          {/* The "Pill" Trigger */}
+          <div className="
+            w-full bg-white rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-gray-100 
+            px-6 py-4 flex justify-between items-center 
+            hover:shadow-md transition-shadow duration-200
+          ">
+            <span className="text-lg font-medium text-gray-900">{t("categories")}</span>
+            <ArrowDown className={cn(
+              "h-5 w-5 text-gray-900 transition-transform duration-200",
+              openSections.categories ? "transform rotate-180" : ""
+            )} />
+          </div>
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4 space-y-3">
-          {categories.map((category) => (
-            <div key={category.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`category-${category.id}`}
-                checked={currentCategories.includes(category.id)}
-                onCheckedChange={() => toggleCategory(category.id)}
-              />
-              <Label
-                htmlFor={`category-${category.id}`}
-                className="flex-1 text-sm font-univers cursor-pointer flex items-center justify-between"
-              >
-                <span>{category.name}</span>
-                <span className="text-xs text-gray-500">({category.count})</span>
-              </Label>
-            </div>
-          ))}
+        <CollapsibleContent className="pt-6 px-2">
+          {renderCategoryList()}
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Vendors/Brands */}
+
+      {/* 2. Vendors - Minimal Border Bottom */}
       <Collapsible
         open={openSections.vendors}
         onOpenChange={(open) => setOpenSections(prev => ({ ...prev, vendors: open }))}
-        className="mb-6"
       >
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-univers hover:text-gray-700">
-          <span>{t("vendors")}</span>
-          {openSections.vendors ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
+        <CollapsibleTrigger className="w-full">
+          <MinimalHeader title={t("vendors")} isOpen={openSections.vendors} />
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4 space-y-3">
-          {vendors.map((vendor) => (
-            <div key={vendor.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`vendor-${vendor.id}`}
-                checked={currentVendors.includes(vendor.id)}
-                onCheckedChange={() => toggleVendor(vendor.id)}
-              />
-              <Label
-                htmlFor={`vendor-${vendor.id}`}
-                className="flex-1 text-sm font-univers cursor-pointer flex items-center justify-between"
-              >
-                <span>{vendor.name}</span>
-                <span className="text-xs text-gray-500">({vendor.count})</span>
-              </Label>
-            </div>
-          ))}
+        <CollapsibleContent className="pb-4">
+          {renderVendorList()}
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Price Range */}
+      {/* 3. Price - Minimal Border Bottom */}
       <Collapsible
         open={openSections.price}
         onOpenChange={(open) => setOpenSections(prev => ({ ...prev, price: open }))}
-        className="mb-6"
       >
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-univers hover:text-gray-700">
-          <span>{t("priceRange")}</span>
-          {openSections.price ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
+        <CollapsibleTrigger className="w-full">
+          <MinimalHeader title={t("priceRange")} isOpen={openSections.price} />
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
+        <CollapsibleContent className="pb-4 pt-4">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="flex-1">
-                <Label htmlFor="min-price" className="text-xs font-univers text-gray-600">
-                  {t("minPrice")}
-                </Label>
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-2.5 text-sm text-gray-400">$</span>
                 <Input
-                  id="min-price"
                   type="number"
-                  placeholder={`$${priceRange.min}`}
+                  placeholder={`${priceRange.min}`}
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
-                  className="mt-1"
+                  className="pl-7 h-10 rounded-full border-gray-200 bg-gray-50 text-sm focus:bg-white transition-colors"
                 />
               </div>
-              <div className="flex-1">
-                <Label htmlFor="max-price" className="text-xs font-univers text-gray-600">
-                  {t("maxPrice")}
-                </Label>
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-2.5 text-sm text-gray-400">$</span>
                 <Input
-                  id="max-price"
                   type="number"
-                  placeholder={`$${priceRange.max}`}
+                  placeholder={`${priceRange.max}`}
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="mt-1"
+                  className="pl-7 h-10 rounded-full border-gray-200 bg-gray-50 text-sm focus:bg-white transition-colors"
                 />
               </div>
             </div>
             <Button
               onClick={applyPriceFilter}
-              className="w-full"
-              size="sm"
+              className="w-full rounded-full h-10 bg-black text-white hover:bg-gray-800 text-sm font-medium"
             >
               {t("applyFilters")}
             </Button>
@@ -263,45 +292,35 @@ export function FilterSidebar({
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Rating Filter */}
+      {/* 4. Rating */}
       <Collapsible
         open={openSections.rating}
         onOpenChange={(open) => setOpenSections(prev => ({ ...prev, rating: open }))}
-        className="mb-6"
       >
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-univers hover:text-gray-700">
-          <span>{t("minRating")}</span>
-          {openSections.rating ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
+        <CollapsibleTrigger className="w-full">
+          <MinimalHeader title={t("minRating")} isOpen={openSections.rating} />
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4 space-y-3">
+        <CollapsibleContent className="pb-4 pt-2">
+          {/* Minimal Rating Content */}
           <RadioGroup
             value={currentRating}
             onValueChange={(value) => updateFilters({ minRating: value })}
+            className="space-y-2"
           >
             {[4, 3, 2, 1].map((rating) => (
-              <div key={rating} className="flex items-center space-x-2">
-                <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} />
+              <div key={rating} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors -ml-2">
+                <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} className="hidden" />
+                {/* Hidden radio, making the whole row clickable essentially if I wrapped in label, but here just keeping simple layout */}
                 <Label
                   htmlFor={`rating-${rating}`}
-                  className="flex items-center gap-1 text-sm font-univers cursor-pointer flex-1"
+                  className="flex items-center gap-2 cursor-pointer w-full font-light text-sm"
                 >
-                  <div className="flex items-center">
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        }`}
-                      />
+                  <span className="w-4 text-center">{rating}+</span>
+                  <div className="flex text-yellow-500">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span key={i} className={i < rating ? "text-yellow-400" : "text-gray-200"}>★</span>
                     ))}
                   </div>
-                  <span className="ml-2">& up</span>
                 </Label>
               </div>
             ))}
@@ -309,46 +328,30 @@ export function FilterSidebar({
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Availability Filter */}
+      {/* 5. Availability */}
       <Collapsible
         open={openSections.availability}
         onOpenChange={(open) => setOpenSections(prev => ({ ...prev, availability: open }))}
-        className="mb-6"
       >
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-univers hover:text-gray-700">
-          <span>{t("availability")}</span>
-          {openSections.availability ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
+        <CollapsibleTrigger className="w-full">
+          <MinimalHeader title={t("availability")} isOpen={openSections.availability} />
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4 space-y-3">
+        <CollapsibleContent className="pb-4 pt-2">
           <RadioGroup
             value={currentAvailability}
             onValueChange={(value) => updateFilters({ availability: value })}
+            className="space-y-2"
           >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="in-stock" id="in-stock" />
-              <Label htmlFor="in-stock" className="text-sm font-univers cursor-pointer">
-                In Stock
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="out-of-stock" id="out-of-stock" />
-              <Label htmlFor="out-of-stock" className="text-sm font-univers cursor-pointer">
-                Out of Stock
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="low-stock" id="low-stock" />
-              <Label htmlFor="low-stock" className="text-sm font-univers cursor-pointer">
-                Low Stock (≤ 5 items)
-              </Label>
-            </div>
+            {['in-stock', 'out-of-stock'].map((val) => (
+              <div key={val} className="flex items-center space-x-2">
+                <RadioGroupItem value={val} id={val} className="border-gray-300" />
+                <Label htmlFor={val} className="font-light text-sm capitalize">{val.replace(/-/g, ' ')}</Label>
+              </div>
+            ))}
           </RadioGroup>
         </CollapsibleContent>
       </Collapsible>
+
     </div>
   );
 }

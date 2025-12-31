@@ -21,9 +21,11 @@ interface SearchResult {
 
 interface SearchBoxProps {
   idSuffix?: string;
+  className?: string; // Add className
+  placeholder?: string; // Add placeholder
 }
 
-export function SearchBox({ idSuffix = "" }: SearchBoxProps) {
+export function SearchBox({ idSuffix = "", className = "", placeholder }: SearchBoxProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -129,8 +131,8 @@ export function SearchBox({ idSuffix = "" }: SearchBoxProps) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => query.length >= 2 && results.length > 0 && setIsOpen(true)}
-              placeholder={t('searchPlaceholder')}
-              className="pl-10 pr-10 w-full border-gray-300 rounded-none font-univers"
+              placeholder={placeholder || t('searchPlaceholder')}
+              className={`pl-10 pr-10 w-full font-univers ${className}`} // Apply className here and remove default border/rounded if handled by className
             />
             {query && (
               <button

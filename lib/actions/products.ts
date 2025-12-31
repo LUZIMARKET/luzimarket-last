@@ -91,9 +91,10 @@ export async function getFilteredProducts(filters: ProductFilters = {}) {
     }
 
     if (tags.length > 0) {
+      console.log("Filtering by tags using jsonb_exists:", tags);
       // Match any of the provided tags in the product tags JSON array
-      // Uses Postgres jsonb key existence operator (?) per tag and combines with OR
-      const tagConds = tags.map((tag) => sql`(${products.tags}::jsonb) ? ${tag}`);
+      // Use jsonb_exists function which is the safe function equivalent of the ? operator
+      const tagConds = tags.map((tag) => sql`jsonb_exists(${products.tags}::jsonb, ${tag}::text)`);
       conditions.push(or(...tagConds));
     }
 

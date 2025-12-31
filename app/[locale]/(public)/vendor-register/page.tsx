@@ -6,8 +6,8 @@ export default async function VendorRegisterPage() {
   const t = await getTranslations("VendorRegistration");
 
   return (
-    <div className="min-h-screen py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <div className="mb-4">
             <Image
@@ -26,7 +26,7 @@ export default async function VendorRegisterPage() {
             {t("welcomeSubtitle")}<br />
             {t("welcomeDescription")}
           </p>
-          
+
           <div className="mt-8">
             <Image
               src="/images/logos/hand-gesture-icon.png"
@@ -40,8 +40,8 @@ export default async function VendorRegisterPage() {
 
         <VendorRegistrationForm />
 
-        <p className="text-center text-sm font-univers text-gray-500 mt-12">
-          © {new Date().getFullYear()} LUZIMARKET. Built by <a href="https://abdulachik.dev" target="_blank" rel="noopener noreferrer" className="underline">Abdul-Hamid Achik</a>.
+        <p className="text-center text-sm font-univers text-gray-500 mt-12 uppercase">
+          MOMENTO ESPECIAL SAPI DE CV © 2022 / TODOS LOS DERECHOS RESERVADOS
         </p>
       </div>
     </div>

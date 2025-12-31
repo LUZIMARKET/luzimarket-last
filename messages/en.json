@@ -1313,6 +1313,7 @@
     }
   },
   "Orders": {
+    "pageOf": "Page {current} of {total}",
     "actions": {
       "buyAgain": "Buy again"
     },
@@ -1714,6 +1715,22 @@
     "vendor": "Vendor",
     "viewDetails": "View details"
   },
+  "RegisterGateway": {
+    "title": "Join Luzimarket",
+    "subtitle": "Select the type of account you want to create to start your experience",
+    "customer": {
+      "title": "Customer",
+      "description": "Discover and shop for unique gifts made by Mexican artisans.",
+      "button": "I am a Customer"
+    },
+    "vendor": {
+      "title": "Vendor",
+      "description": "Sell your products and reach more customers on our platform.",
+      "button": "I am a Vendor"
+    },
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in"
+  },
   "RegisterPage": {
     "alreadyHaveAccount": "Already have an account? Sign in",
     "createAccount": "Create account",
@@ -1755,6 +1772,11 @@
       "passwordMinLength": "Password must be at least 6 characters",
       "passwordsDoNotMatch": "Passwords do not match"
     }
+  },
+  "RegisterSuccess": {
+    "title": "Thank you!",
+    "message": "We have sent you a confirmation email. Please check it to verify your account and log in successfully.",
+    "backToHome": "Back to home"
   },
   "Search": {
     "checkSpelling": "Check spelling",

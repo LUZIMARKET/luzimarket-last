@@ -102,10 +102,15 @@ export async function registerUser(data: unknown): Promise<RegistrationResult> {
         });
 
         // Send verification email
-        await sendVerificationEmail(
-            { email: newUser.email, name: newUser.name },
-            verificationToken
-        );
+        try {
+            await sendVerificationEmail(
+                { email: newUser.email, name: newUser.name },
+                verificationToken
+            );
+        } catch (emailError) {
+            console.error("Failed to send verification email:", emailError);
+            // Continue with registration success even if email fails
+        }
 
         // Convert any guest orders to this new user account
         const conversionResult = await convertGuestOrdersToUser({

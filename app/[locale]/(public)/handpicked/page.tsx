@@ -5,6 +5,7 @@ import { ProductsGrid } from "@/components/products/products-grid";
 import { InfiniteProductsGrid } from "@/components/products/infinite-products-grid";
 import { FilterSidebar } from "@/components/products/filter-sidebar";
 import { SortDropdown } from "@/components/products/sort-dropdown";
+import { getFilteredProductsHandpicked } from "@/lib/actions/products-handpicked";
 import { getFilteredProducts, getProductFilterOptions } from "@/lib/actions/products";
 import { db } from "@/db";
 import { vendors } from "@/db/schema";
@@ -42,7 +43,7 @@ export default async function HandpickedPage({ params, searchParams }: Handpicke
 
   // Execute queries in parallel for better performance
   const [productsResult, filterOptions] = await Promise.all([
-    getFilteredProducts({
+    getFilteredProductsHandpicked({
       categoryIds,
       vendorIds,
       sortBy: filters.sort as any,
@@ -61,7 +62,7 @@ export default async function HandpickedPage({ params, searchParams }: Handpicke
   // Fallback: if no handpicked products, show general products so the page is never empty
   let usingFallback = false;
   let finalProductsResult = productsResult;
-  
+
   if (productsResult.products.length === 0) {
     usingFallback = true;
     finalProductsResult = await getFilteredProducts({
@@ -88,6 +89,7 @@ export default async function HandpickedPage({ params, searchParams }: Handpicke
                 className="absolute inset-0 w-full h-full -z-10 scale-110"
                 viewBox="0 0 400 120"
                 preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <ellipse
                   cx="200"

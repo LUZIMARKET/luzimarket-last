@@ -67,6 +67,7 @@ export async function registerVendor(data: unknown): Promise<{
             <p><strong>Contacto:</strong> ${validatedData.contactName}</p>
             <p><strong>Email:</strong> ${validatedData.email}</p>
             <p><strong>Teléfono:</strong> ${validatedData.businessPhone}</p>
+            <p><strong>Dirección:</strong> ${validatedData.street} ${validatedData.exteriorNumber}, ${validatedData.neighborhood}</p>
             <p><strong>Ciudad:</strong> ${validatedData.city}, ${validatedData.state}</p>
             <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/admin/vendors/${vendor.id}">Revisar solicitud</a></p>
           `,
@@ -86,6 +87,7 @@ export async function registerVendor(data: unknown): Promise<{
           <ul>
             <li>Negocio: ${validatedData.businessName}</li>
             <li>Email: ${validatedData.email}</li>
+            <li>Dirección: ${validatedData.street} ${validatedData.exteriorNumber}, ${validatedData.neighborhood}</li>
             <li>Ciudad: ${validatedData.city}, ${validatedData.state}</li>
           </ul>
           <p>Gracias por tu interés en Luzimarket.</p>
@@ -386,25 +388,25 @@ export async function getVendorStatistics(vendorId: string) {
             where: eq(vendorBalances.vendorId, vendorId),
         });
 
-    // Get product count
-    const productStats = await db
-      .select({
-        totalProducts: sql<number>`count(*)`,
-        activeProducts: sql<number>`count(*) filter (where is_active = true)`,
-      })
-      .from(products)
-      .where(eq(products.vendorId, vendorId));
+        // Get product count
+        const productStats = await db
+            .select({
+                totalProducts: sql<number>`count(*)`,
+                activeProducts: sql<number>`count(*) filter (where is_active = true)`,
+            })
+            .from(products)
+            .where(eq(products.vendorId, vendorId));
 
-    // Get order statistics
-    const orderStats = await db
-      .select({
-        totalOrders: sql<number>`count(*)`,
-        totalRevenue: sql<number>`sum(cast(total as decimal))`,
-        pendingOrders: sql<number>`count(*) filter (where status = 'pending')`,
-        processingOrders: sql<number>`count(*) filter (where status = 'processing')`,
-      })
-      .from(orders)
-      .where(eq(orders.vendorId, vendorId));
+        // Get order statistics
+        const orderStats = await db
+            .select({
+                totalOrders: sql<number>`count(*)`,
+                totalRevenue: sql<number>`sum(cast(total as decimal))`,
+                pendingOrders: sql<number>`count(*) filter (where status = 'pending')`,
+                processingOrders: sql<number>`count(*) filter (where status = 'processing')`,
+            })
+            .from(orders)
+            .where(eq(orders.vendorId, vendorId));
 
         return {
             success: true,

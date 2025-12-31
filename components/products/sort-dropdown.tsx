@@ -31,18 +31,16 @@ export function SortDropdown() {
 
   return (
     <div className="flex items-center gap-4 self-end" data-testid="sort-dropdown">
-      <span className="text-sm font-univers text-gray-600">{t('sortBy')}</span>
+      <span className="text-sm font-univers text-gray-600 hidden sm:inline-block">Ordenar por</span>
       <Select value={currentSort} onValueChange={handleSortChange}>
-        <SelectTrigger className="w-48">
+        <SelectTrigger className="w-auto min-w-[140px] border-none shadow-none focus:ring-0 px-0 h-auto font-medium text-gray-900 bg-transparent gap-1">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="featured">{t('sortOptions.featured')}</SelectItem>
-          <SelectItem value="newest">{t('sortOptions.newest')}</SelectItem>
-          <SelectItem value="price-asc">{t('sortOptions.priceAsc')}</SelectItem>
-          <SelectItem value="price-desc">{t('sortOptions.priceDesc')}</SelectItem>
-          <SelectItem value="rating">Rating (High to Low)</SelectItem>
-          <SelectItem value="popularity">Most Popular</SelectItem>
+        <SelectContent align="end" className="w-[200px]">
+          <SelectItem value="featured">{t('ourSelection')}</SelectItem>
+          <SelectItem value="newest">{t('newest')}</SelectItem>
+          <SelectItem value="price-asc">{t('priceLowToHigh')}</SelectItem>
+          <SelectItem value="price-desc">{t('priceHighToLow')}</SelectItem>
         </SelectContent>
       </Select>
     </div>
