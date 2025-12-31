@@ -1,7 +1,8 @@
 "use client";
 
 import { useLocale } from 'next-intl';
-import { useRouter, usePathname, useParams } from '@/i18n/navigation';
+import { useRouter, usePathname } from '@/i18n/navigation';
+import { useParams } from 'next/navigation';
 import { useCurrency } from "@/contexts/currency-context";
 
 export function LocaleCurrencyToggle() {
@@ -17,7 +18,7 @@ export function LocaleCurrencyToggle() {
         const newCurrency = newLocale === 'es' ? 'MXN' : 'USD';
         setCurrency(newCurrency);
         // @ts-ignore - params is required for dynamic routes but optional for static ones
-        router.replace({ pathname, params }, { locale: newLocale });
+        router.replace({ pathname, params: params as any }, { locale: newLocale });
     };
 
     return (
