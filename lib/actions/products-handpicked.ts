@@ -9,8 +9,6 @@ import { ProductFilters, ProductWithRelations } from "./products";
 function mapRawProduct(row: any): ProductWithRelations {
     return {
         id: row.id,
-        vendorId: row.vendor_id,
-        categoryId: row.category_id,
         name: row.name,
         slug: row.slug,
         description: row.description,
