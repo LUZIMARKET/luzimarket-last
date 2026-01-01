@@ -198,21 +198,14 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <div className="text-center space-y-2">
-              <p className="text-sm text-gray-500">{t("noAccount")}</p>
-              <div className="flex justify-center gap-4">
-                <Link href="/register" className="text-sm font-medium text-black hover:underline">
-                  {t("registerCustomer")}
-                </Link>
-                <span className="text-gray-300">|</span>
-                <Link href="/vendor-register" className="text-sm font-medium text-black hover:underline">
-                  {t("wantToBeVendor")}
-                </Link>
-              </div>
+            <div className="text-center mt-4">
+              <Link href="/register" className="text-sm text-gray-600 hover:text-black font-univers">
+                {t("noAccount")}
+              </Link>
             </div>
           </div>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
