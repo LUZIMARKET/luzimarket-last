@@ -45,9 +45,9 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 h-[85vh] w-full">
+      <section className="grid grid-cols-1 md:grid-cols-2 min-h-[500px] md:h-[650px] w-full">
         {/* Left Side - Image */}
-        <div className="relative h-full w-full bg-gray-100">
+        <div className="relative h-[400px] md:h-full w-full bg-gray-100">
           <Image
             src="https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?q=80&w=1920&auto=format&fit=crop"
             alt="Luzi Market Lifestyle"
@@ -58,22 +58,22 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex flex-col items-center justify-center p-12 text-center bg-white">
-          <div className="max-w-xl">
-            <h1 className="text-5xl md:text-7xl font-times-now leading-tight mb-6">
-              <span className="block mb-2">Regalos</span>
-              <span className="block mb-4 relative z-10">
+        <div className="flex flex-col items-center justify-center p-8 md:p-12 text-center bg-white h-full">
+          <div className="max-w-lg">
+            <h1 className="text-4xl md:text-6xl font-times-now leading-tight mb-6">
+              <span className="block mb-1">Regalos</span>
+              <span className="block mb-2 relative z-10">
                 <HandpickedMark>handpicked</HandpickedMark>
               </span>
               <span className="block">extraordinarios</span>
             </h1>
 
-            <p className="text-lg md:text-xl font-univers text-gray-600 mb-10 max-w-md mx-auto leading-relaxed">
+            <p className="text-base md:text-lg font-univers text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
               Experiencias y productos seleccionados a mano para momentos especiales.
             </p>
 
             <Link href="/handpicked">
-              <Button className="bg-black text-white rounded-none px-10 py-6 text-base font-univers tracking-wide hover:bg-gray-800 transition-colors">
+              <Button className="bg-black text-white rounded-none px-8 py-3 md:px-10 md:py-6 text-sm md:text-base font-univers tracking-wide hover:bg-gray-800 transition-colors">
                 Ver Handpicked
               </Button>
             </Link>

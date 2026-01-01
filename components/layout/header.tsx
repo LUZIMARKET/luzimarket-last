@@ -63,7 +63,7 @@ export function Header() {
         </div>
 
         {/* Main header */}
-        <div className="relative flex items-center justify-between py-6 px-4 md:px-12 bg-white">
+        <div className="relative flex items-center justify-between py-4 px-4 md:px-12 bg-white">
 
           {/* LEFT: Hand Icon + Search Icon */}
           <div className="hidden md:flex items-center gap-6 flex-1 justify-start">
