@@ -20,6 +20,10 @@ const loginSchema = z.object({
   userType: z.enum(["customer", "vendor", "admin"]).optional(),
 });
 
+import Google from "next-auth/providers/google";
+import Facebook from "next-auth/providers/facebook";
+import Apple from "next-auth/providers/apple";
+
 export const authOptions = {
   // Credentials provider requires JWT sessions - cannot use database adapter with credentials
   session: {
@@ -30,6 +34,18 @@ export const authOptions = {
   // Add trustHost for test environment and localhost
   trustHost: true,
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
+    Facebook({
+      clientId: process.env.AUTH_FACEBOOK_ID,
+      clientSecret: process.env.AUTH_FACEBOOK_SECRET,
+    }),
+    Apple({
+      clientId: process.env.AUTH_APPLE_ID,
+      clientSecret: process.env.AUTH_APPLE_SECRET,
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -82,16 +98,59 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger }: { token: any; user: any; trigger?: string }) {
+    async jwt({ token, user, account, trigger }: { token: any; user: any; account?: any; trigger?: string }) {
+      // Initial sign in
       if (user) {
-        token.id = user.id;
-        token.role = user.role as "customer" | "vendor" | "admin";
+        // If it's an OAuth login (account is present and type is oauth)
+        if (account && account.type === "oauth") {
+          const email = user.email;
+
+          if (email) {
+            try {
+              // Check if user exists in DB
+              const [existingUser] = await db
+                .select()
+                .from(users)
+                .where(eq(users.email, email))
+                .limit(1);
+
+              if (existingUser) {
+                token.id = existingUser.id;
+                token.role = "customer"; // OAuth users are customers by default
+              } else {
+                // Create new user
+                const [newUser] = await db
+                  .insert(users)
+                  .values({
+                    email: email,
+                    name: user.name || "User",
+                    isActive: true,
+                    emailVerified: true, // OAuth emails are verified
+                    emailVerifiedAt: new Date(),
+                  })
+                  .returning();
+
+                token.id = newUser.id;
+                token.role = "customer";
+              }
+            } catch (error) {
+              console.error("Error handling OAuth user:", error);
+              // Fallback to basic info if DB fails, but this might cause issues downstream
+              token.id = user.id;
+              token.role = "customer";
+            }
+          }
+        } else {
+          // Credentials login
+          token.id = user.id;
+          token.role = user.role as "customer" | "vendor" | "admin";
+        }
 
         // Generate a unique session token for tracking only on sign in
         if (trigger === "signIn" || trigger === "signUp") {
-          token.sessionToken = `${user.id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+          token.sessionToken = `${token.id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
           // Create a database session
-          await createSession(user.id, user.role, token.sessionToken);
+          await createSession(token.id, token.role, token.sessionToken);
         }
       }
       return token;

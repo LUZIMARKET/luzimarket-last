@@ -1261,10 +1261,17 @@
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "loggingIn": "Iniciando sesión...",
     "loginButton": "Iniciar sesión",
-    "noAccount": "¿No tienes cuenta? Regístrate",
+    "noAccountQuestion": "¿No tienes cuenta?",
+    "signUp": "Regístrate",
     "resendVerificationLink": "¿No recibiste el correo? Reenviar enlace de verificación",
     "subtitle": "Inicia sesión en tu cuenta",
     "registerCustomer": "Registrar nueva cuenta",
+    "social": {
+      "apple": "Continuar con Apple",
+      "facebook": "Continuar con Facebook",
+      "google": "Continuar con Google",
+      "or": "o"
+    },
     "tabs": {
       "admin": "Admin",
       "customer": "Cliente",

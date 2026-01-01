@@ -1261,10 +1261,17 @@
     "forgotPassword": "Forgot your password?",
     "loggingIn": "Signing in...",
     "loginButton": "Sign in",
-    "noAccount": "Don't have an account? Sign up",
+    "noAccountQuestion": "Don't have an account?",
+    "signUp": "Sign up",
     "resendVerificationLink": "Didn't receive the email? Resend verification link",
     "subtitle": "Sign in to your account",
     "registerCustomer": "Register new account",
+    "social": {
+      "apple": "Continue with Apple",
+      "facebook": "Continue with Facebook",
+      "google": "Continue with Google",
+      "or": "or"
+    },
     "tabs": {
       "admin": "Admin",
       "customer": "Customer",

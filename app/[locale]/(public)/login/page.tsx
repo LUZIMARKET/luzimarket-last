@@ -191,6 +191,59 @@ export default function LoginPage() {
             )}
           </Button>
 
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-gray-50 px-2 text-gray-500 font-univers">
+                {t("social.or")}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {/* Google */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full border-gray-200 bg-white text-gray-700 hover:bg-gray-50 font-univers"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              disabled={isLoading}
+            >
+              <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
+              </svg>
+              {t("social.google")}
+            </Button>
+
+            {/* Facebook */}
+            <Button
+              type="button"
+              className="w-full bg-[#1877F2] text-white hover:bg-[#1864cc] font-univers border-none"
+              onClick={() => signIn("facebook", { callbackUrl: "/" })}
+              disabled={isLoading}
+            >
+              <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path fill="currentColor" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"></path>
+              </svg>
+              {t("social.facebook")}
+            </Button>
+
+            {/* Apple */}
+            <Button
+              type="button"
+              className="w-full bg-black text-white hover:bg-gray-800 font-univers"
+              onClick={() => signIn("apple", { callbackUrl: "/" })}
+              disabled={isLoading}
+            >
+              <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="apple" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C55 141.6 4 216 4 300.7c0 74.2 46.5 174.5 90.4 238.1 19.6 28.3 49.3 64.9 76.8 63.8 28.5-1.1 40-19.7 78.4-19.7 37 0 49.1 19.8 77.2 18.6 29.5-1.2 56.6-35.1 76.5-63.5-56-31.3-64.6-88.4-64.6-99.3zm-67.6-189.9c15.1-18.8 24.6-43.1 22.1-66.8-22.3 1.9-49 14.8-64.6 33.1-13.7 15.9-25.5 41.5-22.1 65.6 23.4 1.7 49-13.5 64.6-31.9z"></path>
+              </svg>
+              {t("social.apple")}
+            </Button>
+          </div>
+
           <div className="space-y-4 pt-4 border-t border-gray-100">
             <div className="text-center">
               <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-black font-univers">
@@ -199,9 +252,12 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center mt-4">
-              <Link href="/register" className="text-sm text-gray-600 hover:text-black font-univers">
-                {t("noAccount")}
-              </Link>
+              <p className="text-sm text-gray-600 font-univers">
+                {t("noAccountQuestion")}{" "}
+                <Link href="/register" className="font-medium text-black hover:underline ml-1">
+                  {t("signUp")}
+                </Link>
+              </p>
             </div>
           </div>
         </form>
