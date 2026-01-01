@@ -53,6 +53,8 @@ export function Header() {
       </a>
       <div>
         {/* Top bar - Desktop only */}
+        {/* Hiding top bar if desired, but image shows clean white header. Keeping for utility but maybe simplify? 
+            Image shows just the main header. I will keep utility bar for functionality but minimal. */}
         <div className="hidden md:flex items-center justify-between py-2 text-xs border-b px-8 bg-gray-50 text-gray-500 font-univers">
           <LocaleCurrencyToggle />
           <div className="flex items-center gap-4">
@@ -61,38 +63,39 @@ export function Header() {
         </div>
 
         {/* Main header */}
-        <div className="relative flex items-center justify-between py-4 px-4 md:px-8 bg-white">
+        <div className="relative flex items-center justify-between py-6 px-4 md:px-12 bg-white">
 
-          {/* LEFT: Signature + Search */}
+          {/* LEFT: Hand Icon + Search Icon */}
           <div className="hidden md:flex items-center gap-6 flex-1 justify-start">
-            {/* Signature Logo */}
-            <Image
-              src="/images/logos/signature-decoration.png"
-              alt="Luzimarket Signature"
-              width={50}
-              height={30}
-              className="h-8 w-auto object-contain"
-            />
-
-            {/* Search Box - Compact Pill */}
-            <div className="w-[300px]">
-              <SearchBox idSuffix="-desktop" className="rounded-full border-gray-200" placeholder="Buscar" />
+            {/* Using a generic hand icon or just search for now as placeholder for the "snap" icon */}
+            <div className="flex items-center gap-4">
+              {/* Search Trigger */}
+              <Button variant="ghost" size="icon" aria-label="Search" className="text-gray-900">
+                <Search className="h-6 w-6 stroke-[1.5]" />
+              </Button>
             </div>
           </div>
 
 
           {/* CENTER: Main Logo (Absolute center) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex-shrink-0">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex-shrink-0 text-center">
             <Link href="/" data-testid="logo-link">
               <Image
                 src="/images/logos/logo-full.png"
                 alt="Luzimarket"
-                width={180}
-                height={64}
-                className="h-10 w-auto"
+                width={200}
+                height={70}
+                className="h-8 w-auto" // Slightly smaller as per design cleanliness
                 priority
               />
             </Link>
+
+            {/* Desktop Navigation - Centered BELOW Logo in design? 
+                Actually design image shows layout:
+                [Hand Search]           [LOGO]           [Heart User Bag]
+                                   [Nav Items]
+                Let's move nav items to a new row below. 
+            */}
           </div>
 
           {/* Mobile Menu Trigger (Left on Mobile) */}
@@ -100,7 +103,7 @@ export function Header() {
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label={t('openMenu')} data-testid="mobile-menu-button">
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px]">
@@ -120,30 +123,24 @@ export function Header() {
                     <LanguageSwitcher />
                     <ShippingLocationSelector />
                   </div>
-                  {/* ... mobile links ... */}
                   <Link href="/best-sellers" className="block py-2 text-sm font-univers" onClick={() => setIsMobileMenuOpen(false)}>{tNav('bestSellers')}</Link>
                   <Link href="/handpicked" className="block py-2 text-sm font-univers" onClick={() => setIsMobileMenuOpen(false)}>{tNav('handpicked')}</Link>
                   <Link href="/brands" className="block py-2 text-sm font-univers" onClick={() => setIsMobileMenuOpen(false)}>{tNav('brandsAndStores')}</Link>
                   <Link href="/categories" className="block py-2 text-sm font-univers" onClick={() => setIsMobileMenuOpen(false)}>{tNav('categories')}</Link>
                   <Link href="/occasions" className="block py-2 text-sm font-univers" onClick={() => setIsMobileMenuOpen(false)}>{tNav('occasions')}</Link>
-                  <Link href="/editorial" className="block py-2 text-sm font-univers" onClick={() => setIsMobileMenuOpen(false)}>{tNav('editorial')}</Link>
                 </nav>
               </SheetContent>
             </Sheet>
 
             {/* Mobile Search Trigger */}
             <Button variant="ghost" size="icon" aria-label={t('search')} onClick={() => { }}>
-              <Search className="h-5 w-5" />
+              <Search className="h-6 w-6" />
             </Button>
           </div>
 
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-2 md:gap-4 flex-1 justify-end">
-            <Button variant="outline" size="sm" className="font-univers text-xs tracking-wider hidden md:inline-flex rounded-full border-gray-400 px-6">
-              FAMILY
-            </Button>
-
+          <div className="flex items-center gap-1 md:gap-2 flex-1 justify-end">
             <Link
               href="/wishlist"
               aria-label={getWishlistItems() > 0 ? t('wishlistWithItems', { count: getWishlistItems() }) : t('wishlist')}
@@ -151,11 +148,11 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="hidden md:inline-flex relative"
+                className="hidden md:inline-flex relative text-gray-900"
               >
-                <Heart className="h-5 w-5" />
+                <Heart className="h-6 w-6 stroke-[1.5]" />
                 {getWishlistItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
                     {getWishlistItems()}
                   </span>
                 )}
@@ -164,11 +161,11 @@ export function Header() {
 
             {/* User Menu */}
             {status === "loading" ? (
-              <Button variant="ghost" size="icon" disabled><User className="h-5 w-5" /></Button>
+              <Button variant="ghost" size="icon" disabled><User className="h-6 w-6 stroke-[1.5]" /></Button>
             ) : session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" data-testid="user-menu"><User className="h-5 w-5" /></Button>
+                  <Button variant="ghost" size="icon" data-testid="user-menu" className="text-gray-900"><User className="h-6 w-6 stroke-[1.5]" /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <div className="px-2 py-1.5">
@@ -188,7 +185,7 @@ export function Header() {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon"><User className="h-5 w-5" /></Button>
+                  <Button variant="ghost" size="icon" className="text-gray-900"><User className="h-6 w-6 stroke-[1.5]" /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem asChild><NextLink href="/login">{t('login')}</NextLink></DropdownMenuItem>
@@ -201,12 +198,12 @@ export function Header() {
               variant="ghost"
               size="icon"
               onClick={toggleCart}
-              className="relative"
+              className="relative text-gray-900"
               data-testid="cart-button"
             >
-              <ShoppingBag className="h-5 w-5" />
+              <ShoppingBag className="h-6 w-6 stroke-[1.5]" />
               {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 bg-black text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 h-4 w-4 bg-black text-white text-[10px] rounded-full flex items-center justify-center">
                   {getTotalItems()}
                 </span>
               )}
@@ -219,25 +216,22 @@ export function Header() {
           <SearchBox idSuffix="-mobile" />
         </div>
 
-        {/* Navigation - Desktop only */}
-        <nav className="hidden md:flex items-center justify-center gap-8 py-3 px-8">
-          <Link href="/best-sellers" className="text-xs font-univers hover:text-gray-600 tracking-wide">
+        {/* Navigation - Desktop only - New Row Check */}
+        <nav className="hidden md:flex items-center justify-center gap-10 pb-6 pt-2 px-8">
+          <Link href="/best-sellers" className="text-sm font-univers text-gray-800 hover:text-black tracking-wide">
             {tNav('bestSellers')}
           </Link>
-          <Link href="/handpicked" className="text-xs font-univers hover:text-gray-600 tracking-wide">
+          <Link href="/handpicked" className="text-sm font-univers text-gray-800 hover:text-black tracking-wide">
             {tNav('handpicked')}
           </Link>
-          <Link href="/brands" className="text-xs font-univers hover:text-gray-600 tracking-wide">
-            {tNav('brandsAndStores')}
+          <Link href="/brands" className="text-sm font-univers text-gray-800 hover:text-black tracking-wide flex items-center">
+            {tNav('brandsAndStores')} <span className="ml-1 text-[10px]">▼</span>
           </Link>
-          <Link href="/categories" className="text-xs font-univers hover:text-gray-600 tracking-wide">
-            {tNav('categories')}
+          <Link href="/categories" className="text-sm font-univers text-gray-800 hover:text-black tracking-wide flex items-center">
+            {tNav('categories')} <span className="ml-1 text-[10px]">▼</span>
           </Link>
-          <Link href="/occasions" className="text-xs font-univers hover:text-gray-600 tracking-wide">
-            {tNav('occasions')}
-          </Link>
-          <Link href="/editorial" className="text-xs font-univers hover:text-gray-600 tracking-wide">
-            {tNav('editorial')}
+          <Link href="/occasions" className="text-sm font-univers text-gray-800 hover:text-black tracking-wide flex items-center">
+            {tNav('occasions')} <span className="ml-1 text-[10px]">▼</span>
           </Link>
         </nav>
       </div>
