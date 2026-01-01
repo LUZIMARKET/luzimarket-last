@@ -91,6 +91,7 @@ export function CategoryDialog({ open, onOpenChange, mode, category }: CategoryD
           onOpenChange(false);
           router.refresh();
         } else {
+          console.error("Create category error:", result.error);
           toast.error(result.error || t("createError"));
         }
       } else if (category) {
@@ -104,7 +105,8 @@ export function CategoryDialog({ open, onOpenChange, mode, category }: CategoryD
         }
       }
     } catch (error) {
-      toast.error(t("error"));
+      console.error("Error submitting form:", error);
+      toast.error(error instanceof Error ? error.message : t("error"));
     } finally {
       setIsLoading(false);
     }
@@ -118,8 +120,8 @@ export function CategoryDialog({ open, onOpenChange, mode, category }: CategoryD
             {mode === "create" ? t("createNew") : t("editCategory")}
           </DialogTitle>
           <DialogDescription>
-            {mode === "create" 
-              ? t("createDescription") 
+            {mode === "create"
+              ? t("createDescription")
               : t("editDescription")}
           </DialogDescription>
         </DialogHeader>
@@ -133,8 +135,8 @@ export function CategoryDialog({ open, onOpenChange, mode, category }: CategoryD
                 <FormItem>
                   <FormLabel>{t("categoryName")}</FormLabel>
                   <FormControl>
-                    <Input 
-                      {...field} 
+                    <Input
+                      {...field}
                       onChange={(e) => {
                         field.onChange(e);
                         if (mode === "create") {
@@ -200,9 +202,9 @@ export function CategoryDialog({ open, onOpenChange, mode, category }: CategoryD
                 <FormItem>
                   <FormLabel>{t("order")}</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="number" 
-                      {...field} 
+                    <Input
+                      type="number"
+                      {...field}
                       onChange={e => field.onChange(parseInt(e.target.value) || 0)}
                     />
                   </FormControl>
@@ -247,10 +249,10 @@ export function CategoryDialog({ open, onOpenChange, mode, category }: CategoryD
                 {t("cancel")}
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading 
-                  ? t("saving") 
-                  : mode === "create" 
-                    ? t("create") 
+                {isLoading
+                  ? t("saving")
+                  : mode === "create"
+                    ? t("create")
                     : t("save")}
               </Button>
             </div>

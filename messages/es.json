@@ -207,6 +207,77 @@
     }
   },
   "Admin": {
+    "usersPage": {
+      "title": "Usuarios",
+      "subtitle": "Gestiona clientes, vendedores y administradores",
+      "filterAll": "Todos",
+      "filterCustomer": "Clientes",
+      "filterVendor": "Vendedores",
+      "filterAdmin": "Admins",
+      "totalUsers": "Usuarios totales",
+      "activeUsers": "Usuarios activos",
+      "newThisMonth": "Nuevos este mes",
+      "noName": "Sin nombre",
+      "tableHeaders": {
+        "user": "Usuario",
+        "email": "Email",
+        "type": "Tipo",
+        "status": "Estado",
+        "orders": "Órdenes",
+        "totalSpent": "Total Gastado",
+        "registered": "Registrado",
+        "actions": "Acciones",
+        "products": "Productos",
+        "totalSales": "Ventas Totales"
+      },
+      "userTypes": {
+        "customer": "Cliente",
+        "vendor": "Vendedor",
+        "admin": "Admin"
+      },
+      "active": "Activo",
+      "locked": "Bloqueado",
+      "viewDetails": "Ver detalles",
+      "unlock": "Desbloquear",
+      "lock": "Bloquear"
+    },
+    "userDetail": {
+      "salesReport": "Reporte de Ventas",
+      "activity": "Actividad",
+      "info": "Información",
+      "products": "Productos",
+      "totalOrders": "Órdenes totales",
+      "totalSales": "Ventas Totales",
+      "totalSpent": "Total gastado",
+      "lastAccess": "Último acceso",
+      "never": "Nunca",
+      "userDetails": "Detalles del usuario",
+      "name": "Nombre",
+      "noName": "Sin nombre",
+      "email": "Email",
+      "phone": "Teléfono",
+      "notAvailable": "No disponible",
+      "address": "Dirección",
+      "accountInfo": "Información de cuenta",
+      "registrationDate": "Fecha de registro",
+      "salesHistory": "Historial de Ventas",
+      "salesRealtime": "Actualizado en tiempo real",
+      "noActivityCustomer": "No hay actividad registrada para clientes aun.",
+      "noActivity": "No hay actividad registrada"
+    },
+    "salesReport": {
+      "periods": {
+        "daily": "Últimos 30 Días",
+        "monthly": "Mensual",
+        "yearly": "Anual"
+      },
+      "columns": {
+        "period": "Periodo",
+        "sales": "Ventas",
+        "total": "Total"
+      },
+      "noData": "No hay datos"
+    },
     "activeProducts": "Productos activos",
     "activeVendors": "Vendedores activos",
     "analytics": "Análisis",
@@ -246,8 +317,10 @@
       "updateSuccess": "Categoría actualizada exitosamente"
     },
     "conversionRate": "Tasa de conversión",
-    "dashboard": "Panel de control",
-    "dashboardSubtitle": "Resumen de la actividad de tu plataforma",
+    "dashboard": "Panel de Control",
+    "dashboardSubtitle": "Resumen general de la actividad del marketplace",
+    "vendorMapTitle": "Mapa de Vendedores",
+    "vendorsByCity": "Vendedores por Ciudad",
     "emails": "Correos",
     "emailTemplates": {
       "actions": "Acciones",
@@ -725,39 +798,6 @@
     "totalRevenue": "Ingresos totales",
     "totalUsers": "Usuarios totales",
     "users": "Usuarios",
-    "usersPage": {
-      "active": "Activa",
-      "activeUsers": "Usuarios activos",
-      "filterAdmin": "Admin",
-      "filterAll": "Todos",
-      "filterCustomer": "Cliente",
-      "filterVendor": "Vendedor",
-      "loading": "Cargando...",
-      "lock": "Bloquear",
-      "locked": "Bloqueada",
-      "newThisMonth": "Nuevos este mes",
-      "noName": "Sin nombre",
-      "subtitle": "Administra todos los usuarios de la plataforma",
-      "tableHeaders": {
-        "actions": "Acciones",
-        "email": "Email",
-        "orders": "Órdenes",
-        "registered": "Registro",
-        "status": "Estado",
-        "totalSpent": "Total gastado",
-        "type": "Tipo",
-        "user": "Usuario"
-      },
-      "title": "Usuarios",
-      "totalUsers": "Total usuarios",
-      "unlock": "Desbloquear",
-      "userTypes": {
-        "Admin": "Admin",
-        "customer": "Cliente",
-        "Vendor": "Vendedor"
-      },
-      "viewDetails": "Ver detalles"
-    },
     "vendorRequests": "Solicitudes de vendedor",
     "vendors": "Vendedores",
     "vendorsPage": {
@@ -1193,11 +1233,12 @@
     "showFilters": "Mostrar filtros",
     "sortBy": "Ordenar por",
     "subtitle": "Regalos cuidadosamente seleccionados por nuestros expertos",
-    "title": "Selección Especial",
+    "title": "Regalos <mark>handpicked</mark> extraordinarios",
     "tryAdjustingFilters": "Intenta ajustar los filtros para ver más resultados",
     "Vendor": "Vendedor"
   },
   "HomePage": {
+    "heroTitle": "Regalos <mark>handpicked</mark> extraordinarios",
     "featuredCategories": "Categorías destacadas",
     "newArrivals": "Nuevos productos",
     "shopNow": "Comprar ahora",

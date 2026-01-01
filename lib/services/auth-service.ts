@@ -762,9 +762,9 @@ export async function authenticateUser(
                 role: detectedUserType,
             },
         };
-    } catch (error) {
+    } catch (error: any) {
         console.error("Authentication error:", error);
-        return { success: false, error: "Error de autenticación" };
+        return { success: false, error: `Auth Error: ${error.message || String(error)}` };
     }
 }
 

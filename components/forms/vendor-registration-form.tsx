@@ -645,7 +645,7 @@ export default function VendorRegistrationForm() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-black text-white px-20 py-7 font-univers text-lg tracking-widest hover:bg-gray-800 rounded-none transition-all"
+              className="bg-black text-white px-20 py-7 font-univers text-base tracking-widest hover:bg-gray-800 rounded-none transition-all"
               data-testid="vendor-submit"
             >
               {isSubmitting ? (

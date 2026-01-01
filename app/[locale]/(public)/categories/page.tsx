@@ -30,7 +30,7 @@ async function getCategoriesWithProducts() {
 export default async function CategoriesPage({ params }: CategoriesPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
-  
+
   const t = await getTranslations('Navigation');
   const categoryList = await getCategoriesWithProducts();
 
@@ -72,7 +72,7 @@ export default async function CategoriesPage({ params }: CategoriesPageProps) {
                     </span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-colors" />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
                   <h3 className="text-xl font-univers mb-2">{category.name}</h3>
                   <span className="text-sm font-univers opacity-90">

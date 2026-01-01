@@ -5,6 +5,7 @@ import { ProductsGrid } from "@/components/products/products-grid";
 import { InfiniteProductsGrid } from "@/components/products/infinite-products-grid";
 import { FilterSidebar } from "@/components/products/filter-sidebar";
 import { SortDropdown } from "@/components/products/sort-dropdown";
+import { HandpickedMark } from "@/components/ui/handpicked-mark";
 import { getFilteredProductsHandpicked } from "@/lib/actions/products-handpicked";
 import { getFilteredProducts, getProductFilterOptions } from "@/lib/actions/products";
 import { db } from "@/db";
@@ -82,27 +83,10 @@ export default async function HandpickedPage({ params, searchParams }: Handpicke
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-gray-50 to-white py-16 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-times-now mb-6">
-            <span className="relative inline-block">
-              {t('title')}
-              <svg
-                className="absolute inset-0 w-full h-full -z-10 scale-110"
-                viewBox="0 0 400 120"
-                preserveAspectRatio="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <ellipse
-                  cx="200"
-                  cy="60"
-                  rx="185"
-                  ry="50"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="text-gray-700"
-                />
-              </svg>
-            </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-times-now mb-6 text-gray-900">
+            {t.rich('title', {
+              mark: (chunks) => <HandpickedMark>{chunks}</HandpickedMark>
+            })}
           </h1>
           <p className="text-lg md:text-xl font-univers text-gray-600 max-w-3xl mx-auto">
             {t('description')}

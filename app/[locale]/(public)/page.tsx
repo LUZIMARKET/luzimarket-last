@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { setRequestLocale } from 'next-intl/server';
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { HandpickedMark } from "@/components/ui/handpicked-mark";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -45,7 +46,9 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* Hero Section */}
       <section className="py-16 text-center px-8">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-times-now mb-6 leading-tight">
-          Regalos handpicked extraordinarios
+          {t.rich('heroTitle', {
+            mark: (chunks) => <HandpickedMark>{chunks}</HandpickedMark>
+          })}
         </h1>
         <p className="text-base md:text-lg font-univers text-gray-600 max-w-2xl mx-auto">
           Experiencias y productos seleccionados a mano para momentos especiales.
@@ -59,7 +62,7 @@ export default async function HomePage({ params }: HomePageProps) {
           {categories.map((category) => (
             <div
               key={category.slug}
-              className={`relative aspect-square group overflow-hidden ${category.bgColor}`}
+              className={`relative h-[50vh] md:h-[75vh] group overflow-hidden ${category.bgColor}`}
             >
               <Link
                 href={{ pathname: "/category/[slug]", params: { slug: category.slug } }}
@@ -74,8 +77,8 @@ export default async function HomePage({ params }: HomePageProps) {
                 />
 
                 {/* Category title */}
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-                  <h3 className="text-black text-sm font-univers tracking-wider bg-white px-6 py-2 inline-block">
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-full text-center px-4">
+                  <h3 className="bg-white text-black text-sm font-univers tracking-wider py-3 px-8 inline-block rounded-none shadow-none">
                     {category.title}
                   </h3>
                 </div>

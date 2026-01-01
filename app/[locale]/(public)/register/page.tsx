@@ -39,7 +39,7 @@ export default function RegisterGatewayPage() {
                         </CardContent>
                         <CardFooter className="pb-10 justify-center">
                             <Link href="/register/customer" className="w-full max-w-[200px]">
-                                <Button className="w-full bg-black text-white hover:bg-gray-800 font-univers rounded-full h-12">
+                                <Button className="w-full bg-white text-black border border-black hover:bg-[#ffe16b] hover:border-[#ffe16b] font-univers rounded-full h-12 transition-colors duration-300">
                                     {t("customer.button")} <ArrowRight className="h-4 w-4 ml-2" />
                                 </Button>
                             </Link>
@@ -61,7 +61,7 @@ export default function RegisterGatewayPage() {
                         </CardContent>
                         <CardFooter className="pb-10 justify-center">
                             <Link href="/vendor-register" className="w-full max-w-[200px]">
-                                <Button variant="outline" className="w-full border-black text-black hover:bg-gray-50 font-univers rounded-full h-12">
+                                <Button variant="outline" className="w-full bg-white text-black border border-black hover:bg-[#ffe16b] hover:border-[#ffe16b] font-univers rounded-full h-12 transition-colors duration-300">
                                     {t("vendor.button")} <ArrowRight className="h-4 w-4 ml-2" />
                                 </Button>
                             </Link>

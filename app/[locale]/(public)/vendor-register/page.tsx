@@ -21,7 +21,7 @@ export default async function VendorRegisterPage() {
           </div>
           <h1 className="text-3xl font-univers tracking-wider">
           </h1>
-          <h2 className="text-5xl font-times-now mb-4">{t("welcomeTitle")}</h2>
+          <h2 className="text-5xl font-times-now mb-4 tracking-tighter">{t("welcomeTitle")}</h2>
           <p className="text-lg font-univers text-gray-600 max-w-2xl mx-auto">
             {t("welcomeSubtitle")}<br />
             {t("welcomeDescription")}
@@ -40,7 +40,7 @@ export default async function VendorRegisterPage() {
 
         <VendorRegistrationForm />
 
-        <p className="text-center text-sm font-univers text-gray-500 mt-12 uppercase">
+        <p className="text-center text-xs font-univers font-light text-gray-400 mt-12 uppercase">
           MOMENTO ESPECIAL SAPI DE CV © 2022 / TODOS LOS DERECHOS RESERVADOS
         </p>
       </div>

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { users, vendors, adminUsers, orders } from "@/db/schema";
+import { users, vendors, adminUsers, orders, products } from "@/db/schema";
 import { eq, and, gt, sql, or, ilike, desc } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { changePasswordSchema, updateUserProfileSchema, adminUsersQuerySchema } from "@/lib/services/validation-service";
@@ -283,6 +283,15 @@ export async function listUsers(filters: {
                     createdAt: users.createdAt,
                     lockedUntil: users.lockedUntil,
                     userType: sql<string>`'customer'`,
+                    orderCount: sql<number>`(
+                        SELECT count(*) FROM ${orders}
+                        WHERE ${orders.userId} = users.id
+                    )`,
+                    totalSpent: sql<number>`(
+                        SELECT COALESCE(SUM(${orders.total}::numeric), 0) FROM ${orders}
+                        WHERE ${orders.userId} = users.id
+                        AND ${orders.status} != 'cancelled'
+                    )`,
                 })
                 .from(users)
                 .where(buildConditions(users))
@@ -303,6 +312,15 @@ export async function listUsers(filters: {
                     createdAt: vendors.createdAt,
                     lockedUntil: vendors.lockedUntil,
                     userType: sql<string>`'vendor'`,
+                    orderCount: sql<number>`(
+                        SELECT count(*) FROM ${products}
+                        WHERE ${products.vendorId} = vendors.id
+                    )`,
+                    totalSpent: sql<number>`(
+                        SELECT COALESCE(SUM(${orders.total}::numeric), 0) FROM ${orders}
+                        WHERE ${orders.vendorId} = vendors.id
+                        AND ${orders.status} != 'cancelled'
+                    )`,
                 })
                 .from(vendors)
                 .where(buildConditions(vendors))

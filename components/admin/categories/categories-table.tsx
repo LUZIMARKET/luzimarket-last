@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { 
+import {
   Table,
   TableBody,
   TableCell,
@@ -54,7 +54,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
     <>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-times-now">{t("title")}</h1>
-        <Button 
+        <Button
           onClick={() => setIsCreateOpen(true)}
           className="bg-black text-white hover:bg-gray-800"
         >
@@ -81,11 +81,14 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
               <TableRow key={category.id}>
                 <TableCell>
                   <div className="relative w-12 h-12 bg-gray-100 rounded overflow-hidden">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={category.imageUrl || "/images/placeholder.jpg"}
                       alt={category.name}
-                      fill
-                      className="object-cover"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/placeholder.jpg";
+                      }}
                     />
                   </div>
                 </TableCell>
@@ -94,7 +97,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                 <TableCell>{category.productCount || 0}</TableCell>
                 <TableCell>{category.displayOrder}</TableCell>
                 <TableCell>
-                  <Badge 
+                  <Badge
                     variant={category.isActive ? "default" : "secondary"}
                     className={category.isActive ? "bg-green-50 text-green-700" : ""}
                   >
@@ -103,16 +106,16 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => handleEdit(category)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
+                    <Button
+                      size="sm"
+                      variant="outline"
                       className="text-red-600 hover:text-red-700"
                       onClick={() => handleDelete(category)}
                     >

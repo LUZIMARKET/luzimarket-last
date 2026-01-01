@@ -24,7 +24,7 @@ export default function AdminUsersPage() {
   const t = useTranslations("Admin.usersPage");
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
-  const { data: userList = [], isLoading } = useQuery<UserData[]>({
+  const { data: userList = [], isLoading, error } = useQuery<UserData[]>({
     queryKey: ["admin", "users"],
     queryFn: getAdminUsers,
     staleTime: 60 * 1000,
@@ -60,6 +60,11 @@ export default function AdminUsersPage() {
     );
   }
 
+
+  // Debug: Show error checks
+  // If we have an explicit error or empty list
+  const isError = error || (userList.length === 0 && !isLoading);
+
   return (
     <div className="space-y-8">
       {/* Page header */}
@@ -68,6 +73,22 @@ export default function AdminUsersPage() {
         <p className="text-sm text-gray-600 font-univers mt-1">
           {t("subtitle")}
         </p>
+
+        {/* Debug Info */}
+        {isError && (
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
+            <p className="font-bold">Debug Info:</p>
+            {error ? (
+              <p><strong>System Error:</strong> {error.message}</p>
+            ) : (
+              <>
+                <p>Users list is empty (No error returned).</p>
+                <p>This usually means you are not logged in as an ADMIN.</p>
+              </>
+            )}
+            <p className="mt-2">Try logging out and logging in as: <strong>admin@luzimarket.shop</strong></p>
+          </div>
+        )}
       </div>
 
       {/* User type filters */}
@@ -128,10 +149,10 @@ export default function AdminUsersPage() {
                   {t("tableHeaders.status", { default: "Status" })}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-univers font-medium text-gray-500 uppercase tracking-wider">
-                  {t("tableHeaders.orders")}
+                  {activeFilter === 'vendor' ? t("tableHeaders.products") : t("tableHeaders.orders")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-univers font-medium text-gray-500 uppercase tracking-wider">
-                  {t("tableHeaders.totalSpent")}
+                  {activeFilter === 'vendor' ? t("tableHeaders.totalSales") : t("tableHeaders.totalSpent")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-univers font-medium text-gray-500 uppercase tracking-wider">
                   {t("tableHeaders.registered")}

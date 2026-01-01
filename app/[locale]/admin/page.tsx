@@ -243,9 +243,25 @@ function getStatCardStyle(change: number, isNewItems: boolean = false) {
   }
 }
 
-export default async function AdminDashboard() {
+import { getVendorLocations } from "@/lib/actions/admin/vendor-map";
+import VendorMapWrapper from "./_components/vendor-map-wrapper";
+
+export default async function AdminDashboard({
+  params: { locale }
+}: {
+  params: { locale: string }
+}) {
   const t = await getTranslations("Admin");
   const stats = await getStats();
+  const vendorLocations = await getVendorLocations();
+
+  // Format currency
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat(locale === "es" ? "es-MX" : "en-US", {
+      style: "currency",
+      currency: "MXN",
+    }).format(amount);
+  };
 
   const revenueStyle = getStatCardStyle(stats.revenueChange);
   const ordersStyle = getStatCardStyle(stats.ordersChange);

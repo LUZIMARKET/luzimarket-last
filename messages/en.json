@@ -207,6 +207,77 @@
     }
   },
   "Admin": {
+    "usersPage": {
+      "title": "Users",
+      "subtitle": "Manage customers, vendors and admins",
+      "filterAll": "All",
+      "filterCustomer": "Customers",
+      "filterVendor": "Vendors",
+      "filterAdmin": "Admins",
+      "totalUsers": "Total Users",
+      "activeUsers": "Active Users",
+      "newThisMonth": "New this month",
+      "noName": "No name",
+      "tableHeaders": {
+        "user": "User",
+        "email": "Email",
+        "type": "Type",
+        "status": "Status",
+        "orders": "Orders",
+        "totalSpent": "Total Spent",
+        "registered": "Registered",
+        "actions": "Actions",
+        "products": "Products",
+        "totalSales": "Total Sales"
+      },
+      "userTypes": {
+        "customer": "Customer",
+        "vendor": "Vendor",
+        "admin": "Admin"
+      },
+      "active": "Active",
+      "locked": "Locked",
+      "viewDetails": "View details",
+      "unlock": "Unlock",
+      "lock": "Lock"
+    },
+    "userDetail": {
+      "salesReport": "Sales Report",
+      "activity": "Activity",
+      "info": "Information",
+      "products": "Products",
+      "totalOrders": "Total Orders",
+      "totalSales": "Total Sales",
+      "totalSpent": "Total Spent",
+      "lastAccess": "Last Access",
+      "never": "Never",
+      "userDetails": "User Details",
+      "name": "Name",
+      "noName": "No name",
+      "email": "Email",
+      "phone": "Phone",
+      "notAvailable": "Not available",
+      "address": "Address",
+      "accountInfo": "Account Info",
+      "registrationDate": "Registration Date",
+      "salesHistory": "Sales History",
+      "salesRealtime": "Updated in real-time",
+      "noActivityCustomer": "No activity registered for customers yet.",
+      "noActivity": "No activity registered"
+    },
+    "salesReport": {
+      "periods": {
+        "daily": "Last 30 Days",
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "columns": {
+        "period": "Period",
+        "sales": "Sales",
+        "total": "Total"
+      },
+      "noData": "No data"
+    },
     "activeProducts": "Active Products",
     "activeVendors": "Active Vendors",
     "analytics": "Analytics",
@@ -247,7 +318,9 @@
     },
     "conversionRate": "Conversion Rate",
     "dashboard": "Dashboard",
-    "dashboardSubtitle": "Overview of your platform activity",
+    "dashboardSubtitle": "Overview of marketplace activity",
+    "vendorMapTitle": "Vendor Map",
+    "vendorsByCity": "Vendors by City",
     "emails": "Emails",
     "emailTemplates": {
       "actions": "Actions",
@@ -725,39 +798,6 @@
     "totalRevenue": "Total Revenue",
     "totalUsers": "Total Users",
     "users": "Users",
-    "usersPage": {
-      "active": "Active",
-      "activeUsers": "Active users",
-      "filterAdmin": "Admin",
-      "filterAll": "All",
-      "filterCustomer": "Customer",
-      "filterVendor": "Vendor",
-      "loading": "Loading...",
-      "lock": "Lock",
-      "locked": "Locked",
-      "newThisMonth": "New this month",
-      "noName": "No name",
-      "subtitle": "Manage all platform users",
-      "tableHeaders": {
-        "actions": "Actions",
-        "email": "Email",
-        "orders": "Orders",
-        "registered": "Registered",
-        "status": "Status",
-        "totalSpent": "Total Spent",
-        "type": "Type",
-        "user": "User"
-      },
-      "title": "Users",
-      "totalUsers": "Total users",
-      "unlock": "Unlock",
-      "userTypes": {
-        "Admin": "Admin",
-        "customer": "Customer",
-        "Vendor": "Vendor"
-      },
-      "viewDetails": "View details"
-    },
     "vendorRequests": "Vendor requests",
     "vendors": "Vendors",
     "vendorsPage": {
@@ -1193,11 +1233,12 @@
     "showFilters": "Show filters",
     "sortBy": "Sort by",
     "subtitle": "Gifts carefully selected by our experts",
-    "title": "Handpicked Selection",
+    "title": "Extraordinary <mark>handpicked</mark> gifts",
     "tryAdjustingFilters": "Try adjusting filters to see more results",
     "Vendor": "Vendor"
   },
   "HomePage": {
+    "heroTitle": "Extraordinary <mark>handpicked</mark> gifts",
     "featuredCategories": "Featured Categories",
     "newArrivals": "New Arrivals",
     "shopNow": "Shop now",

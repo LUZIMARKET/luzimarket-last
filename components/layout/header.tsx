@@ -88,7 +88,7 @@ export function Header() {
                 src="/images/logos/logo-full.png"
                 alt="Luzimarket"
                 width={180}
-                height={40}
+                height={64}
                 className="h-10 w-auto"
                 priority
               />

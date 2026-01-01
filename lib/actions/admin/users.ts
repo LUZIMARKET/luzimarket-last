@@ -39,7 +39,7 @@ export async function getAdminUsers(): Promise<AdminUserRow[]> {
 
     if (!result.success) {
       console.error("Error from UserService:", result.error);
-      return [];
+      throw new Error(result.error || "Failed to fetch users");
     }
 
     // Map to AdminUserRow format for backward compatibility
@@ -53,8 +53,8 @@ export async function getAdminUsers(): Promise<AdminUserRow[]> {
       userType: u.userType as "customer" | "vendor" | "admin",
       lockedUntil: u.lockedUntil,
     }));
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error getting admin users:", error);
-    return [];
+    throw new Error(error.message || "Unexpected error fetching admin users");
   }
 }
