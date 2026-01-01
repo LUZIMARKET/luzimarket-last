@@ -236,7 +236,7 @@ export function Header() {
                 <ul className="space-y-2">
                   {["Baby + Kids", "Joyería", "Home", "Experiencias", "Play + Fitness", "Tech", "Pets", "Kits"].map(item => (
                     <li key={item}>
-                      <Link href={`/category/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-xs text-gray-600 hover:text-black flex items-center">
+                      <Link href={{ pathname: '/category/[slug]', params: { slug: item.toLowerCase().replace(/\s+/g, '-') } }} className="text-xs text-gray-600 hover:text-black flex items-center">
                         <span className="mr-2">→</span> {item}
                       </Link>
                     </li>
@@ -250,7 +250,7 @@ export function Header() {
                 <ul className="space-y-2">
                   {["Pasteles", "Postres", "Galletas", "Chocolates"].map(item => (
                     <li key={item}>
-                      <Link href={`/category/${item.toLowerCase()}`} className="text-xs text-gray-600 hover:text-black flex items-center">
+                      <Link href={{ pathname: '/category/[slug]', params: { slug: item.toLowerCase() } }} className="text-xs text-gray-600 hover:text-black flex items-center">
                         <span className="mr-2">→</span> {item}
                       </Link>
                     </li>
@@ -264,7 +264,7 @@ export function Header() {
                 <ul className="space-y-2">
                   {["Botanas", "Fit / Healthy", "Bebidas"].map(item => (
                     <li key={item}>
-                      <Link href={`/category/${item.toLowerCase()}`} className="text-xs text-gray-600 hover:text-black flex items-center">
+                      <Link href={{ pathname: '/category/[slug]', params: { slug: item.toLowerCase().replace(' / ', '-').replace('/', '-') } }} className="text-xs text-gray-600 hover:text-black flex items-center">
                         <span className="mr-2">→</span> {item}
                       </Link>
                     </li>
@@ -278,7 +278,7 @@ export function Header() {
                 <ul className="space-y-2">
                   {["Classic", "Modern", "Plantas", "Condolencias", "Romance"].map(item => (
                     <li key={item}>
-                      <Link href={`/category/${item.toLowerCase()}`} className="text-xs text-gray-600 hover:text-black flex items-center">
+                      <Link href={{ pathname: '/category/[slug]', params: { slug: item.toLowerCase() } }} className="text-xs text-gray-600 hover:text-black flex items-center">
                         <span className="mr-2">→</span> {item}
                       </Link>
                     </li>
@@ -292,7 +292,7 @@ export function Header() {
                 <ul className="space-y-2">
                   {["Beauty", "Self-care", "Hair", "SPA"].map(item => (
                     <li key={item}>
-                      <Link href={`/category/${item.toLowerCase()}`} className="text-xs text-gray-600 hover:text-black flex items-center">
+                      <Link href={{ pathname: '/category/[slug]', params: { slug: item.toLowerCase().replace('-', '') } }} className="text-xs text-gray-600 hover:text-black flex items-center">
                         <span className="mr-2">→</span> {item}
                       </Link>
                     </li>
