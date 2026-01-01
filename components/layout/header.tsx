@@ -10,6 +10,7 @@ import LanguageSwitcher from "./language-switcher";
 import { ShippingLocationSelector } from "./shipping-location-selector";
 import { CurrencySwitch } from "./currency-switch";
 import { LocaleCurrencyToggle } from "./locale-currency-toggle";
+import { ShippingSelectorBar } from "./shipping-selector-bar";
 import { useState } from "react";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
@@ -53,21 +54,14 @@ export function Header() {
       </a>
 
       {/* Top bar - Desktop only */}
-      <div className="hidden md:flex items-center justify-between py-2 text-[10px] border-b px-8 bg-white text-black font-univers tracking-widest uppercase">
+      <div className="hidden md:flex items-center justify-between h-9 border-b px-8 bg-white text-black font-univers tracking-widest uppercase">
         {/* Left: Locale/Currency Pills */}
-        <div className="flex items-center gap-2">
-          <div className="border border-gray-300 rounded-full px-3 py-0.5">ESP</div>
-          <div className="border border-gray-300 rounded-full px-3 py-0.5">MXN</div>
-        </div>
+        <LocaleCurrencyToggle />
 
-        {/* Center: Shipping (Approximate center by push) */}
-        <div className="flex-1 text-center">
-          <span className="text-gray-500 mr-2">ENVIAR A</span>
-          <span className="font-medium">→ MONTERREY, NUEVO LEÓN</span>
+        {/* Right: Shipping Selector Bar */}
+        <div className="h-full">
+          <ShippingSelectorBar />
         </div>
-
-        {/* Right: Empty balance or just space to center the middle */}
-        <div className="w-[100px]"></div>
       </div>
 
       <div>

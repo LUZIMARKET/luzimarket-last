@@ -22,21 +22,23 @@ export function LocaleCurrencyToggle() {
     };
 
     return (
-        <div className="flex items-center gap-2 text-xs font-univers uppercase bg-transparent">
+        <div className="flex items-center gap-2 font-univers uppercase">
+            {/* Language Pill */}
             <button
-                onClick={() => switchTo('es')}
-                className={`transition-colors hover:text-gray-600 ${locale === 'es' ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
-                aria-label="Switch to Spanish and MXN"
+                onClick={() => switchTo(locale === 'es' ? 'en' : 'es')}
+                className="border border-gray-300 rounded-full px-3 py-0.5 text-[10px] hover:border-gray-500 transition-colors"
+                aria-label="Toggle Language"
             >
-                ESP — MXN
+                {locale === 'es' ? 'ESP' : 'ENG'}
             </button>
-            <span className="text-gray-300">/</span>
+
+            {/* Currency Pill */}
             <button
-                onClick={() => switchTo('en')}
-                className={`transition-colors hover:text-gray-600 ${locale === 'en' ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
-                aria-label="Switch to English and USD"
+                onClick={() => setCurrency(locale === 'es' ? 'USD' : 'MXN')} // Simple toggle for now
+                className="border border-gray-300 rounded-full px-3 py-0.5 text-[10px] hover:border-gray-500 transition-colors"
+                aria-label="Toggle Currency"
             >
-                ENG — USD
+                {locale === 'es' ? 'MXN' : 'USD'}
             </button>
         </div>
     );
