@@ -247,10 +247,11 @@ import { getVendorLocations } from "@/lib/actions/admin/vendor-map";
 import VendorMapWrapper from "./_components/vendor-map-wrapper";
 
 export default async function AdminDashboard({
-  params: { locale }
+  params
 }: {
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }) {
+  const { locale } = await params;
   const t = await getTranslations("Admin");
   const stats = await getStats();
   const vendorLocations = await getVendorLocations();
