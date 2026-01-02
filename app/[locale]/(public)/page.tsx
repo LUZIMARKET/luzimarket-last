@@ -46,12 +46,19 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = await getTranslations('HomePage');
 
   // Fetch 4 active handpicked products
-  const handpickedProducts = await db
-    .select()
-    .from(products)
-    .where(eq(products.isActive, true))
-    .orderBy(desc(products.createdAt))
-    .limit(4);
+  // Fetch 4 active handpicked products
+  let handpickedProducts: any[] = [];
+  try {
+    handpickedProducts = await db
+      .select()
+      .from(products)
+      .where(eq(products.isActive, true))
+      .orderBy(desc(products.createdAt))
+      .limit(4);
+  } catch (error) {
+    console.error("Error fetching handpicked products:", error);
+    // Silent fail for now to let page render
+  }
 
   return (
     <main className="min-h-screen">
