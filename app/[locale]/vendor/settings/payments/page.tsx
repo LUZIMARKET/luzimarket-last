@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CreditCard, ExternalLink, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { CreditCard, ExternalLink, CheckCircle2, AlertTriangle, XCircle, ArrowLeft } from "lucide-react";
 import { getVendorFromSession } from "@/lib/actions/vendor";
 import { getVendorStripeAccount, createVendorOnboardingLink } from "@/lib/actions/stripe-connect.action";
 import { Badge } from "@/components/ui/badge";
@@ -26,11 +26,18 @@ export default async function VendorPaymentsSettingsPage() {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-univers text-gray-900">{t("title", { default: "Pagos" })}</h1>
-                <p className="text-sm text-gray-600 font-univers mt-1">
-                    {t("description", { default: "Administra tu método de cobro y estado de Stripe Connect" })}
-                </p>
+            <div className="flex items-center gap-4">
+                <Link href="/vendor/settings">
+                    <Button variant="ghost" size="icon">
+                        <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                </Link>
+                <div>
+                    <h1 className="text-2xl font-univers text-gray-900">{t("title", { default: "Pagos" })}</h1>
+                    <p className="text-sm text-gray-600 font-univers mt-1">
+                        {t("description", { default: "Administra tu método de cobro y estado de Stripe Connect" })}
+                    </p>
+                </div>
             </div>
 
             <Card>

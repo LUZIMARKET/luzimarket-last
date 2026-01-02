@@ -2,6 +2,10 @@ import { db } from "@/db";
 import { orders, shippingLabels, shippingMethods } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { sendEmail } from "@/lib/email";
+import {
+    validateTrackingNumber,
+    generateTrackingUrl
+} from "@/lib/utils/tracking";
 
 export interface TrackingInfo {
     trackingNumber: string;
@@ -25,57 +29,6 @@ export interface ShippingLabelData {
         height: number;
         unit: string;
     };
-}
-
-/**
- * Carrier tracking URL patterns
- */
-const CARRIER_TRACKING_URLS: Record<string, string> = {
-    fedex: "https://www.fedex.com/fedextrack/?trknbr={trackingNumber}",
-    ups: "https://www.ups.com/track?loc=en_US&tracknum={trackingNumber}",
-    dhl: "https://www.dhl.com/en/express/tracking.html?AWB={trackingNumber}",
-    estafeta: "https://www.estafeta.com/Herramientas/Rastreo?wayBillType=0&wayBill={trackingNumber}",
-    "correos-de-mexico": "https://www.correosdemexico.gob.mx/SSLServicios/RastreoEnvios/Rastreo.aspx?codigo={trackingNumber}",
-    "99minutos": "https://99minutos.com/rastreo/{trackingNumber}",
-};
-
-/**
- * Validates tracking number format
- */
-export function validateTrackingNumber(trackingNumber: string, carrier?: string): boolean {
-    // Remove whitespace
-    const cleaned = trackingNumber.trim().replace(/\s+/g, "");
-
-    if (cleaned.length < 5) return false;
-
-    // Basic validation - can be enhanced per carrier
-    const patterns: Record<string, RegExp> = {
-        fedex: /^[0-9]{12,22}$/,
-        ups: /^1Z[A-Z0-9]{16}$/i,
-        dhl: /^[0-9]{10,11}$/,
-        estafeta: /^[0-9]{10,22}$/,
-    };
-
-    if (carrier && patterns[carrier.toLowerCase()]) {
-        return patterns[carrier.toLowerCase()].test(cleaned);
-    }
-
-    // Generic validation if carrier not specified or not in patterns
-    return /^[A-Z0-9]{5,30}$/i.test(cleaned);
-}
-
-/**
- * Generates tracking URL for a carrier
- */
-export function generateTrackingUrl(trackingNumber: string, carrier: string): string {
-    const pattern = CARRIER_TRACKING_URLS[carrier.toLowerCase()];
-
-    if (!pattern) {
-        // Default fallback
-        return `https://www.google.com/search?q=${encodeURIComponent(carrier + " tracking " + trackingNumber)}`;
-    }
-
-    return pattern.replace("{trackingNumber}", trackingNumber);
 }
 
 /**

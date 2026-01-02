@@ -91,14 +91,14 @@ export default function NewEmailTemplatePage() {
   </style>
 </head>
 <body>
-  <div class="header">
+  <div className="header">
     <h1>LUZIMARKET</h1>
   </div>
-  <div class="content">
+  <div className="content">
     <h2>Hola {{customer_name}},</h2>
     <p>Tu contenido aquí...</p>
   </div>
-  <div class="footer">
+  <div className="footer">
     <p>© {{current_year}} Luzimarket. Todos los derechos reservados.</p>
   </div>
 </body>
@@ -137,7 +137,7 @@ export default function NewEmailTemplatePage() {
 
   const onSubmit = async (data: EmailTemplateForm) => {
     setIsLoading(true);
-    
+
     try {
       const response = await fetch("/api/admin/email-templates", {
         method: "POST",
@@ -169,7 +169,7 @@ export default function NewEmailTemplatePage() {
           <ChevronLeft className="h-4 w-4 mr-1" />
           {t("labels.backToTemplates")}
         </Link>
-        
+
         <h1 className="text-2xl font-univers text-gray-900">{t("labels.newTemplate")}</h1>
         <p className="text-sm text-gray-600 font-univers mt-1">
           {t("labels.createDescription")}
@@ -184,7 +184,7 @@ export default function NewEmailTemplatePage() {
               {/* Basic Information */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-lg font-univers mb-6">{t("labels.basicInfo")}</h2>
-                
+
                 <div className="space-y-4">
                   <FormField
                     control={form.control}
@@ -232,13 +232,13 @@ export default function NewEmailTemplatePage() {
                       <FormItem>
                         <FormLabel>Asunto del Email</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Ej: Tu orden #{{order_number}} ha sido confirmada" 
-                            {...field} 
+                          <Input
+                            placeholder="Ej: Tu orden #{{order_number}} ha sido confirmada"
+                            {...field}
                           />
                         </FormControl>
                         <FormDescription>
-                          Puedes usar variables como {"{"}{"{"} order_number {"}"}{"}"} 
+                          Puedes usar variables como {"{"}{"{"} order_number {"}"}{"}"}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -396,9 +396,8 @@ export default function NewEmailTemplatePage() {
 
                   <TabsContent value="preview" className="m-0 p-6">
                     <div
-                      className={`mx-auto bg-white border rounded-lg shadow-sm ${
-                        previewMode === "mobile" ? "max-w-sm" : "max-w-2xl"
-                      }`}
+                      className={`mx-auto bg-white border rounded-lg shadow-sm ${previewMode === "mobile" ? "max-w-sm" : "max-w-2xl"
+                        }`}
                     >
                       <iframe
                         srcDoc={form.watch("htmlContent")}

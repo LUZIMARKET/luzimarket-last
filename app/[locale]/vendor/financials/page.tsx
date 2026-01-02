@@ -6,7 +6,7 @@ import { FinancialsClient } from "./financials-client";
 
 export default async function VendorFinancialsPage() {
   const t = await getTranslations("Vendor.financials");
-  
+
   const vendorResult = await getVendorFromSession();
   if (!vendorResult.success || !vendorResult.data) {
     redirect("/vendor-register");
@@ -31,7 +31,7 @@ export default async function VendorFinancialsPage() {
 
       <FinancialsClient
         vendor={vendor}
-        balance={balanceResult.success ? balanceResult.data : null}
+        balance={balanceResult.success && balanceResult.data ? balanceResult.data.balance : null}
         transactions={transactionsResult.success ? transactionsResult.data : null}
         payouts={payoutsResult.success ? payoutsResult.data : null}
         stripeAccount={stripeAccountResult.success ? stripeAccountResult.data : null}

@@ -30,6 +30,7 @@ import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { MultiVendorSummary } from "@/components/orders/multi-vendor-summary";
+import { generateTrackingUrl } from "@/lib/utils/tracking";
 
 interface OrderDetailClientProps {
   orderNumber: string;
@@ -102,6 +103,11 @@ export function OrderDetailClient({ orderNumber, locale }: OrderDetailClientProp
   const [isCancelling, setIsCancelling] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [cancelError, setCancelError] = useState<string | null>(null);
+
+  const handleTrackPackage = (trackingNumber: string, carrier: string) => {
+    const url = generateTrackingUrl(trackingNumber, carrier);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
   const isAuthenticated = !!session?.user;
   const userOrderQuery = useOrder(orderNumber);
@@ -416,7 +422,12 @@ export function OrderDetailClient({ orderNumber, locale }: OrderDetailClientProp
                         <Copy className="h-4 w-4 mr-2" />
                         {t('tracking.copy')}
                       </Button>
-                      <Button variant="outline" size="sm" className="font-univers">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="font-univers"
+                        onClick={() => handleTrackPackage(order.trackingNumber, order.carrier)}
+                      >
                         <ExternalLink className="h-4 w-4 mr-2" />
                         {t('tracking.track')}
                       </Button>
@@ -592,7 +603,7 @@ export function OrderDetailClient({ orderNumber, locale }: OrderDetailClientProp
                     )}
                   </>
                 )}
-                
+
                 {order.status === 'delivered' && (
                   <Button className="w-full font-univers">
                     {t('actions.buyAgain')}

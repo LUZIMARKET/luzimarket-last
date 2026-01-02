@@ -9,6 +9,8 @@ import { db } from "@/db";
 import { vendors } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 async function updateNotificationSettings(formData: FormData) {
     "use server";
@@ -60,11 +62,18 @@ export default async function VendorNotificationsSettingsPage() {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-univers text-gray-900">{t("title", { default: "Notificaciones" })}</h1>
-                <p className="text-sm text-gray-600 font-univers mt-1">
-                    {t("description", { default: "Elige cómo quieres que te contactemos" })}
-                </p>
+            <div className="flex items-center gap-4">
+                <Link href="/vendor/settings">
+                    <Button variant="ghost" size="icon">
+                        <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                </Link>
+                <div>
+                    <h1 className="text-2xl font-univers text-gray-900">{t("title", { default: "Notificaciones" })}</h1>
+                    <p className="text-sm text-gray-600 font-univers mt-1">
+                        {t("description", { default: "Elige cómo quieres que te contactemos" })}
+                    </p>
+                </div>
             </div>
 
             <Card>

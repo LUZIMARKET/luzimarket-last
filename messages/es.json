@@ -2827,39 +2827,83 @@
       "title": "Configuración"
     },
     "shipping": {
+      "title": "Configuración de Envíos",
+      "description": "Configura las tarifas y opciones de envío para tu tienda",
+      "general": {
+        "title": "Configuración General",
+        "subtitle": "Información básica para calcular los envíos",
+        "originState": "Estado de Origen",
+        "selectState": "Selecciona tu estado",
+        "originHint": "Desde dónde envías tus productos",
+        "freeShippingFrom": "Envío Gratis desde",
+        "freeShippingPlaceholder": "1000",
+        "freeShippingHint": "Monto mínimo para envío gratis (dejar vacío para desactivar)",
+        "defaultMethod": "Método de Envío Predeterminado",
+        "selectMethod": "Selecciona un método"
+      },
+      "rates": {
+        "title": "Tarifas de Envío",
+        "subtitle": "Configura las tarifas por zona, peso y tipo de servicio",
+        "base": "base",
+        "perKgSuffix": "/kg"
+      },
+      "actions": {
+        "save": "Guardar Configuración",
+        "saving": "Guardando..."
+      },
       "form": {
-        "selectState": "Select your state"
+        "selectState": "Selecciona tu estado"
       },
       "placeholders": {
         "additionalCost": "Costo adicional por producto",
         "basePrice": "Precio base de envío"
       },
       "toast": {
-        "loadError": "Could not load shipping data",
-        "saveError": "Could not save configuration",
-        "saveSuccess": "Your shipping configuration has been updated",
+        "loadError": "No se pudieron cargar los datos de envío",
+        "saveError": "No se pudo guardar la configuración",
+        "saveSuccess": "Tu configuración de envíos ha sido actualizada",
         "updateError": "Error al actualizar la configuración",
         "updateSuccess": "Configuración de envío actualizada"
       }
     },
     "shippingAddress": "Dirección de envío",
     "store": {
-      "businessHours": "Horarios del negocio",
-      "businessName": "Nombre del negocio",
-      "businessPhone": "Teléfono del negocio",
-      "city": "Ciudad",
-      "country": "País",
-      "description": "Descripción",
-      "facebookUrl": "Facebook",
-      "instagramUrl": "Instagram",
-      "phone": "Teléfono",
-      "postalCode": "Código postal",
-      "state": "Estado",
-      "street": "Calle",
-      "tiktokUrl": "TikTok",
-      "twitterUrl": "Twitter",
-      "websiteUrl": "Sitio web",
-      "whatsapp": "WhatsApp"
+      "title": "Tienda",
+      "description": "Actualiza la información de tu tienda",
+      "save": "Guardar",
+      "profile": {
+        "title": "Perfil de la tienda",
+        "description": "Datos básicos, dirección y enlaces"
+      },
+      "fields": {
+        "businessName": "Nombre del negocio",
+        "websiteUrl": "Sitio web",
+        "phone": "Teléfono",
+        "whatsapp": "WhatsApp",
+        "businessPhone": "Teléfono del negocio",
+        "businessHours": "Horario de atención",
+        "street": "Calle y número",
+        "city": "Ciudad",
+        "state": "Estado",
+        "country": "País",
+        "postalCode": "Código postal",
+        "description": "Descripción"
+      }
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Elige cómo quieres que te contactemos",
+      "preferences": {
+        "title": "Preferencias",
+        "description": "Actualiza tus preferencias de notificación"
+      },
+      "orderUpdates": "Actualizaciones de pedidos",
+      "orderUpdatesDescription": "Notificaciones sobre el estado de tus pedidos",
+      "promotionalEmails": "Correos promocionales",
+      "promotionalDescription": "Ofertas y novedades",
+      "securityAlerts": "Alertas de seguridad",
+      "securityDescription": "Avisos importantes de cuenta",
+      "save": "Guardar Cambios"
     },
     "stripeOnboarding": {
       "accountCreated": "Cuenta creada exitosamente",
