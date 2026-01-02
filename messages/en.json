@@ -2890,21 +2890,6 @@
       }
     },
     "shippingAddress": "Shipping address",
-    "notifications": {
-      "title": "Notifications",
-      "description": "Choose how you want to be contacted",
-      "preferences": {
-        "title": "Preferences",
-        "description": "Update your notification preferences"
-      },
-      "orderUpdates": "Order updates",
-      "orderUpdatesDescription": "Notifications about your order status",
-      "promotionalEmails": "Promotional emails",
-      "promotionalDescription": "Offers and news",
-      "securityAlerts": "Security alerts",
-      "securityDescription": "Important account notices",
-      "save": "Save Changes"
-    },
     "stripeOnboarding": {
       "accountCreated": "Account created successfully",
       "accountCreationFailed": "Failed to create account",

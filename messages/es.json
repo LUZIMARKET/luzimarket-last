@@ -2890,21 +2890,6 @@
         "description": "Descripción"
       }
     },
-    "notifications": {
-      "title": "Notificaciones",
-      "description": "Elige cómo quieres que te contactemos",
-      "preferences": {
-        "title": "Preferencias",
-        "description": "Actualiza tus preferencias de notificación"
-      },
-      "orderUpdates": "Actualizaciones de pedidos",
-      "orderUpdatesDescription": "Notificaciones sobre el estado de tus pedidos",
-      "promotionalEmails": "Correos promocionales",
-      "promotionalDescription": "Ofertas y novedades",
-      "securityAlerts": "Alertas de seguridad",
-      "securityDescription": "Avisos importantes de cuenta",
-      "save": "Guardar Cambios"
-    },
     "stripeOnboarding": {
       "accountCreated": "Cuenta creada exitosamente",
       "accountCreationFailed": "Error al crear la cuenta",
