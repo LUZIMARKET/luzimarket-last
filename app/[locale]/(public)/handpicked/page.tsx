@@ -4,7 +4,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { ProductsGrid } from "@/components/products/products-grid";
 import { InfiniteProductsGrid } from "@/components/products/infinite-products-grid";
 import { FilterSidebar } from "@/components/products/filter-sidebar";
-import { SortDropdown } from "@/components/products/sort-dropdown";
+
 import { HandpickedMark } from "@/components/ui/handpicked-mark";
 import { getFilteredProductsHandpicked } from "@/lib/actions/products-handpicked";
 import { getFilteredProducts, getProductFilterOptions } from "@/lib/actions/products";
@@ -131,7 +131,7 @@ export default async function HandpickedPage({ params, searchParams }: Handpicke
                   </p>
                 )}
               </div>
-              <SortDropdown />
+
             </div>
 
             {/* Products */}

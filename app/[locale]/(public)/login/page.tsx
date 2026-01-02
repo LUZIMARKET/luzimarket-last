@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -115,9 +116,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
       <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-times-now">LUZIMARKET</h1>
-          <p className="mt-2 text-sm text-gray-600 font-univers">
+        <div className="text-center flex flex-col items-center">
+          <div className="relative w-64 h-24 mb-4">
+            <Image
+              src="/images/logos/logo-operations.png"
+              alt="LUZIMARKET"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <p className="mt-2 text-xs text-gray-500 font-medium font-univers uppercase tracking-[0.2em]">
             {t("subtitle")}
           </p>
         </div>
