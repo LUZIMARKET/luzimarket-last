@@ -1193,6 +1193,11 @@
     "tryAgain": "Intentar de nuevo"
   },
   "Footer": {
+    "country": "País",
+    "affiliate": "Afíliate",
+    "editorialArchive": "Archivo Editorial",
+    "careers": "Trabaja con Nosotros",
+    "sitemap": "Mapa del sitio",
     "aboutUs": "Acerca de nosotros",
     "allRightsReserved": "Todos los derechos reservados",
     "bestSellers": "Best Sellers",
@@ -1238,6 +1243,8 @@
     "Vendor": "Vendedor"
   },
   "HomePage": {
+    "handpickedTitle": "Handpicked",
+    "viewHandpicked": "Ver Handpicked",
     "heroTitle": "Regalos <mark>handpicked</mark> extraordinarios",
     "featuredCategories": "Categorías destacadas",
     "newArrivals": "Nuevos productos",

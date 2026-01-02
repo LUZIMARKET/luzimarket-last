@@ -1193,6 +1193,11 @@
     "tryAgain": "Try again"
   },
   "Footer": {
+    "country": "Country",
+    "affiliate": "Affiliate",
+    "editorialArchive": "Editorial Archive",
+    "careers": "Work with Us",
+    "sitemap": "Sitemap",
     "aboutUs": "About Us",
     "allRightsReserved": "All rights reserved",
     "bestSellers": "Best Sellers",
@@ -1238,6 +1243,8 @@
     "Vendor": "Vendor"
   },
   "HomePage": {
+    "handpickedTitle": "Handpicked",
+    "viewHandpicked": "Shop Handpicked",
     "heroTitle": "Extraordinary <mark>handpicked</mark> gifts",
     "featuredCategories": "Featured Categories",
     "newArrivals": "New Arrivals",

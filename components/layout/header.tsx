@@ -54,11 +54,13 @@ export function Header() {
       </a>
 
       {/* Top bar - Desktop only */}
-      <div className="hidden md:flex items-center justify-between h-9 border-b px-8 bg-white text-black font-univers tracking-widest uppercase">
+      <div className="hidden md:flex items-center justify-center relative h-9 border-b px-8 bg-white text-black font-univers tracking-widest uppercase">
         {/* Left: Locale/Currency Pills */}
-        <LocaleCurrencyToggle />
+        <div className="absolute left-8 top-1/2 -translate-y-1/2">
+          <LocaleCurrencyToggle />
+        </div>
 
-        {/* Right: Shipping Selector Bar */}
+        {/* Center: Shipping Selector Bar */}
         <div className="h-full">
           <ShippingSelectorBar />
         </div>
@@ -68,23 +70,28 @@ export function Header() {
         {/* Main header */}
         <div className="relative flex items-center justify-between py-5 px-4 md:px-12 bg-white">
 
-          {/* LEFT: Hand Icon + Search Icon */}
+          {/* LEFT: Hand Icon + Search Icon - Now Collapsible Search */}
           <div className="hidden md:flex items-center gap-4 flex-1 justify-start">
-            <Image
-              src="/images/icons/hand-peace.png" // Placeholder, using a generic icon if image fails
-              alt="Hand"
-              width={24}
-              height={24}
-              className="h-6 w-auto"
-              onError={(e) => {
-                // Fallback to Icon if image missing (Logic handled by visual check usually, but safely just hiding alt)
-                e.currentTarget.style.display = 'none';
-              }}
+            <SearchBox
+              className="w-full max-w-[300px]"
+              customTrigger={
+                <div className="flex items-center gap-4">
+                  <Image
+                    src="/images/icons/hand-peace.png"
+                    alt="Hand"
+                    width={24}
+                    height={24}
+                    className="h-6 w-auto"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  <Button variant="ghost" size="icon" aria-label="Search" className="text-gray-900 -ml-2 pointer-events-none">
+                    <Search className="h-5 w-5 stroke-[1.5]" />
+                  </Button>
+                </div>
+              }
             />
-            {/* Fallback Icon if no image - visually represented by Search mostly */}
-            <Button variant="ghost" size="icon" aria-label="Search" className="text-gray-900 -ml-2">
-              <Search className="h-5 w-5 stroke-[1.5]" />
-            </Button>
           </div>
 
 

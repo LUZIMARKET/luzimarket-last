@@ -5,6 +5,8 @@ import { setRequestLocale, getMessages } from 'next-intl/server';
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Viewport } from "next";
+import "../globals.css";
+import "../leaflet-custom.css";
 
 export const viewport: Viewport = {
   width: "device-width",

@@ -4,6 +4,9 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { HandpickedMark } from "@/components/ui/handpicked-mark";
 import { Button } from "@/components/ui/button";
+import { db } from "@/db";
+import { products } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -23,9 +26,9 @@ const categories = [
     bgColor: "bg-luzi-pink-light"
   },
   {
-    title: "Events + Dinners",
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8ZmFuY3klMjBkaW5uZXJ8ZW58MHx8fHwxNzY3MDUzODgxfDA&ixlib=rb-4.1.0&q=85",
-    slug: "eventos-cenas",
+    title: "Beauty + Wellness",
+    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1000&auto=format&fit=crop",
+    slug: "belleza-bienestar",
     bgColor: "bg-white"
   },
   {
@@ -41,6 +44,14 @@ export default async function HomePage({ params }: HomePageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations('HomePage');
+
+  // Fetch 4 active handpicked products
+  const handpickedProducts = await db
+    .select()
+    .from(products)
+    .where(eq(products.isActive, true))
+    .orderBy(desc(products.createdAt))
+    .limit(4);
 
   return (
     <main className="min-h-screen">
@@ -128,6 +139,51 @@ export default async function HomePage({ params }: HomePageProps) {
               </Link>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Handpicked Section */}
+      <section className="w-full py-16 px-8">
+        <div className="container mx-auto">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-12">
+            <div className="flex items-center gap-4">
+              <h2 className="text-4xl font-univers text-black">{t('handpickedTitle')}</h2>
+              <Image
+                src="/images/icons/handpicked-doodle.png"
+                alt="Handpicked"
+                width={48}
+                height={48}
+                className="w-12 h-12"
+              />
+            </div>
+            <Link href="/handpicked">
+              <Button className="bg-black text-white rounded-none px-8 py-3 text-sm font-univers tracking-wide hover:bg-gray-800 transition-colors">
+                {t('viewHandpicked')}
+              </Button>
+            </Link>
+          </div>
+
+          {/* Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {handpickedProducts.map((product) => (
+              <div key={product.id} className="group cursor-pointer">
+                <Link href={{ pathname: '/products/[slug]', params: { slug: product.slug } }} className="block">
+                  <div className="relative aspect-square w-full bg-gray-100 overflow-hidden border border-gray-200">
+                    <Image
+                      src={product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg'}
+                      alt={product.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <h3 className="text-sm font-univers text-black">{product.name}</h3>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

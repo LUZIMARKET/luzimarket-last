@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { Newsletter } from "./newsletter";
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { businessConfig } from '@/lib/config/business';
+import { ArrowRight } from "lucide-react";
 
 export function Footer() {
   const t = useTranslations('Footer');
@@ -13,97 +12,80 @@ export function Footer() {
     { name: "Instagram", href: businessConfig.social.instagram, icon: "/images/socials/Instagram.png" },
     { name: "Facebook", href: businessConfig.social.facebook, icon: "/images/socials/Facebook.png" },
     { name: "TikTok", href: businessConfig.social.tiktok, icon: "/images/socials/TikTok.png" },
-    { name: "WhatsApp", href: "https://wa.me/521234567890", icon: "/images/socials/Whatsapp.png" }, // Update with actual WhatsApp number
+    { name: "WhatsApp", href: "https://wa.me/521234567890", icon: "/images/socials/Whatsapp.png" },
     { name: "X", href: businessConfig.social.twitter, icon: "/images/socials/X.png" },
-    { name: "YouTube", href: "https://youtube.com/@luzimarket", icon: "/images/socials/Youtube.png" }, // Update with actual YouTube channel
+    { name: "YouTube", href: "https://youtube.com/@luzimarket", icon: "/images/socials/Youtube.png" },
   ];
 
   return (
-    <>
-      <Newsletter />
-      <footer className="bg-gradient-to-r from-green-400 via-yellow-300 to-cyan-400 text-black">
-        <div className="px-8 py-12">
-          {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            {/* Logo and Description */}
-            <div className="col-span-1">
-              <Image
-                src="/images/logos/logo-simple.png"
-                alt="Luzi"
-                width={80}
-                height={30}
-                className="h-8 w-auto mb-4"
-              />
-              <p className="text-sm font-univers">{t('tagline')}</p>
-            </div>
+    <footer className="bg-white text-black pt-16 pb-8 border-t border-gray-100">
+      <div className="container mx-auto px-8">
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-univers font-bold mb-4">{t('shop')}</h3>
-              <ul className="space-y-2 text-sm font-univers">
-                <li><Link href="/products" className="hover:underline">{t('products')}</Link></li>
-                <li><Link href="/best-sellers" className="hover:underline">{t('bestSellers')}</Link></li>
-                <li><Link href="/categories" className="hover:underline">{t('categories')}</Link></li>
-                <li><Link href="/occasions" className="hover:underline">{t('occasions')}</Link></li>
-              </ul>
-            </div>
+        {/* TOP ROW */}
+        <div className="flex flex-col xl:flex-row items-center justify-between gap-8 mb-16">
 
-            {/* Company */}
-            <div>
-              <h3 className="font-univers font-bold mb-4">{t('company')}</h3>
-              <ul className="space-y-2 text-sm font-univers">
-                <li><Link href="/about" className="hover:underline">{t('aboutUs')}</Link></li>
-                <li><Link href="/vendor-register" className="hover:underline">{t('sellWithUs')}</Link></li>
-                <li><Link href="/contact" className="hover:underline">{t('contact')}</Link></li>
-                <li><Link href="/editorial" className="hover:underline">{t('editorial')}</Link></li>
-                <li><Link href="/orders/lookup" className="hover:underline">{t('trackOrder')}</Link></li>
-                <li><Link href="/privacy" className="hover:underline">{t('privacy')}</Link></li>
-                <li><Link href="/terms" className="hover:underline">{t('terms')}</Link></li>
-              </ul>
-            </div>
-
-            {/* Social Media */}
-            <div>
-              <h3 className="font-univers font-bold mb-4">{t('followUs')}</h3>
-              <div className="flex gap-4">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    className="hover:opacity-70 transition-opacity"
-                    aria-label={social.name}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Image
-                      src={social.icon}
-                      alt={social.name}
-                      width={24}
-                      height={24}
-                      className="w-6 h-6"
-                    />
-                  </a>
-                ))}
-              </div>
-            </div>
+          {/* LEFT: LUZI FAMILY Badge */}
+          {/* LEFT: LUZI FAMILY Badge */}
+          <div className="flex items-center gap-3">
+            <Image
+              src="/images/logos/luzi-family.png"
+              alt="Luzi Family"
+              width={120}
+              height={32}
+              className="h-8 w-auto object-contain"
+            />
+            <span className="text-black text-lg">→</span>
+            <span className="text-sm font-univers text-black">
+              {t('affiliate')}
+            </span>
           </div>
 
-          {/* Coming Soon Banner */}
-          <div className="border-t border-black/20 pt-8 mb-4">
-            <div className="flex items-center justify-center gap-8">
-              <span className="text-sm font-univers">COMING SOON</span>
-              <span className="text-sm font-univers">PRÓXIMAMENTE</span>
-              <span className="text-sm font-univers">BIENTÔT</span>
-              <span className="text-sm font-univers">곧 출시</span>
+          {/* CENTER: Navigation Links */}
+          <nav className="flex flex-wrap justify-center items-center gap-x-8 gap-y-2">
+            <div className="text-sm font-univers text-black">
+              <span>{t('country')}:</span>
+              <span className="ml-1 underline decoration-1 underline-offset-2 font-medium">México</span>
             </div>
-          </div>
+            <Link href="/newsletter" className="text-sm font-univers text-black hover:text-gray-600 transition-colors">{t('newsletter')}</Link>
+            <Link href="/editorial" className="text-sm font-univers text-black hover:text-gray-600 transition-colors">{t('editorialArchive')}</Link>
+            <Link href="/careers" className="text-sm font-univers text-black hover:text-gray-600 transition-colors">{t('careers')}</Link>
+            <Link href="/sitemap" className="text-sm font-univers text-black hover:text-gray-600 transition-colors">{t('sitemap')}</Link>
+          </nav>
 
-          {/* Copyright */}
-          <div className="text-center">
-            <p className="text-xs font-univers">{t('copyright', { year: currentYear })} / {t('allRightsReserved')}</p>
+          {/* RIGHT: Social Icons */}
+          <div className="flex items-center gap-6">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                className="opacity-100 hover:opacity-70 transition-opacity"
+                aria-label={social.name}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={social.icon}
+                  alt={social.name}
+                  width={22}
+                  height={22}
+                  className="w-[22px] h-[22px] grayscale hover:grayscale-0 transition-all"
+                />
+              </a>
+            ))}
           </div>
         </div>
-      </footer>
-    </>
+
+        {/* BOTTOM ROW: Copyright & Legal */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 text-[10px] text-gray-400 font-univers uppercase tracking-wide border-t border-transparent">
+          <p>© {currentYear} LUZI ® MARKET</p>
+          <div className="flex flex-wrap justify-center gap-8">
+            <Link href="/terms" className="hover:text-black transition-colors">Términos & Condiciones</Link>
+            <Link href="/privacy" className="hover:text-black transition-colors">Política de Privacidad</Link>
+            <Link href="/cookies" className="hover:text-black transition-colors">Cookies</Link>
+            <Link href="/accessibility" className="hover:text-black transition-colors">Accesibilidad</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }

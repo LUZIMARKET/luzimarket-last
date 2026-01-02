@@ -234,6 +234,26 @@ export const routing = defineRouting({
     '/privacy': {
       es: '/privacidad',
       en: '/privacy'
+    },
+    '/newsletter': {
+      es: '/boletin',
+      en: '/newsletter'
+    },
+    '/careers': {
+      es: '/empleos',
+      en: '/careers'
+    },
+    '/sitemap': {
+      es: '/mapa-del-sitio',
+      en: '/sitemap'
+    },
+    '/cookies': {
+      es: '/cookies',
+      en: '/cookies'
+    },
+    '/accessibility': {
+      es: '/accesibilidad',
+      en: '/accessibility'
     }
   }
 });

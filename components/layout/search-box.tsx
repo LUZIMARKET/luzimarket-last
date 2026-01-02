@@ -21,11 +21,12 @@ interface SearchResult {
 
 interface SearchBoxProps {
   idSuffix?: string;
-  className?: string; // Add className
-  placeholder?: string; // Add placeholder
+  className?: string;
+  placeholder?: string;
+  customTrigger?: React.ReactNode;
 }
 
-export function SearchBox({ idSuffix = "", className = "", placeholder }: SearchBoxProps) {
+export function SearchBox({ idSuffix = "", className = "", placeholder, customTrigger }: SearchBoxProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -68,12 +69,16 @@ export function SearchBox({ idSuffix = "", className = "", placeholder }: Search
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        // If we have a custom trigger (collapsible mode) and clicked outside, close the input
+        if (customTrigger && !query) {
+          setShowSearchInput(false);
+        }
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [customTrigger, query]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +91,7 @@ export function SearchBox({ idSuffix = "", className = "", placeholder }: Search
   const handleResultClick = () => {
     setIsOpen(false);
     setQuery("");
+    if (customTrigger) setShowSearchInput(false);
   };
 
   const clearSearch = () => {
@@ -95,29 +101,35 @@ export function SearchBox({ idSuffix = "", className = "", placeholder }: Search
   };
 
   const handleSearchButtonClick = () => {
-    setShowSearchInput(!showSearchInput);
-    if (!showSearchInput) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    setShowSearchInput(true);
+    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
   return (
-    <div ref={searchRef} className="relative flex-1" data-testid="search-box">
-      {/* Search Button for mobile/tests */}
-      <div className="md:hidden">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleSearchButtonClick}
-          aria-label={t('search')}
-          className="h-10 w-10"
-        >
-          <Search className="h-5 w-5" />
-        </Button>
-      </div>
+    <div ref={searchRef} className={`relative flex-1 ${className}`} data-testid="search-box">
+      {/* Search Trigger (Mobile or Custom) - Hidden when input is shown */}
+      {!showSearchInput && (
+        <div className={`${customTrigger ? '' : 'md:hidden'}`}>
+          {customTrigger ? (
+            <div onClick={handleSearchButtonClick} className="cursor-pointer">
+              {customTrigger}
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleSearchButtonClick}
+              aria-label={t('search')}
+              className="h-10 w-10"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          )}
+        </div>
+      )}
 
-      {/* Search Input - Always visible on desktop, toggleable on mobile */}
-      <div className={`${showSearchInput ? 'block' : 'hidden'} md:block`}>
+      {/* Search Input - Visible if toggled ON or if NO custom trigger (default desktop behavior) */}
+      <div className={`${showSearchInput ? 'block' : 'hidden'} ${!customTrigger ? 'md:block' : ''} w-full`}>
         <form onSubmit={handleSubmit}>
           <div className="relative">
             <label htmlFor={`search-input${idSuffix}`} className="sr-only">
@@ -132,18 +144,20 @@ export function SearchBox({ idSuffix = "", className = "", placeholder }: Search
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => query.length >= 2 && results.length > 0 && setIsOpen(true)}
               placeholder={placeholder || t('searchPlaceholder')}
-              className={`pl-10 pr-10 w-full font-univers ${className}`} // Apply className here and remove default border/rounded if handled by className
+              className={`pl-10 pr-10 w-full font-univers`}
             />
-            {query && (
-              <button
-                type="button"
-                onClick={clearSearch}
-                aria-label={t('clearSearch')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
+            {/* Close/Clear Button */}
+            <button
+              type="button"
+              onClick={() => {
+                clearSearch();
+                if (customTrigger) setShowSearchInput(false);
+              }}
+              aria-label={t('clearSearch')}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </form>
       </div>

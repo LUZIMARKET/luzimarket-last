@@ -7,6 +7,7 @@ import { CartProvider } from "@/contexts/cart-context";
 import { WishlistProvider } from "@/contexts/wishlist-context";
 import { CurrencyProvider } from "@/contexts/currency-context";
 import { ShippingLocationProvider } from "@/contexts/shipping-location-context";
+import { LocationModal } from "@/components/layout/location-modal";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -37,6 +38,7 @@ export function Providers({ children }: { children: ReactNode }) {
           <ShippingLocationProvider>
             <CartProvider>
               <WishlistProvider>
+                <LocationModal />
                 {children}
               </WishlistProvider>
             </CartProvider>

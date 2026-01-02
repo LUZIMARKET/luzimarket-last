@@ -13,6 +13,10 @@ interface ShippingLocationContextType {
   location: ShippingLocation;
   setLocation: (location: ShippingLocation) => void;
   availableLocations: ShippingLocation[];
+  isLocationModalOpen: boolean;
+  setIsLocationModalOpen: (isOpen: boolean) => void;
+  hasUserSelected: boolean;
+  confirmLocation: () => void;
 }
 
 const defaultLocation: ShippingLocation = {
@@ -23,40 +27,65 @@ const defaultLocation: ShippingLocation = {
 };
 
 const availableLocations: ShippingLocation[] = [
-  { city: 'MONTERREY', state: 'NL', country: 'MX', displayName: 'MONTERREY, NL' },
+  { city: 'MONTERREY', state: 'Nuevo León', country: 'MX', displayName: 'MONTERREY, NL' },
   { city: 'CDMX', state: 'CDMX', country: 'MX', displayName: 'CDMX' },
-  { city: 'GUADALAJARA', state: 'JAL', country: 'MX', displayName: 'GUADALAJARA, JAL' },
-  { city: 'QUERETARO', state: 'QRO', country: 'MX', displayName: 'QUERETARO, QRO' },
-  { city: 'PUEBLA', state: 'PUE', country: 'MX', displayName: 'PUEBLA, PUE' },
-  { city: 'CANCUN', state: 'QROO', country: 'MX', displayName: 'CANCUN, QROO' },
-  { city: 'MERIDA', state: 'YUC', country: 'MX', displayName: 'MERIDA, YUC' },
-  { city: 'TIJUANA', state: 'BC', country: 'MX', displayName: 'TIJUANA, BC' },
+  { city: 'GUADALAJARA', state: 'Jalisco', country: 'MX', displayName: 'GUADALAJARA, JAL' },
+  { city: 'QUERETARO', state: 'Querétaro', country: 'MX', displayName: 'QUERETARO, QRO' },
+  { city: 'PUEBLA', state: 'Puebla', country: 'MX', displayName: 'PUEBLA, PUE' },
+  { city: 'CANCUN', state: 'Quintana Roo', country: 'MX', displayName: 'CANCUN, QROO' },
+  { city: 'MERIDA', state: 'Yucatán', country: 'MX', displayName: 'MERIDA, YUC' },
+  { city: 'TIJUANA', state: 'Baja California', country: 'MX', displayName: 'TIJUANA, BC' },
+  { city: 'TOLUCA', state: 'Estado de México', country: 'MX', displayName: 'TOLUCA, EDOMEX' },
 ];
 
 const ShippingLocationContext = createContext<ShippingLocationContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'luzimarket_shipping_location';
+const STORAGE_KEY = 'luzimarket_shipping_location_v3';
+const USER_SELECTED_KEY = 'luzimarket_location_confirmed_v3';
 
 export function ShippingLocationProvider({ children }: { children: React.ReactNode }) {
   const [location, setLocationState] = useState<ShippingLocation>(defaultLocation);
+  const [hasUserSelected, setHasUserSelected] = useState(false);
+  // Default to CLOSED to prevent flash
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
   // Load saved location from localStorage on mount
+  // Load saved location from localStorage on mount
   useEffect(() => {
-    try {
-      const savedLocation = localStorage.getItem(STORAGE_KEY);
-      if (savedLocation) {
-        const parsed = JSON.parse(savedLocation);
-        // Validate the saved location is still in our available locations
-        const isValid = availableLocations.some(
-          loc => loc.city === parsed.city && loc.state === parsed.state
-        );
-        if (isValid) {
-          setLocationState(parsed);
+    // specific check with timeout to ensure hydration/mounting is complete
+    const checkLocation = () => {
+      try {
+        const savedLocation = localStorage.getItem(STORAGE_KEY);
+        const userConfirmed = localStorage.getItem(USER_SELECTED_KEY);
+
+        console.log('[ShippingContext] Checking storage:', { savedLocation, userConfirmed });
+
+        if (userConfirmed === 'true') {
+          console.log('[ShippingContext] User confirmed, staying closed');
+          setHasUserSelected(true);
+        } else {
+          console.log('[ShippingContext] No confirmation, OPENING modal');
+          setIsLocationModalOpen(true);
         }
+
+        if (savedLocation) {
+          const parsed = JSON.parse(savedLocation);
+          // Validate the saved location is still in our available locations
+          const isValid = availableLocations.some(
+            loc => loc.city === parsed.city && loc.state === parsed.state
+          );
+          if (isValid) {
+            setLocationState(parsed);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading shipping location:', error);
       }
-    } catch (error) {
-      console.error('Error loading shipping location:', error);
-    }
+    };
+
+    // Small delay to ensure initial render is done
+    const timer = setTimeout(checkLocation, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const setLocation = (newLocation: ShippingLocation) => {
@@ -69,8 +98,25 @@ export function ShippingLocationProvider({ children }: { children: React.ReactNo
     }
   };
 
+  const confirmLocation = () => {
+    setHasUserSelected(true);
+    try {
+      localStorage.setItem(USER_SELECTED_KEY, 'true');
+    } catch (error) {
+      console.error('Error saving location confirmation:', error);
+    }
+  };
+
   return (
-    <ShippingLocationContext.Provider value={{ location, setLocation, availableLocations }}>
+    <ShippingLocationContext.Provider value={{
+      location,
+      setLocation,
+      availableLocations,
+      hasUserSelected,
+      confirmLocation,
+      isLocationModalOpen,
+      setIsLocationModalOpen
+    }}>
       {children}
     </ShippingLocationContext.Provider>
   );
