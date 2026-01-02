@@ -137,6 +137,69 @@
       "title": "Our Values"
     }
   },
+  "CookiesPage": {
+    "title": "Cookies Policy",
+    "lastUpdated": "Last updated: January 2026",
+    "intro": "At Luzimarket, we believe in being clear and open about how we collect and use data related to you. This Cookie Policy applies to any Luzimarket product or service that links to this policy or incorporates it by reference.",
+    "whatAreCookies": {
+      "title": "What are cookies?",
+      "description": "Cookies are small text files that are sent to or accessed from your web browser or your device's memory. A cookie typically contains the name of the domain (internet location) from which the cookie originated, the 'lifetime' of the cookie (i.e., when it expires), and a randomly generated unique number or similar identifier. A cookie also may contain information about your device, such as user settings, browsing history, and activities conducted while using our services."
+    },
+    "howWeUse": {
+      "title": "How we use cookies",
+      "description": "We use cookies and other identifiers to enhance your browsing experience, display personalized content, analyze our traffic, and understand where our visitors come from."
+    },
+    "types": {
+      "title": "Types of cookies we use",
+      "essential": {
+        "title": "Essential Cookies",
+        "description": "These cookies are necessary for the website to function and cannot be switched off in our systems. They are usually only set in response to actions made by you which amount to a request for services, such as setting your privacy preferences, logging in or filling in forms."
+      },
+      "performance": {
+        "title": "Performance Cookies",
+        "description": "These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us to know which pages are the most and least popular and see how visitors move around the site."
+      },
+      "functional": {
+        "title": "Functional Cookies",
+        "description": "These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third party providers whose services we have added to our pages."
+      },
+      "marketing": {
+        "title": "Targeting Cookies",
+        "description": "These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites."
+      }
+    },
+    "managing": {
+      "title": "Managing cookies",
+      "description": "Most web browsers allow some control of most cookies through the browser settings. To find out more about cookies, including how to see what cookies have been set, visit www.aboutcookies.org or www.allaboutcookies.org."
+    }
+  },
+  "AccessibilityPage": {
+    "title": "Accessibility Statement",
+    "commitment": {
+      "title": "Our Commitment",
+      "description": "Luzimarket is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards."
+    },
+    "standards": {
+      "title": "Conformance Status",
+      "description": "The Web Content Accessibility Guidelines (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA. Luzimarket is partially conformant with WCAG 2.1 level AA. Partially conformant means that some parts of the content do not fully conform to the accessibility standard."
+    },
+    "features": {
+      "title": "Accessibility Features",
+      "description": "We have implemented the following features to ensure our site is accessible:",
+      "list": {
+        "text": "Text alternatives for non-text content.",
+        "keyboard": "Full keyboard navigability.",
+        "contrast": "Sufficient color contrast ratios.",
+        "responsive": "Responsive design that adapts to different screen sizes and zoom levels."
+      }
+    },
+    "feedback": {
+      "title": "Feedback",
+      "description": "We welcome your feedback on the accessibility of Luzimarket. Please let us know if you encounter accessibility barriers on Luzimarket:",
+      "email": "E-mail: accessibility@luzimarket.shop",
+      "response": "We try to respond to feedback within 2 business days."
+    }
+  },
   "account": {
     "page": {
       "delivered": "Delivered",
@@ -1221,7 +1284,9 @@
     "subscribe": "Subscribe",
     "tagline": "Curated gifts and unique experiences in Mexico.",
     "terms": "Terms & Conditions",
-    "trackOrder": "Track My Order"
+    "trackOrder": "Track My Order",
+    "accessibility": "Accessibility",
+    "cookies": "Cookies"
   },
   "HandpickedPage": {
     "description": "Discover our exclusive collection of artisanal and unique products, specially chosen for unforgettable moments.",

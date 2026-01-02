@@ -26,7 +26,7 @@ export function Footer() {
 
           {/* LEFT: LUZI FAMILY Badge */}
           {/* LEFT: LUZI FAMILY Badge */}
-          <div className="flex items-center gap-3">
+          <Link href="/vendor-register" className="flex items-center gap-3 hover:opacity-70 transition-opacity">
             <Image
               src="/images/logos/luzi-family.png"
               alt="Luzi Family"
@@ -38,7 +38,7 @@ export function Footer() {
             <span className="text-sm font-univers text-black">
               {t('affiliate')}
             </span>
-          </div>
+          </Link>
 
           {/* CENTER: Navigation Links */}
           <nav className="flex flex-wrap justify-center items-center gap-x-8 gap-y-2">
@@ -79,10 +79,10 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 text-[10px] text-gray-400 font-univers uppercase tracking-wide border-t border-transparent">
           <p>© {currentYear} LUZI ® MARKET</p>
           <div className="flex flex-wrap justify-center gap-8">
-            <Link href="/terms" className="hover:text-black transition-colors">Términos & Condiciones</Link>
-            <Link href="/privacy" className="hover:text-black transition-colors">Política de Privacidad</Link>
-            <Link href="/cookies" className="hover:text-black transition-colors">Cookies</Link>
-            <Link href="/accessibility" className="hover:text-black transition-colors">Accesibilidad</Link>
+            <Link href="/terms" className="hover:text-black transition-colors">{t('terms')}</Link>
+            <Link href="/privacy" className="hover:text-black transition-colors">{t('privacy')}</Link>
+            <Link href="/cookies" className="hover:text-black transition-colors">{t('cookies')}</Link>
+            <Link href="/accessibility" className="hover:text-black transition-colors">{t('accessibility')}</Link>
           </div>
         </div>
       </div>

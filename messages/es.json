@@ -137,6 +137,69 @@
       "title": "Our Values"
     }
   },
+  "CookiesPage": {
+    "title": "Política de Cookies",
+    "lastUpdated": "Última actualización: Enero 2026",
+    "intro": "En Luzimarket, creemos en ser claros y abiertos sobre cómo recopilamos y usamos los datos relacionados contigo. Esta Política de Cookies se aplica a cualquier producto o servicio de Luzimarket que enlace a esta política o la incorpore por referencia.",
+    "whatAreCookies": {
+      "title": "¿Qué son las cookies?",
+      "description": "Las cookies son pequeños archivos de texto que se envían o acceden desde tu navegador web o la memoria de tu dispositivo. Una cookie generalmente contiene el nombre del dominio (ubicación de internet) desde el cual se originó la cookie, la 'vida útil' de la cookie (es decir, cuándo caduca) y un número único generado aleatoriamente o un identificador similar. Una cookie también puede contener información sobre tu dispositivo, como configuración de usuario, historial de navegación y actividades realizadas mientras usas nuestros servicios."
+    },
+    "howWeUse": {
+      "title": "Cómo usamos las cookies",
+      "description": "Usamos cookies y otros identificadores para mejorar tu experiencia de navegación, mostrar contenido personalizado, analizar nuestro tráfico y comprender de dónde vienen nuestros visitantes."
+    },
+    "types": {
+      "title": "Tipos de cookies que utilizamos",
+      "essential": {
+        "title": "Cookies Esenciales",
+        "description": "Estas cookies son necesarias para que el sitio web funcione y no se pueden desactivar en nuestros sistemas. Por lo general, solo se configuran en respuesta a acciones realizadas por ti que equivalen a una solicitud de servicios, como configurar tus preferencias de privacidad, iniciar sesión o completar formularios."
+      },
+      "performance": {
+        "title": "Cookies de Rendimiento",
+        "description": "Estas cookies nos permiten contar las visitas y fuentes de tráfico para que podamos medir y mejorar el rendimiento de nuestro sitio. Nos ayudan a saber qué páginas son las más y menos populares y ver cómo los visitantes se mueven por el sitio."
+      },
+      "functional": {
+        "title": "Cookies Funcionales",
+        "description": "Estas cookies permiten que el sitio web proporcione una funcionalidad y personalización mejoradas. Pueden ser establecidas por nosotros o por proveedores externos cuyos servicios hemos agregado a nuestras páginas."
+      },
+      "marketing": {
+        "title": "Cookies de Publicidad",
+        "description": "Estas cookies pueden ser establecidas a través de nuestro sitio por nuestros socios publicitarios. Pueden ser utilizadas por esas compañías para crear un perfil de tus intereses y mostrarte anuncios relevantes en otros sitios."
+      }
+    },
+    "managing": {
+      "title": "Gestión de cookies",
+      "description": "La mayoría de los navegadores web permiten cierto control de la mayoría de las cookies a través de la configuración del navegador. Para obtener más información sobre las cookies, incluido cómo ver qué cookies se han establecido, visita www.aboutcookies.org o www.allaboutcookies.org."
+    }
+  },
+  "AccessibilityPage": {
+    "title": "Declaración de Accesibilidad",
+    "commitment": {
+      "title": "Nuestro Compromiso",
+      "description": "Luzimarket se compromete a garantizar la accesibilidad digital para personas con discapacidades. Estamos mejorando continuamente la experiencia del usuario para todos y aplicando los estándares de accesibilidad relevantes."
+    },
+    "standards": {
+      "title": "Estado de Conformidad",
+      "description": "Las Pautas de Accesibilidad al Contenido Web (WCAG) definen los requisitos para diseñadores y desarrolladores para mejorar la accesibilidad para personas con discapacidades. Define tres niveles de conformidad: Nivel A, Nivel AA y Nivel AAA. Luzimarket cumple parcialmente con WCAG 2.1 nivel AA. Parcialmente conforme significa que algunas partes del contenido no cumplen completamente con el estándar de accesibilidad."
+    },
+    "features": {
+      "title": "Características de Accesibilidad",
+      "description": "Hemos implementado las siguientes características para asegurar que nuestro sitio sea accesible:",
+      "list": {
+        "text": "Alternativas de texto para contenido no textual.",
+        "keyboard": "Navegabilidad completa por teclado.",
+        "contrast": "Relaciones de contraste de color suficientes.",
+        "responsive": "Diseño responsivo que se adapta a diferentes tamaños de pantalla y niveles de zoom."
+      }
+    },
+    "feedback": {
+      "title": "Comentarios",
+      "description": "Agradecemos tus comentarios sobre la accesibilidad de Luzimarket. Por favor, háznos saber si encuentras barreras de accesibilidad en Luzimarket:",
+      "email": "Correo electrónico: accessibility@luzimarket.shop",
+      "response": "Intentamos responder a los comentarios dentro de los 2 días hábiles."
+    }
+  },
   "account": {
     "page": {
       "delivered": "Entregado",
@@ -1221,7 +1284,9 @@
     "subscribe": "Suscribirse",
     "tagline": "Regalos curados y experiencias únicas en México.",
     "terms": "Términos y condiciones",
-    "trackOrder": "Buscar mi pedido"
+    "trackOrder": "Buscar mi pedido",
+    "accessibility": "Accesibilidad",
+    "cookies": "Cookies"
   },
   "HandpickedPage": {
     "description": "Descubre nuestra colección exclusiva de productos artesanales y únicos, elegidos especialmente para momentos inolvidables.",
