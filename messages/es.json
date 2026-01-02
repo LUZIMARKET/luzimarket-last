@@ -232,8 +232,8 @@
       },
       "userTypes": {
         "customer": "Cliente",
-        "vendor": "Vendedor",
-        "admin": "Admin"
+        "vendor_role": "Vendedor",
+        "admin_role": "Admin"
       },
       "active": "Activo",
       "locked": "Bloqueado",

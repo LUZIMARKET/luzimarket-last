@@ -190,8 +190,8 @@ export default function AdminUsersPage() {
                       user.userType === 'vendor' ? 'bg-purple-100 text-purple-800' :
                         'bg-blue-100 text-blue-800'
                       }`}>
-                      {user.userType === 'admin' ? t("userTypes.admin") :
-                        user.userType === 'vendor' ? t("userTypes.vendor") :
+                      {user.userType === 'admin' ? t("userTypes.admin_role") :
+                        user.userType === 'vendor' ? t("userTypes.vendor_role") :
                           t("userTypes.customer")}
                     </span>
                   </td>

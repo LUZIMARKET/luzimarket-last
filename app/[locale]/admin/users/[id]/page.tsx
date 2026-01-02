@@ -156,8 +156,8 @@ export default function UserDetailPage() {
                         user.userType === 'vendor' ? 'bg-purple-100 text-purple-800' :
                             'bg-blue-100 text-blue-800'
                         }`}>
-                        {user.userType === 'admin' ? t("usersPage.userTypes.admin") :
-                            user.userType === 'vendor' ? t("usersPage.userTypes.vendor") :
+                        {user.userType === 'admin' ? t("usersPage.userTypes.admin_role") :
+                            user.userType === 'vendor' ? t("usersPage.userTypes.vendor_role") :
                                 t("usersPage.userTypes.customer")}
                     </span>
                     <Link href={`/admin/users/${userId}/edit`}>
