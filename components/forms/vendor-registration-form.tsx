@@ -16,6 +16,14 @@ import { registerVendor } from "@/lib/actions/vendor";
 import { toast } from "sonner";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { MEXICO_STATES, getCitiesByState } from "@/lib/constants/mexico-locations";
 
 // Extended schema type to include new fields if they aren't in the imported type yet
 // (Typescript might complain if we don't cast or if the schema file wasn't reloaded by IDE)
@@ -436,8 +444,8 @@ export default function VendorRegistrationForm() {
                     />
                   </div>
 
-                  {/* Row 2: Neighborhood / City */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Row 2: Neighborhood */}
+                  <div className="grid grid-cols-1 gap-4">
                     <FormField
                       control={form.control}
                       name="neighborhood"
@@ -457,25 +465,6 @@ export default function VendorRegistrationForm() {
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <InputWithValidation
-                              className="rounded-full border-gray-400"
-                              placeholder={t("cityPlaceholder")}
-                              {...field}
-                              isValid={isValid("city")}
-                              isInvalid={isInvalid("city")}
-                              showValidation={true}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                   </div>
 
                   {/* Row 3: State / Country */}
@@ -486,19 +475,67 @@ export default function VendorRegistrationForm() {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <InputWithValidation
-                              className="rounded-full border-gray-400"
-                              placeholder={t("statePlaceholder")}
-                              {...field}
-                              isValid={isValid("state")}
-                              isInvalid={isInvalid("state")}
-                              showValidation={true}
-                            />
+                            <div className="relative">
+                              <Select
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                  // Clear city when state changes
+                                  form.setValue("city", "");
+                                }}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="w-full rounded-full border-gray-400 px-4 py-2 h-10 font-univers text-sm">
+                                  <SelectValue placeholder={t("statePlaceholder") || "Estado"} />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                  {MEXICO_STATES.map((state) => (
+                                    <SelectItem key={state} value={state}>
+                                      {state}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
+                    {/* City - Dependent on State */}
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative">
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                disabled={!form.watch("state")}
+                              >
+                                <SelectTrigger className="w-full rounded-full border-gray-400 px-4 py-2 h-10 font-univers text-sm">
+                                  <SelectValue placeholder={t("cityPlaceholder") || "Ciudad"} />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                  {form.watch("state") && getCitiesByState(form.watch("state")!).map((city) => (
+                                    <SelectItem key={city} value={city}>
+                                      {city}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Country - Readonly */}
+                  <div className="grid grid-cols-1 mb-4">
                     <FormField
                       control={form.control}
                       name="country"
@@ -506,12 +543,12 @@ export default function VendorRegistrationForm() {
                         <FormItem>
                           <FormControl>
                             <InputWithValidation
-                              className="rounded-full border-gray-400"
+                              className="rounded-full border-gray-400 bg-gray-50"
                               placeholder={t("countryPlaceholder")}
                               {...field}
-                              isValid={isValid("country")}
-                              isInvalid={isInvalid("country")}
-                              showValidation={true}
+                              readOnly
+                              isValid={true}
+                              showValidation={false}
                             />
                           </FormControl>
                           <FormMessage />

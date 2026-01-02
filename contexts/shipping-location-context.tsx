@@ -19,24 +19,16 @@ interface ShippingLocationContextType {
   confirmLocation: () => void;
 }
 
+import { MEXICO_LOCATIONS } from '@/lib/constants/mexico-locations';
+
 const defaultLocation: ShippingLocation = {
   city: 'MONTERREY',
-  state: 'NL',
+  state: 'Nuevo León',
   country: 'MX',
   displayName: 'MONTERREY, NL'
 };
 
-const availableLocations: ShippingLocation[] = [
-  { city: 'MONTERREY', state: 'Nuevo León', country: 'MX', displayName: 'MONTERREY, NL' },
-  { city: 'CDMX', state: 'CDMX', country: 'MX', displayName: 'CDMX' },
-  { city: 'GUADALAJARA', state: 'Jalisco', country: 'MX', displayName: 'GUADALAJARA, JAL' },
-  { city: 'QUERETARO', state: 'Querétaro', country: 'MX', displayName: 'QUERETARO, QRO' },
-  { city: 'PUEBLA', state: 'Puebla', country: 'MX', displayName: 'PUEBLA, PUE' },
-  { city: 'CANCUN', state: 'Quintana Roo', country: 'MX', displayName: 'CANCUN, QROO' },
-  { city: 'MERIDA', state: 'Yucatán', country: 'MX', displayName: 'MERIDA, YUC' },
-  { city: 'TIJUANA', state: 'Baja California', country: 'MX', displayName: 'TIJUANA, BC' },
-  { city: 'TOLUCA', state: 'Estado de México', country: 'MX', displayName: 'TOLUCA, EDOMEX' },
-];
+const availableLocations: ShippingLocation[] = MEXICO_LOCATIONS;
 
 const ShippingLocationContext = createContext<ShippingLocationContextType | undefined>(undefined);
 
