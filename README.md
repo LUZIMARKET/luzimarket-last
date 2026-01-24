@@ -22,6 +22,39 @@ A modern e-commerce platform for curated gifts and unique experiences in Mexico.
 - **File Storage**: Vercel Blob
 - **Deployment**: Vercel
 
+## Architecture
+
+### High-Level Design
+LuziMarket is built on a **modern, server-first architecture** leveraging the full capabilities of **Next.js 15 App Router**. It unifies the frontend and backend into a single monolithic application deployable to serverless edge environments.
+
+### Core Architecture Pillars
+
+1.  **Server-First Data Fetching**:
+    - Uses **React Server Components (RSC)** to fetch data directly from the **PostgreSQL** database via **Drizzle ORM** on the server.
+    - Eliminates the need for client-side loading spinners for initial data and improves SEO.
+    - Sensitive logic (like database queries) remains secure on the server.
+
+2.  **Server Actions for Mutations**:
+    - Replaces traditional REST API endpoints for form submissions and data mutations.
+    - **Zod** is used for strict schema validation on both client and server.
+    - Server Actions handle authentication, validation, database updates, and revalidating the Next.js cache in a single round-trip.
+
+3.  **Authentication & Security**:
+    - **NextAuth.js v5** manages sessions using secure, HTTP-only cookies.
+    - Middleware (`middleware.ts`) protects private routes (`/admin`, `/vendor`) and handles internationalized routing.
+
+4.  **Database & Data Access**:
+    - **PostgreSQL** (hosted on Neon) serving as the relational source of truth.
+    - **Drizzle ORM** provides type-safe database queries, ensuring TypeScript types match the actual database schema (`db/schema.ts`).
+
+5.  **Internationalization (i18n)**:
+    - Deeply integrated via **next-intl**.
+    - Content is statically typed and rendered on the server based on the route locale (e.g., `/en/...`, `/es/...`).
+
+6.  **Payment Processing**:
+    - Direct integration with **Stripe** for payment intents.
+    - Webhooks (`/api/webhooks/stripe`) handle asynchronous payment confirmations and order status updates securely.
+
 ## 🚀 Quick Deployment Guide
 
 ### One-Click Deploy
