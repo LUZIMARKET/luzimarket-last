@@ -43,16 +43,31 @@ const addressSchema = z.object({
 
 type AddressFormValues = z.infer<typeof addressSchema>;
 
+interface AddressPartial {
+    id: string;
+    name: string;
+    street: string;
+    exteriorNumber?: string | null;
+    interiorNumber?: string | null;
+    neighborhood?: string | null;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    phone?: string | null;
+    isDefault?: boolean | null;
+}
+
 interface AddressDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    addressToEdit?: any; // Using any for simplicity in props matching
+    addressToEdit?: AddressPartial;
 }
 
 export function AddressDialog({ open, onOpenChange, addressToEdit }: AddressDialogProps) {
     const [isPending, startTransition] = useTransition();
 
-    const form = useForm<AddressFormValues>({
+    const form = useForm({
         resolver: zodResolver(addressSchema),
         defaultValues: {
             name: addressToEdit?.name || "",
@@ -65,7 +80,7 @@ export function AddressDialog({ open, onOpenChange, addressToEdit }: AddressDial
             postalCode: addressToEdit?.postalCode || "",
             country: addressToEdit?.country || "México",
             phone: addressToEdit?.phone || "",
-            isDefault: addressToEdit?.isDefault || false,
+            isDefault: addressToEdit?.isDefault ?? false,
         },
     });
 
