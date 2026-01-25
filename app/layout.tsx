@@ -110,8 +110,9 @@ export default function RootLayout({
   };
 
   return (
-    <>
-      <head>
+    <html lang="en">
+      <body className="antialiased">
+        {/* <head> content is handled by Metadata API mostly, but custom scripts can go here or in specific components */}
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
@@ -120,8 +121,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
         <CsrfProvider>{null}</CsrfProvider>
-      </head>
-      {children}
-    </>
+        {children}
+      </body>
+    </html>
   );
 }
