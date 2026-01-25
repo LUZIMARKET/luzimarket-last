@@ -573,13 +573,23 @@ export async function bulkUpdateVendorProductPrices(
   priceUpdate: { type: 'percentage' | 'fixed'; value: number }
 ) {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    // Security: Use ID from session, ignore or validate the argument
+    const safeVendorId = session.user.vendor.id;
+
     // Verify all products belong to vendor
     const vendorProducts = await db
       .select({ id: products.id, price: products.price })
       .from(products)
       .where(and(
         inArray(products.id, productIds),
-        eq(products.vendorId, vendorId)
+        eq(products.vendorId, safeVendorId)
       ));
 
     if (vendorProducts.length !== productIds.length) {
@@ -615,12 +625,21 @@ export async function bulkUpdateVendorProductPrices(
 
 export async function bulkDeleteVendorProducts(productIds: string[], vendorId: string) {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const safeVendorId = session.user.vendor.id;
+
     // Verify all products belong to vendor
     const result = await db
       .delete(products)
       .where(and(
         inArray(products.id, productIds),
-        eq(products.vendorId, vendorId)
+        eq(products.vendorId, safeVendorId)
       ))
       .returning({ id: products.id });
 
@@ -643,11 +662,13 @@ export async function toggleVendorProductStatus(productId: string, vendorId: str
     throw new Error("Unauthorized");
   }
 
+  const safeVendorId = session.user.vendor.id;
+
   // Verify the product belongs to the vendor
   const existingProduct = await db.query.products.findFirst({
     where: and(
       eq(products.id, productId),
-      eq(products.vendorId, vendorId)
+      eq(products.vendorId, safeVendorId)
     ),
   });
 
@@ -676,13 +697,22 @@ export async function bulkUpdateVendorProductCategories(
   categoryId: number
 ) {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const safeVendorId = session.user.vendor.id;
+
     // Verify all products belong to vendor
     const vendorProducts = await db
       .select({ id: products.id })
       .from(products)
       .where(and(
         inArray(products.id, productIds),
-        eq(products.vendorId, vendorId)
+        eq(products.vendorId, safeVendorId)
       ));
 
     if (vendorProducts.length !== productIds.length) {
@@ -718,13 +748,22 @@ export async function bulkUpdateVendorProductCategories(
  */
 export async function duplicateVendorProduct(productId: string, vendorId: string) {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || session.user.role !== "vendor" || !session.user.vendor?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const safeVendorId = session.user.vendor.id;
+
     // Get the original product
     const [original] = await db
       .select()
       .from(products)
       .where(and(
         eq(products.id, productId),
-        eq(products.vendorId, vendorId)
+        eq(products.vendorId, safeVendorId)
       ))
       .limit(1);
 

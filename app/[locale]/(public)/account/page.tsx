@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "@/i18n/navigation";
 import { ProfileForm } from "@/components/account/profile-form";
 import { OrdersList } from "@/components/account/orders-list";
+import { AddressBook } from "@/components/account/address-book";
+import { getUserAddresses } from "@/lib/actions/addresses";
 
 interface AccountPageProps {
   params: Promise<{ locale: string }>;
@@ -43,8 +45,11 @@ async function getUserData(userId: string) {
     .from(orders)
     .where(eq(orders.userId, userId));
 
+  const addresses = await getUserAddresses();
+
   return {
     user,
+    addresses,
     recentOrders: userOrders,
     stats: orderStats[0] || { totalOrders: 0, totalSpent: 0 },
   };
@@ -53,9 +58,9 @@ async function getUserData(userId: string) {
 export default async function AccountPage({ params }: AccountPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
-  
+
   const session = await auth();
-  
+
   if (!session || !session.user) {
     redirect("/login");
   }
@@ -120,6 +125,9 @@ export default async function AccountPage({ params }: AccountPageProps) {
             </TabsTrigger>
             <TabsTrigger value="profile" className="font-univers">
               {t('profile')}
+            </TabsTrigger>
+            <TabsTrigger value="addresses" className="font-univers">
+              Addresses
             </TabsTrigger>
           </TabsList>
 
@@ -187,16 +195,15 @@ export default async function AccountPage({ params }: AccountPageProps) {
                             <p className="font-univers font-medium">
                               ${Number(order.total).toLocaleString('es-MX')}
                             </p>
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-univers ${
-                              order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-univers ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                               order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
-                              order.status === 'paid' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-gray-100 text-gray-800'
-                            }`}>
+                                order.status === 'paid' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-gray-100 text-gray-800'
+                              }`}>
                               {order.status === 'delivered' ? t('delivered') :
-                               order.status === 'shipped' ? t('shipped') :
-                               order.status === 'paid' ? t('paid') :
-                               t('pending')}
+                                order.status === 'shipped' ? t('shipped') :
+                                  order.status === 'paid' ? t('paid') :
+                                    t('pending')}
                             </span>
                           </div>
                         </div>
@@ -251,6 +258,15 @@ export default async function AccountPage({ params }: AccountPageProps) {
               </CardHeader>
               <CardContent>
                 <ProfileForm user={userData.user!} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Addresses Tab */}
+          <TabsContent value="addresses">
+            <Card>
+              <CardContent className="pt-6">
+                <AddressBook addresses={userData.addresses} />
               </CardContent>
             </Card>
           </TabsContent>

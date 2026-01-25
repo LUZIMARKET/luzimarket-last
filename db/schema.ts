@@ -173,6 +173,27 @@ export const users = pgTable("users", {
   emailIdx: index("users_email_idx").on(table.email),
 }));
 
+// User Addresses table
+export const userAddresses = pgTable("user_addresses", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(), // Recipient name
+  street: text("street").notNull(),
+  exteriorNumber: text("exterior_number"),
+  interiorNumber: text("interior_number"),
+  neighborhood: text("neighborhood"),
+  city: text("city").notNull(),
+  state: text("state").notNull(),
+  postalCode: text("postal_code").notNull(),
+  country: text("country").notNull().default("México"),
+  phone: text("phone"),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => ({
+  userIdx: index("user_addresses_user_idx").on(table.userId),
+}));
+
 // Orders table
 export const orders = pgTable("orders", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -582,6 +603,14 @@ export const userRelations = relations(users, ({ many }) => ({
   orders: many(orders),
   reviews: many(reviews),
   wishlists: many(wishlists),
+  addresses: many(userAddresses),
+}));
+
+export const userAddressRelations = relations(userAddresses, ({ one }) => ({
+  user: one(users, {
+    fields: [userAddresses.userId],
+    references: [users.id],
+  }),
 }));
 
 export const orderRelations = relations(orders, ({ one, many }) => ({

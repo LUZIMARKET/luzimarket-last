@@ -82,6 +82,24 @@ export default function CheckoutPage() {
     },
   });
 
+  // Pre-fill form with session data
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.email) {
+        form.setValue("email", session.user.email);
+      }
+      if (session.user.name) {
+        const parts = session.user.name.trim().split(/\s+/);
+        if (parts.length > 0) {
+          form.setValue("firstName", parts[0]);
+          if (parts.length > 1) {
+            form.setValue("lastName", parts.slice(1).join(" "));
+          }
+        }
+      }
+    }
+  }, [session, form]);
+
   // Group items by vendor
   const itemsByVendor = useMemo(() => {
     const groups: Record<string, typeof items> = {};

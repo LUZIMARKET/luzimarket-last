@@ -61,10 +61,35 @@ export async function updateOrderStatus(
   trackingNumber?: string
 ): Promise<boolean> {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    // 1. Authentication Check
+    if (!session || !session.user) {
+      console.error("Unauthorized: No session");
+      return false;
+    }
+
     // Get current order with all details
+    // Note: getOrderById now includes auth checks, but we need the raw data here for the vendor check below
+    // So we query directly or re-use the function if it allows us (getOrderById will enforce visibility)
+    // For update logic, let's be explicit and safe.
     const order = await getOrderById(orderId);
+
     if (!order) {
-      throw new Error("Order not found");
+      // Either not found OR unauthorized (since getOrderById returns null on unauthorized)
+      // We can return false here securely.
+      return false;
+    }
+
+    // 2. Authorization Check (Vendor Only)
+    // Only the assigned vendor or an admin can update the status
+    const isVendor = session.user.role === "vendor" && session.user.vendor?.id === order.vendor.id;
+    const isAdmin = session.user.role === "admin";
+
+    if (!isVendor && !isAdmin) {
+      console.error("Unauthorized: User is not the vendor of this order");
+      return false;
     }
 
     // Update order status
@@ -108,6 +133,13 @@ export async function updateOrderStatus(
  */
 export async function getOrderById(orderId: string): Promise<OrderWithDetails | null> {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return null;
+    }
+
     const orderData = await db.query.orders.findFirst({
       where: eq(orders.id, orderId),
       with: {
@@ -143,6 +175,21 @@ export async function getOrderById(orderId: string): Promise<OrderWithDetails | 
       return null;
     }
 
+    // Access Control Logic
+    // 1. Admin can see everything
+    const isAdmin = session.user.role === "admin";
+
+    // 2. Customer can see their own orders
+    const isCustomerOwner = session.user.id === orderData.userId;
+
+    // 3. Vendor can see orders for them
+    const isVendorOwner = session.user.vendor?.id === orderData.vendorId;
+
+    if (!isAdmin && !isCustomerOwner && !isVendorOwner) {
+      console.error(`Unauthorized access attempt to order ${orderId} by user ${session.user.id}`);
+      return null;
+    }
+
     return {
       ...orderData,
       status: orderData.status as OrderStatus,
@@ -158,6 +205,23 @@ export async function getOrderById(orderId: string): Promise<OrderWithDetails | 
  */
 export async function getVendorOrders(vendorId: string, status?: OrderStatus): Promise<OrderWithDetails[]> {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return [];
+    }
+
+    // Security Check: Ensure the user is the vendor regarding which they are requesting orders
+    // OR is an admin
+    const isAdmin = session.user.role === "admin";
+    const isOwner = session.user.vendor?.id === vendorId;
+
+    if (!isAdmin && !isOwner) {
+      console.error("Unauthorized: User tried to access another vendor's orders");
+      return [];
+    }
+
     const conditions = [eq(orders.vendorId, vendorId)];
     if (status) {
       conditions.push(eq(orders.status, status));
@@ -210,6 +274,23 @@ export async function getVendorOrders(vendorId: string, status?: OrderStatus): P
  */
 export async function getUserOrders(userId: string): Promise<OrderWithDetails[]> {
   try {
+    const { auth } = await import("@/lib/auth");
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return [];
+    }
+
+    // Security Check: Ensure the user is requesting their OWN orders
+    // OR is an admin
+    const isAdmin = session.user.role === "admin";
+    const isOwner = session.user.id === userId;
+
+    if (!isAdmin && !isOwner) {
+      console.error("Unauthorized: User tried to access another user's orders");
+      return [];
+    }
+
     const userOrders = await db.query.orders.findMany({
       where: eq(orders.userId, userId),
       with: {
