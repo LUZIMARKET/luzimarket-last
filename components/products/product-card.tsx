@@ -142,12 +142,12 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
             </p>
           )}
         </div>
-        
+
         <div className="flex items-center justify-between mt-1">
           <p className="font-univers text-[13px] text-gray-800" data-testid="product-price">
             {formatPrice(parseFloat(product.price))}
           </p>
-          
+
           <button
             onClick={handleWishlistToggle}
             aria-label={isWishlisted ? t('removeFromWishlist') : t('addToWishlist')}
