@@ -20,6 +20,8 @@ interface AddToCartWithQuantityProps {
     vendorName: string;
     vendorState?: string | null;
     stock?: number;
+    deliveryDate?: string;
+    deliveryTimeSlot?: string;
   };
   className?: string;
 }

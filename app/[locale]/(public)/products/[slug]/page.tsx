@@ -12,11 +12,12 @@ import { Heart, ShoppingBag, Package, Shield, Gift } from "lucide-react";
 import { ProductReviews } from "@/components/products/product-reviews";
 import { ProductsGrid } from "@/components/products/products-grid";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
-import { AddToCartWithQuantityWrapper } from "@/components/cart/add-to-cart-with-quantity-wrapper";
+import { ProductSchedulerActions } from "@/components/products/product-scheduler-actions";
 import { ProductPriceDisplay } from "@/components/products/product-price-display";
 import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
@@ -216,152 +217,77 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </nav>
 
         {/* Product Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Images */}
-          <div className="space-y-4">
-            <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              {images[0] ? (
-                <Image
-                  src={images[0]}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <Package className="h-24 w-24 text-gray-400" />
-                </div>
-              )}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mb-16 items-start">
+          
+          {/* Left Column (Info) */}
+          <div className="lg:col-span-3 border border-gray-300 bg-white flex flex-col">
+            <div className="p-6 pb-8">
+              <h1 className="text-2xl font-normal font-sans text-gray-800 mb-1 leading-tight">{product.name}</h1>
+              <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-8 font-sans">
+                &rarr; {product.vendor?.businessName || (locale === 'es' ? 'VENDEDOR' : 'VENDOR')}
+              </p>
+              
+              <div className="mb-8">
+                <ProductPriceDisplay price={Number(product.price)} />
+              </div>
+
+              <div className="font-sans text-gray-600 text-[12px] leading-[1.8] text-justify">
+                <p>{product.description}</p>
+              </div>
             </div>
 
-            {/* Thumbnail gallery */}
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {images.slice(0, 4).map((image, index) => (
-                  <div key={index} className="relative aspect-square bg-gray-100 rounded overflow-hidden cursor-pointer hover:opacity-80">
-                    <Image
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+            {/* Accordions */}
+            <div className="mt-auto">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="characteristics" className="border-t border-b-0 border-gray-300 px-5">
+                  <AccordionTrigger className="hover:no-underline py-4 text-[11px] font-sans font-normal text-gray-700">
+                    Características
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs font-sans text-gray-500 pb-4 leading-relaxed">
+                    {t('specificationContent')}
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="shipping" className="border-t border-b-0 border-gray-300 px-5">
+                  <AccordionTrigger className="hover:no-underline py-4 text-[11px] font-sans font-normal text-gray-700">
+                    Envíos y Devoluciones
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs font-sans text-gray-500 pb-4 leading-relaxed">
+                    {t('shippingContent')}<br /><br />{t('returnsContent')}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </div>
+
+          {/* Center Column (Images) */}
+          <div className="lg:col-span-6 flex flex-col gap-6">
+            {images.length > 0 ? (
+              images.map((image, index) => (
+                <div key={index} className="relative aspect-square w-full border border-gray-300 bg-white">
+                  <Image
+                    src={image}
+                    alt={`${product.name} - Img ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="relative aspect-square w-full border border-gray-300 bg-white flex items-center justify-center">
+                <Package className="h-24 w-24 text-gray-400" />
               </div>
             )}
           </div>
 
-          {/* Product Info */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-times-now mb-2">{product.name}</h1>
-              <p className="text-sm font-univers text-gray-600 uppercase tracking-wider">
-                {locale === 'es' ? 'POR' : 'BY'} {product.vendor?.businessName || (locale === 'es' ? 'VENDEDOR' : 'VENDOR')}
-              </p>
-            </div>
+          {/* Right Column (Schedule & Actions) */}
+          <div className="lg:col-span-3 flex flex-col">
+            <ProductSchedulerActions product={product} images={images} />
 
-            <ProductPriceDisplay price={Number(product.price)} />
-
-            <div className="prose prose-sm font-univers">
-              <p>{product.description}</p>
-            </div>
-
-            {/* Actions */}
-            <div className="space-y-4">
-              <AddToCartWithQuantityWrapper
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  price: Number(product.price),
-                  image: images[0] || '',
-                  vendorId: product.vendorId,
-                  vendorName: product.vendor?.businessName || '',
-                  stock: product.stock || 0,
-                }}
-              />
-
-              <div className="flex justify-center">
-                <WishlistButton
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price),
-                    image: images[0] || '',
-                    vendor: product.vendor?.businessName || '',
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Features */}
-            <div className="grid grid-cols-3 gap-4 py-6 border-t border-b">
-              <div className="text-center">
-                <Package className="h-6 w-6 mx-auto mb-2" />
-                <p className="text-xs font-univers">{t('shippingAvailable')}</p>
-              </div>
-              <div className="text-center">
-                <Shield className="h-6 w-6 mx-auto mb-2" />
-                <p className="text-xs font-univers">{t('securePayment')}</p>
-              </div>
-              <div className="text-center">
-                <Gift className="h-6 w-6 mx-auto mb-2" />
-                <p className="text-xs font-univers">{t('specialPackaging')}</p>
-              </div>
-            </div>
-
-            {/* Vendor Info */}
-            <div className="space-y-2">
-              <p className="text-sm font-univers">
-                <span className="text-gray-600">{t('vendor')}:</span> {product.vendor?.businessName}
-              </p>
-              <p className="text-sm font-univers">
-                <span className="text-gray-600">{t('category')}:</span> {product.category?.name}
-              </p>
+            <div className="mt-5 text-[11px] text-gray-400 font-sans leading-[1.8] text-justify">
+              Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.
             </div>
           </div>
         </div>
-
-        {/* Tabs Section */}
-        <Tabs defaultValue="description" className="mb-16">
-          <TabsList className="w-full justify-start border-b">
-            <TabsTrigger value="description" className="font-univers">
-              {t('description')}
-            </TabsTrigger>
-            <TabsTrigger value="specifications" className="font-univers">
-              {t('specifications')}
-            </TabsTrigger>
-            <TabsTrigger value="shipping" className="font-univers">
-              {t('shipping')}
-            </TabsTrigger>
-            <TabsTrigger value="returns" className="font-univers">
-              {t('returns')}
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="description" className="mt-6">
-            <div className="prose prose-sm font-univers max-w-none">
-              <p>{product.description}</p>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="specifications" className="mt-6">
-            <div className="prose prose-sm font-univers max-w-none">
-              <p>{t('specificationContent')}</p>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="shipping" className="mt-6">
-            <div className="prose prose-sm font-univers max-w-none">
-              <p>{t('shippingContent')}</p>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="returns" className="mt-6">
-            <div className="prose prose-sm font-univers max-w-none">
-              <p>{t('returnsContent')}</p>
-            </div>
-          </TabsContent>
-        </Tabs>
 
         {/* Reviews Section */}
         <ProductReviews

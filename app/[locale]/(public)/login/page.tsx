@@ -92,7 +92,8 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError(tAuth("loginError"));
+        console.error("NextAuth signIn error:", result.error);
+        setError(`${tAuth("loginError")} (${result.error})`);
       } else {
         // Redirect based on user type
         switch (detectedRole) {

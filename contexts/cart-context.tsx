@@ -11,6 +11,8 @@ export interface CartItem {
   vendorId: string;
   vendorName: string;
   vendorState?: string | null; // For per-vendor tax calculation
+  deliveryDate?: string;
+  deliveryTimeSlot?: string;
 }
 
 interface CartState {
@@ -43,13 +45,19 @@ const CART_STORAGE_KEY = "luzimarket-cart";
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD_ITEM": {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
+      const existingItem = state.items.find(item => 
+        item.id === action.payload.id &&
+        item.deliveryDate === action.payload.deliveryDate &&
+        item.deliveryTimeSlot === action.payload.deliveryTimeSlot
+      );
 
       if (existingItem) {
         return {
           ...state,
           items: state.items.map(item =>
-            item.id === action.payload.id
+            item.id === action.payload.id && 
+            item.deliveryDate === action.payload.deliveryDate && 
+            item.deliveryTimeSlot === action.payload.deliveryTimeSlot
               ? { ...item, quantity: item.quantity + 1 }
               : item
           ),

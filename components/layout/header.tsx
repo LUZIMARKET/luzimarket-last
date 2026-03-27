@@ -11,6 +11,7 @@ import { ShippingLocationSelector } from "./shipping-location-selector";
 import { CurrencySwitch } from "./currency-switch";
 import { LocaleCurrencyToggle } from "./locale-currency-toggle";
 import { ShippingSelectorBar } from "./shipping-selector-bar";
+import { FullWidthSearch } from "./full-width-search";
 import { useState } from "react";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
@@ -33,6 +34,7 @@ import {
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isGlobalSearchOpen, setIsGlobalSearchOpen] = useState(false);
   const { toggleCart, getTotalItems } = useCart();
   const { getTotalItems: getWishlistItems } = useWishlist();
   const t = useTranslations('Common');
@@ -66,37 +68,32 @@ export function Header() {
         </div>
       </div>
 
+      <FullWidthSearch isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} />
+
       <div>
         {/* Main header */}
         <div className="relative flex items-center justify-between py-5 px-4 md:px-12 bg-white">
 
-          {/* LEFT: Hand Icon + Search Icon - Now Collapsible Search */}
+          {/* LEFT: Hand Icon + Search Button */}
           <div className="hidden md:flex items-center gap-4 flex-1 justify-start">
-            <SearchBox
-              className="w-full max-w-[300px]"
-              customTrigger={
-                <div className="flex items-center gap-4">
-                  <Image
-                    src="/images/icons/hand-peace.png"
-                    alt="Hand"
-                    width={24}
-                    height={24}
-                    className="h-6 w-auto"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                  <Button variant="ghost" size="icon" aria-label="Search" className="text-gray-900 -ml-2 pointer-events-none">
-                    <Search className="h-5 w-5 stroke-[1.5]" />
-                  </Button>
-                </div>
-              }
-            />
+            <div className="flex items-center gap-4 cursor-pointer group" onClick={() => setIsGlobalSearchOpen(true)}>
+              <Image
+                src="/images/icons/hand-peace.png"
+                alt="Hand"
+                width={24}
+                height={24}
+                className="h-6 w-auto transition-transform group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <Search className="h-5 w-5 text-gray-900 stroke-[1.5] group-hover:text-black transition-colors" />
+            </div>
           </div>
 
 
-          {/* CENTER: Main Logo */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex-shrink-0 text-center">
+          {/* CENTER: Main Logo (Hidden during search) */}
+          <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex-shrink-0 text-center transition-opacity duration-200 ${isGlobalSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             <Link href="/" data-testid="logo-link">
               <Image
                 src="/images/logos/logo-full.png"
@@ -122,7 +119,7 @@ export function Header() {
                 <SheetHeader>
                   <SheetTitle>Luzi</SheetTitle>
                 </SheetHeader>
-                <nav className="mt-8 space-y-4">
+                <nav className="mt-8 space-y-4 font-sans">
                   <Link href="/best-sellers" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Best Sellers</Link>
                   <Link href="/categories" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Categorias</Link>
                   {/* Simplified mobile nav for brevity in this edit */}
@@ -131,7 +128,7 @@ export function Header() {
             </Sheet>
 
             {/* Mobile Search Trigger */}
-            <Button variant="ghost" size="icon" aria-label={t('search')} onClick={() => { }}>
+            <Button variant="ghost" size="icon" aria-label={t('search')} onClick={() => setIsGlobalSearchOpen(true)}>
               <Search className="h-6 w-6" />
             </Button>
           </div>
@@ -209,10 +206,12 @@ export function Header() {
           </div>
         </div>
 
-        {/* Search - Mobile */}
-        <div className="md:hidden pb-3 px-4">
-          <SearchBox idSuffix="-mobile" />
-        </div>
+        {/* Search - Mobile (Hidden since we use FullWidthSearch globally) */}
+        {!isGlobalSearchOpen && (
+          <div className="md:hidden pb-3 px-4">
+            <SearchBox idSuffix="-mobile" />
+          </div>
+        )}
 
         {/* Navigation - Desktop only - MEGA MENU IMPLEMENTATION */}
         <nav className="hidden md:flex items-center justify-center gap-12 pb-6 px-8 relative z-40">

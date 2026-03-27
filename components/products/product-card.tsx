@@ -70,12 +70,12 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
   return (
     <Link
       href={{ pathname: '/products/[slug]', params: { slug: product.slug } }}
-      className={cn("group block", className)}
+      className={cn("group flex flex-col border border-gray-300 bg-white", className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       data-testid="product-card"
     >
-      <div className="relative aspect-square mb-4 overflow-hidden bg-gray-100 rounded-lg">
+      <div className="relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-300">
         <Image
           src={product.images[0] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Z2lmdCUyMGJveHxlbnwwfHx8fDE3NjcwNTM2ODV8MA&ixlib=rb-4.1.0&q=85"}
           alt={product.name}
@@ -88,26 +88,6 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
           "absolute inset-0 bg-black/0 transition-all duration-300",
           isHovered && "bg-black/10"
         )} />
-
-        {/* Wishlist button */}
-        <Button
-          size="icon"
-          variant="ghost"
-          className={cn(
-            "absolute top-3 right-3 h-9 w-9 bg-white/90 hover:bg-white transition-all duration-200",
-            "opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
-          )}
-          onClick={handleWishlistToggle}
-          aria-label={isWishlisted ? t('removeFromWishlist') : t('addToWishlist')}
-          data-testid={`wishlist-button-${product.slug}`}
-        >
-          <Heart
-            className={cn(
-              "h-4 w-4 transition-colors",
-              isWishlisted ? "fill-red-500 text-red-500" : "text-gray-700"
-            )}
-          />
-        </Button>
 
         {/* Quick actions on hover */}
         <div className={cn(
@@ -151,18 +131,38 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
         </div>
       </div>
 
-      <div className="space-y-1">
-        <h3 className="font-univers text-sm font-medium" data-testid="product-name">
-          {product.name}
-        </h3>
-        {product.vendor?.businessName && (
-          <p className="text-xs text-gray-500 font-univers" data-testid="vendor-name">
-            + {product.vendor.businessName.toUpperCase()}
+      <div className="flex flex-col p-4 flex-grow justify-between text-gray-600">
+        <div>
+          <h3 className="font-univers text-[13px] text-gray-800" data-testid="product-name">
+            {product.name}
+          </h3>
+          {product.vendor?.businessName && (
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-[2px] mb-2" data-testid="vendor-name">
+              &rarr; {product.vendor.businessName}
+            </p>
+          )}
+        </div>
+        
+        <div className="flex items-center justify-between mt-1">
+          <p className="font-univers text-[13px] text-gray-800" data-testid="product-price">
+            {formatPrice(parseFloat(product.price))}
           </p>
-        )}
-        <p className="font-univers text-sm mt-2" data-testid="product-price">
-          {formatPrice(parseFloat(product.price))}
-        </p>
+          
+          <button
+            onClick={handleWishlistToggle}
+            aria-label={isWishlisted ? t('removeFromWishlist') : t('addToWishlist')}
+            data-testid={`wishlist-button-${product.slug}`}
+            className="text-gray-500 hover:text-red-500 transition-colors z-10"
+          >
+            <Heart
+              strokeWidth={1.5}
+              className={cn(
+                "h-[18px] w-[18px] transition-colors",
+                isWishlisted ? "fill-red-500 text-red-500" : "text-current"
+              )}
+            />
+          </button>
+        </div>
       </div>
     </Link>
   );

@@ -33,6 +33,7 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   // Add trustHost for test environment and localhost
   trustHost: true,
+  debug: true,
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
