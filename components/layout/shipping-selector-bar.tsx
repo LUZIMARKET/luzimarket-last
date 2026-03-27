@@ -40,7 +40,12 @@ export function ShippingSelectorBar() {
     const handleAccept = () => {
         if (selectedState && selectedCity) {
             // Assume setLocation accepts state and city
-            setLocation({ state: selectedState, city: selectedCity, country: 'Mexico' });
+            setLocation({ 
+                state: selectedState, 
+                city: selectedCity, 
+                country: 'Mexico',
+                displayName: `${selectedCity}, ${selectedState}`
+            });
         }
     };
 
