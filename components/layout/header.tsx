@@ -70,7 +70,101 @@ export function Header() {
 
       <FullWidthSearch isOpen={isGlobalSearchOpen} onClose={() => setIsGlobalSearchOpen(false)} />
 
-      <div>
+      {/* Conditionally Render Condensed Navigation if Search is Open, else Normal Header */}
+      {isGlobalSearchOpen ? (
+        <div className="relative flex items-center py-6 px-4 md:px-12 bg-white">
+          <div className="flex-1 flex justify-start">
+            <Image
+              src="/images/icons/hand-peace.png"
+              alt="Hand"
+              width={24}
+              height={24}
+              className="h-6 w-auto"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </div>
+
+          <nav className="hidden md:flex flex-[2] items-center justify-center gap-12 uppercase">
+            <Link href="/best-sellers" className="text-[11px] font-sans text-gray-800 hover:text-black tracking-widest">
+              {tNav('bestSellers')}
+            </Link>
+            <Link href="/handpicked" className="text-[11px] font-sans text-gray-800 hover:text-black tracking-widest">
+              {tNav('handpicked')}
+            </Link>
+            <Link href="/brands" className="text-[11px] font-sans text-gray-800 hover:text-black tracking-widest flex items-center py-2">
+              {tNav('brandsAndStores')} <span className="ml-1 text-[8px]">▼</span>
+            </Link>
+            <Link href="/categories" className="text-[11px] font-sans text-gray-800 hover:text-black tracking-widest flex items-center py-2">
+              {tNav('categories')} <span className="ml-1 text-[8px]">▼</span>
+            </Link>
+            <Link href="/occasions" className="text-[11px] font-sans text-gray-800 hover:text-black tracking-widest flex items-center py-2">
+              {tNav('occasions')} <span className="ml-1 text-[8px]">▼</span>
+            </Link>
+          </nav>
+
+          <div className="flex-1 flex items-center justify-end gap-3 text-black">
+            <div className="relative flex items-center justify-center h-10 w-10">
+              <Heart className="h-5 w-5 stroke-[1.5]" />
+              {getWishlistItems() > 0 && (
+                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center">
+                  {getWishlistItems()}
+                </span>
+              )}
+            </div>
+            {status === "loading" ? (
+              <div className="flex items-center justify-center h-10 w-10">
+                 <User className="h-5 w-5 stroke-[1.5]" />
+              </div>
+            ) : session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex flex-col items-center gap-1 cursor-pointer focus:outline-none h-10 w-10 justify-center">
+                    <User className="h-5 w-5 stroke-[1.5]" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 font-sans">
+                  <div className="px-2 py-1.5 border-b border-gray-100 mb-1">
+                    <p className="text-sm font-medium">{session.user?.name || t('user')}</p>
+                    <p className="text-xs text-gray-500">{session.user?.email}</p>
+                  </div>
+                  <DropdownMenuItem asChild><NextLink href="/account">{t('myAccount')}</NextLink></DropdownMenuItem>
+                  <DropdownMenuItem asChild><NextLink href="/orders">{t('myOrders')}</NextLink></DropdownMenuItem>
+                  {session.user?.role !== 'customer' && (
+                    <DropdownMenuItem asChild><NextLink href={session.user?.role === 'vendor' ? '/vendor/dashboard' : '/admin'}>{t('dashboard')}</NextLink></DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-500">
+                    <LogOut className="mr-2 h-4 w-4" />{t('logout')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex flex-col items-center gap-1 cursor-pointer focus:outline-none h-10 w-10 justify-center">
+                    <User className="h-5 w-5 stroke-[1.5]" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 font-sans">
+                  <DropdownMenuItem asChild><NextLink href="/login">{t('login')}</NextLink></DropdownMenuItem>
+                  <DropdownMenuItem asChild><NextLink href="/register">{t('register')}</NextLink></DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            <div className="relative flex items-center justify-center h-10 w-10 cursor-pointer" onClick={toggleCart}>
+              <ShoppingBag className="h-5 w-5 stroke-[1.5]" />
+              {getTotalItems() > 0 && (
+                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 bg-black text-white text-[9px] rounded-full flex items-center justify-center">
+                  {getTotalItems()}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+      <div className="animate-in fade-in duration-300">
         {/* Main header */}
         <div className="relative flex items-center justify-between py-5 px-4 md:px-12 bg-white">
 
@@ -215,22 +309,22 @@ export function Header() {
 
         {/* Navigation - Desktop only - MEGA MENU IMPLEMENTATION */}
         <nav className="hidden md:flex items-center justify-center gap-12 pb-6 px-8 relative z-40">
-          <Link href="/best-sellers" className="text-xs font-univers text-gray-800 hover:text-black tracking-wide">
+          <Link href="/best-sellers" className="text-[11px] font-sans uppercase tracking-widest text-gray-800 hover:text-black">
             {tNav('bestSellers')}
           </Link>
-          <Link href="/handpicked" className="text-xs font-univers text-gray-800 hover:text-black tracking-wide">
+          <Link href="/handpicked" className="text-[11px] font-sans uppercase tracking-widest text-gray-800 hover:text-black">
             {tNav('handpicked')}
           </Link>
 
           <div className="group relative">
-            <Link href="/brands" className="text-xs font-univers text-gray-800 hover:text-black tracking-wide flex items-center cursor-pointer py-2">
+            <Link href="/brands" className="text-[11px] font-sans uppercase tracking-widest text-gray-800 hover:text-black flex items-center cursor-pointer py-2">
               {tNav('brandsAndStores')} <span className="ml-1 text-[8px]">▼</span>
             </Link>
           </div>
 
           {/* CATEGORIES with MEGA MENU */}
           <div className="group relative">
-            <Link href="/categories" className="text-xs font-univers text-gray-800 group-hover:text-black tracking-wide flex items-center cursor-pointer py-2 border-b-2 border-transparent group-hover:border-black transition-colors">
+            <Link href="/categories" className="text-[11px] font-sans uppercase tracking-widest text-gray-800 group-hover:text-black flex items-center cursor-pointer py-2 border-b-2 border-transparent group-hover:border-black transition-colors">
               {tNav('categories')} <span className="ml-1 text-[8px]">▼</span>
             </Link>
 
@@ -309,12 +403,13 @@ export function Header() {
           </div>
 
           <div className="group relative">
-            <Link href="/occasions" className="text-xs font-univers text-gray-800 hover:text-black tracking-wide flex items-center cursor-pointer py-2">
+            <Link href="/occasions" className="text-[11px] font-sans uppercase tracking-widest text-gray-800 hover:text-black flex items-center cursor-pointer py-2">
               {tNav('occasions')} <span className="ml-1 text-[8px]">▼</span>
             </Link>
           </div>
         </nav>
       </div>
+      )}
     </header>
   );
 }

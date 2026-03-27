@@ -93,64 +93,68 @@ export function FullWidthSearch({ isOpen, onClose }: FullWidthSearchProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="w-full bg-white relative z-[60] border-b border-gray-200">
-      <form onSubmit={handleSubmit} className="w-full max-w-7xl mx-auto px-4 md:px-12 flex flex-col">
-        <div className="flex items-center py-6 md:py-8 border-b border-gray-200">
-          <Search className="h-6 w-6 text-black mr-6 shrink-0" strokeWidth={1.5} />
-          <input
-            ref={inputRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar productos"
-            className="flex-1 text-2xl md:text-3xl font-sans text-black placeholder:text-gray-300 outline-none border-none bg-transparent"
-          />
-          {query.length > 0 && (
+    <div className="w-full bg-white relative z-[60]">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-12 flex flex-col">
+        <form onSubmit={handleSubmit} className="pt-8">
+          <div className="flex items-center pb-3 border-b border-gray-300">
+            <Search className="h-5 w-5 text-black mr-6 shrink-0" strokeWidth={1.5} />
+            <input
+              ref={inputRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar productos"
+              className="flex-1 text-2xl font-sans text-gray-500 placeholder:text-gray-300 outline-none border-none bg-transparent"
+            />
+            {query.length > 0 && (
+              <button 
+                  type="button" 
+                  onClick={clearSearch}
+                  aria-label="Clear Search"
+                  className="ml-4 mr-6 text-gray-400 hover:text-black transition-colors"
+              >
+                <X className="h-5 w-5" strokeWidth={1.5} />
+              </button>
+            )}
             <button 
                 type="button" 
-                onClick={clearSearch}
-                aria-label="Clear Search"
-                className="ml-4 mr-6 text-gray-400 hover:text-black transition-colors"
+                onClick={onClose}
+                aria-label="Close Search"
+                className="text-gray-400 hover:text-black transition-colors"
             >
-              <X className="h-6 w-6" strokeWidth={1.5} />
+              <X className="h-6 w-6" strokeWidth={1} />
             </button>
-          )}
-          <button 
-              type="button" 
-              onClick={onClose}
-              aria-label="Close Search"
-              className="text-gray-500 hover:text-black transition-colors"
-          >
-            <X className="h-8 w-8" strokeWidth={1} />
-          </button>
-        </div>
+          </div>
+        </form>
         
         {/* Results Area */}
-        <div className="w-full min-h-[4px]">
+        <div className="w-full">
           {isLoading ? (
             <div className="py-8 text-gray-400 font-sans tracking-wide">
               Buscando...
             </div>
           ) : results.length > 0 ? (
-            <div className="py-8 flex flex-col gap-4 mb-4">
+            <div className="py-6 flex flex-col gap-3 border-b border-gray-300">
               {results.slice(0, 8).map((result) => (
                 <Link
                   key={result.id}
                   href={`/products/${result.slug || result.id}`}
                   onClick={() => { onClose(); setQuery(''); }}
-                  className="text-xl md:text-2xl text-gray-700 hover:text-black font-sans transition-colors block w-fit"
+                  className="text-[17px] text-gray-600 hover:text-black font-sans transition-colors block w-fit"
                 >
                   {result.name}
                 </Link>
               ))}
             </div>
           ) : query.length >= 2 ? (
-            <div className="py-8 text-gray-400 font-sans tracking-wide">
+            <div className="py-8 text-gray-400 font-sans tracking-wide border-b border-gray-300">
               No se encontraron resultados para &quot;{query}&quot;.
             </div>
-          ) : null}
+          ) : (
+            <div className="h-8"></div>
+          )}
         </div>
-      </form>
+      </div>
     </div>
   );
 }
