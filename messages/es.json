@@ -1317,7 +1317,11 @@
     "subtitle": "Encuentra el regalo perfecto de vendedores seleccionados en México",
     "title": "Regalos extraordinarios curados",
     "trendingNow": "Tendencias",
-    "viewAll": "Ver todo"
+    "viewAll": "Ver todo",
+    "promoBannerTitle": "10% off en tu primer compra al suscribirte gratis",
+    "subscribeButton": "Suscribirse",
+    "subscribeEmailPlaceholder": "Tu correo electrónico",
+    "subscribeSuccess": "¡Gracias por suscribirte! Revisa tu bandeja de entrada."
   },
   "LoginPage": {
     "emailVerifiedSuccess": "¡Tu correo electrónico ha sido verificado exitosamente! Ahora puedes iniciar sesión.",

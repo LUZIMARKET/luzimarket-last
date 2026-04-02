@@ -86,7 +86,7 @@ const categoryInfo: Record<string, { title: string; subtitle: string; heroImage:
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  
+
   const t = await getTranslations('Common');
   const categoryData = await getCategoryWithProducts(slug);
 
@@ -114,15 +114,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 <p className="text-base font-univers mb-8 leading-relaxed">
                   {info.subtitle}
                 </p>
-                <Link href={{ pathname: '/category/[slug]/[vendor]', params: { slug, vendor: 'flowershop' } }}>
-                  <Button className="bg-white text-black hover:bg-gray-100 px-8">
-                    Flowershop
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
-          
+
           {/* Right side - hero image */}
           <div className="relative bg-black">
             <Image
@@ -147,12 +142,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             {/* Products Grid */}
             <div className="flex-1">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-times-now">Handpicked</h2>
+                <h2 className="text-2xl font-times-now">{categoryData.category.name}</h2>
                 <Link href="/products" className="text-sm font-univers hover:underline">
                   Ver todos
                 </Link>
               </div>
-              
+
               <ProductsGrid products={categoryData.products} />
             </div>
           </div>

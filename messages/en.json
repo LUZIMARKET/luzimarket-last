@@ -1317,7 +1317,11 @@
     "subtitle": "Find the perfect gift from curated vendors across Mexico",
     "title": "Handpicked extraordinary gifts",
     "trendingNow": "Trending Now",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "promoBannerTitle": "10% off your first purchase when subscribing for free",
+    "subscribeButton": "Subscribe",
+    "subscribeEmailPlaceholder": "Your email address",
+    "subscribeSuccess": "Thanks for subscribing! Check your inbox."
   },
   "LoginPage": {
     "emailVerifiedSuccess": "Your email has been successfully verified! You can now sign in.",

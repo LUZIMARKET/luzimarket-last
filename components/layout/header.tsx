@@ -4,7 +4,28 @@ import { Link } from '@/i18n/navigation';
 import NextLink from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Heart, ShoppingBag, User, Menu, LogOut, Search } from "lucide-react";
+import { Menu, LogOut, Search } from "lucide-react";
+
+const Heart = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 21.35C12 21.35 2 14.5 2 8.5C2 5.5 4.5 3 7.5 3C9.5 3 11 4 12 5.5C13 4 14.5 3 16.5 3C19.5 3 22 5.5 22 8.5C22 14.5 12 21.35 12 21.35Z" />
+    <path d="M12 5.5C10 7.5 14 7.5 12 5.5Z" />
+  </svg>
+);
+
+const User = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 21v-3a3 3 0 0 0-3-3H9a3 3 0 0 0-3 3v3" />
+    <circle cx="12" cy="8" r="3.5" />
+  </svg>
+);
+
+const ShoppingBag = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 9h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9Z" />
+    <path d="M9 9V5a3 3 0 0 1 6 0v4" />
+  </svg>
+);
 import { SearchBox } from "./search-box";
 import LanguageSwitcher from "./language-switcher";
 import { ShippingLocationSelector } from "./shipping-location-selector";
@@ -154,12 +175,14 @@ export function Header() {
               </DropdownMenu>
             )}
             <div className="relative flex items-center justify-center h-10 w-10 cursor-pointer" onClick={toggleCart}>
-              <ShoppingBag className="h-5 w-5 stroke-[1.5]" />
-              {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 bg-black text-white text-[9px] rounded-full flex items-center justify-center">
-                  {getTotalItems()}
-                </span>
-              )}
+              <div className="relative flex">
+                <ShoppingBag className="h-6 w-6 stroke-[1.5]" />
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-[5px] -right-[6px] h-[18px] w-[18px] bg-black text-white text-[10px] font-medium rounded-full flex items-center justify-center border border-white">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -287,15 +310,17 @@ export function Header() {
               variant="ghost"
               size="icon"
               onClick={toggleCart}
-              className="relative text-gray-900"
+              className="relative text-gray-900 overflow-visible"
               data-testid="cart-button"
             >
-              <ShoppingBag className="h-5 w-5 stroke-[1.5]" />
-              {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 bg-black text-white text-[9px] rounded-full flex items-center justify-center">
-                  {getTotalItems()}
-                </span>
-              )}
+              <div className="relative flex">
+                <ShoppingBag className="h-6 w-6 stroke-[1.5]" />
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-[5px] -right-[6px] h-[18px] w-[18px] bg-black text-white text-[10px] font-medium rounded-full flex items-center justify-center border border-white">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </div>
             </Button>
           </div>
         </div>
