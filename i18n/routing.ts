@@ -13,30 +13,12 @@ export const routing = defineRouting({
   // Define localized pathnames
   pathnames: {
     '/': '/',
-    '/products': {
-      es: '/productos',
-      en: '/products'
-    },
-    '/products/[slug]': {
-      es: '/productos/[slug]',
-      en: '/products/[slug]'
-    },
-    '/category/[slug]': {
-      es: '/categoria/[slug]',
-      en: '/category/[slug]'
-    },
-    '/category/[slug]/[vendor]': {
-      es: '/categoria/[slug]/[vendor]',
-      en: '/category/[slug]/[vendor]'
-    },
-    '/cart': {
-      es: '/carrito',
-      en: '/cart'
-    },
-    '/checkout': {
-      es: '/pagar',
-      en: '/checkout'
-    },
+    '/products': '/products',
+    '/products/[slug]': '/products/[slug]',
+    '/category/[slug]': '/category/[slug]',
+    '/category/[slug]/[vendor]': '/category/[slug]/[vendor]',
+    '/cart': '/cart',
+    '/checkout': '/checkout',
     '/vendor-register': {
       es: '/vendedor/registro',
       en: '/vendor/register'
@@ -123,94 +105,28 @@ export const routing = defineRouting({
       es: '/proximamente',
       en: '/coming-soon'
     },
-    '/brands': {
-      es: '/tiendas-marcas',
-      en: '/brands'
-    },
-    '/brands/[slug]': {
-      es: '/tiendas-marcas/[slug]',
-      en: '/brands/[slug]'
-    },
-    '/best-sellers': {
-      es: '/mas-vendidos',
-      en: '/best-sellers'
-    },
-    '/handpicked': {
-      es: '/seleccionados',
-      en: '/handpicked'
-    },
-    '/search': {
-      es: '/buscar',
-      en: '/search'
-    },
-    '/categories': {
-      es: '/categorias',
-      en: '/categories'
-    },
-    '/occasions': {
-      es: '/ocasiones',
-      en: '/occasions'
-    },
-    '/occasions/[id]': {
-      es: '/ocasiones/[id]',
-      en: '/occasions/[id]'
-    },
-    '/editorial': {
-      es: '/editorial',
-      en: '/editorial'
-    },
-    '/editorial/[id]': {
-      es: '/editorial/[id]',
-      en: '/editorial/[id]'
-    },
-    '/wishlist': {
-      es: '/favoritos',
-      en: '/wishlist'
-    },
-    '/login': {
-      es: '/iniciar-sesion',
-      en: '/login'
-    },
-    '/register': {
-      es: '/registrarse',
-      en: '/register'
-    },
-    '/register/success': {
-      es: '/registrarse/confirmacion',
-      en: '/register/success'
-    },
-    '/register/customer': {
-      es: '/registrarse/cliente',
-      en: '/register/customer'
-    },
-    '/forgot-password': {
-      es: '/olvide-contrasena',
-      en: '/forgot-password'
-    },
-    '/reset-password': {
-      es: '/restablecer-contrasena',
-      en: '/reset-password'
-    },
-    '/resend-verification': {
-      es: '/reenviar-verificacion',
-      en: '/resend-verification'
-    },
-    '/orders/lookup': {
-      es: '/pedidos/buscar',
-      en: '/orders/lookup'
-    },
-    '/orders': {
-      es: '/pedidos',
-      en: '/orders'
-    },
-    '/orders/[id]': {
-      es: '/pedidos/[id]',
-      en: '/orders/[id]'
-    },
-    '/orders/[orderNumber]': {
-      es: '/pedidos/[orderNumber]',
-      en: '/orders/[orderNumber]'
-    },
+    '/brands': '/brands',
+    '/brands/[slug]': '/brands/[slug]',
+    '/best-sellers': '/best-sellers',
+    '/handpicked': '/handpicked',
+    '/search': '/search',
+    '/categories': '/categories',
+    '/occasions': '/occasions',
+    '/occasions/[id]': '/occasions/[id]',
+    '/editorial': '/editorial',
+    '/editorial/[id]': '/editorial/[id]',
+    '/wishlist': '/wishlist',
+    '/login': '/login',
+    '/register': '/register',
+    '/register/success': '/register/success',
+    '/register/customer': '/register/customer',
+    '/forgot-password': '/forgot-password',
+    '/reset-password': '/reset-password',
+    '/resend-verification': '/resend-verification',
+    '/orders/lookup': '/orders/lookup',
+    '/orders': '/orders',
+    '/orders/[id]': '/orders/[id]',
+    '/orders/[orderNumber]': '/orders/[orderNumber]',
     '/account': {
       es: '/account',
       en: '/account'
@@ -219,41 +135,14 @@ export const routing = defineRouting({
       es: '/account/security',
       en: '/account/security'
     },
-    '/about': {
-      es: '/acerca-de',
-      en: '/about'
-    },
-    '/contact': {
-      es: '/contacto',
-      en: '/contact'
-    },
-    '/terms': {
-      es: '/terminos',
-      en: '/terms'
-    },
-    '/privacy': {
-      es: '/privacidad',
-      en: '/privacy'
-    },
-    '/newsletter': {
-      es: '/boletin',
-      en: '/newsletter'
-    },
-    '/careers': {
-      es: '/empleos',
-      en: '/careers'
-    },
-    '/sitemap': {
-      es: '/mapa-del-sitio',
-      en: '/sitemap'
-    },
-    '/cookies': {
-      es: '/cookies',
-      en: '/cookies'
-    },
-    '/accessibility': {
-      es: '/accesibilidad',
-      en: '/accessibility'
-    }
+    '/about': '/about',
+    '/contact': '/contact',
+    '/terms': '/terms',
+    '/privacy': '/privacy',
+    '/newsletter': '/newsletter',
+    '/careers': '/careers',
+    '/sitemap': '/sitemap',
+    '/cookies': '/cookies',
+    '/accessibility': '/accessibility'
   }
 });

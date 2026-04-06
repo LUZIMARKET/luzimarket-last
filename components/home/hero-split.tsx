@@ -14,7 +14,7 @@ export function HeroSplit() {
     <div className="w-full h-auto md:h-[60vh] min-h-[500px] flex flex-col md:flex-row relative">
       <div className="w-full md:w-1/2 h-[50vh] md:h-full relative bg-gray-100">
         <Image
-          src="https://images.unsplash.com/photo-1582046467389-980072b21cf5?q=80&w=1500&auto=format&fit=crop"
+          src="/images/links/apartamento-hero.jpg"
           alt="Apartamento Tote Bag"
           fill
           priority

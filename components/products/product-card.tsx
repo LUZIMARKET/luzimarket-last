@@ -77,10 +77,13 @@ export function ProductCard({ product, className, onQuickView }: ProductCardProp
     >
       <div className="relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-300">
         <Image
-          src={product.images[0] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Z2lmdCUyMGJveHxlbnwwfHx8fDE3NjcwNTM2ODV8MA&ixlib=rb-4.1.0&q=85"}
+          src={product.images[0] || "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80"}
           alt={product.name}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+            e.currentTarget.src = "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=800&q=80";
+          }}
         />
 
         {/* Overlay on hover */}
