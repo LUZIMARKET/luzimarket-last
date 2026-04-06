@@ -1,4 +1,22 @@
 {
+  "Occasions": {
+    "title": "Occasions",
+    "subtitle": "Find the perfect gift for every special moment",
+    "categories": {
+      "cumpleanos": "Birthday",
+      "aniversario": "Anniversary",
+      "boda": "Wedding",
+      "baby-shower": "Baby Shower",
+      "graduacion": "Graduation",
+      "navidad": "Christmas",
+      "dia-madres": "Mother's Day",
+      "dia-padres": "Father's Day",
+      "san-valentin": "Valentine's Day",
+      "agradecimiento": "Thank You",
+      "nuevo-hogar": "New Home",
+      "recuperacion": "Get Well Soon"
+    }
+  },
   "About": {
     "commitment": {
       "description": "We're committed to maintaining the highest standards of service, ensuring secure transactions, and fostering a marketplace built on trust and quality. Every purchase on Luzimarket directly supports Mexican entrepreneurs and helps preserve traditional crafts for future generations.",

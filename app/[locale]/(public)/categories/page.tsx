@@ -60,7 +60,7 @@ export default async function CategoriesPage({ params }: CategoriesPageProps) {
               <div className="relative aspect-square overflow-hidden bg-gray-100">
                 {category.imageUrl ? (
                   <Image
-                    src={category.imageUrl}
+                    src={category.imageUrl.includes('unsplash.com') && !category.imageUrl.includes('?') ? `${category.imageUrl}?q=80&w=800&auto=format&fit=crop` : category.imageUrl}
                     alt={category.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"

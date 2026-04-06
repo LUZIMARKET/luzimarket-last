@@ -19,6 +19,7 @@ async function getActiveVendors() {
       description: vendors.description,
       city: vendors.city,
       state: vendors.state,
+      bannerImageUrl: vendors.bannerImageUrl,
       productCount: sql<number>`count(${products.id})`,
     })
     .from(vendors)
@@ -68,13 +69,23 @@ export default async function BrandsPage({ params }: BrandsPageProps) {
                 className="group"
               >
                 <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  {/* Vendor Image Placeholder */}
-                  <div className="aspect-[4/3] bg-gray-100 relative">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-times-now text-gray-300">
-                        {vendor.businessName.charAt(0)}
-                      </span>
-                    </div>
+                  {/* Vendor Image Placeholder / Banner */}
+                  <div className="aspect-[4/3] bg-gray-100 relative group-hover:opacity-90 transition-opacity">
+                    {vendor.bannerImageUrl ? (
+                      <Image
+                        src={vendor.bannerImageUrl}
+                        alt={vendor.businessName}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-4xl font-times-now text-gray-300">
+                          {vendor.businessName.charAt(0)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   
                   {/* Vendor Info */}
@@ -99,23 +110,6 @@ export default async function BrandsPage({ params }: BrandsPageProps) {
         )}
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-black text-white py-16">
-        <div className="text-center px-8">
-          <h2 className="text-3xl font-times-now mb-4">
-            ¿Quieres ser parte de LUZIMARKET?
-          </h2>
-          <p className="text-lg font-univers mb-8 opacity-90">
-            Únete a nuestra plataforma de vendedores seleccionados
-          </p>
-          <Link
-            href="/vendor-register"
-            className="inline-block bg-white text-black px-8 py-3 font-univers hover:bg-gray-100 transition-colors"
-          >
-            Regístrate como vendedor
-          </Link>
-        </div>
-      </section>
     </main>
   );
 }
